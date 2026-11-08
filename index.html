@@ -1,0 +1,2025 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Toolkit: ZIP to PDF, PDF Splitter, Screen Recorder &amp; Urdu Text to Speech</title>
+<style>
+  :root {
+    --bg: #f5f6f8; --card: #ffffff; --text: #1d2330; --muted: #667085;
+    --border: #dde1e8; --accent: #2f6feb; --accent-text: #ffffff;
+    --ok: #16794c; --warn: #b54708; --err: #c0262d; --row: #f0f3f9;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #12151c; --card: #1b2029; --text: #e7eaf0; --muted: #98a2b3;
+      --border: #2d3441; --accent: #5b8cff; --accent-text: #0b1020;
+      --ok: #4cc38a; --warn: #f5a455; --err: #ff7b80; --row: #232a36;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+    line-height: 1.5; padding: 24px 16px 60px;
+  }
+  .wrap { max-width: 860px; margin: 0 auto; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  .sub { color: var(--muted); margin: 0 0 20px; }
+  .card {
+    background: var(--card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 18px; margin-bottom: 16px;
+  }
+  .drop {
+    border: 2px dashed var(--border); border-radius: 12px; padding: 36px 16px;
+    text-align: center; cursor: pointer; transition: .15s;
+  }
+  .drop:hover, .drop.over { border-color: var(--accent); background: var(--row); }
+  .drop strong { display: block; font-size: 18px; }
+  .drop span { color: var(--muted); font-size: 14px; }
+  input[type=file] { display: none; }
+  h2 { font-size: 16px; margin: 0 0 12px; }
+  .opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; }
+  label.f { display: flex; flex-direction: column; gap: 4px; font-size: 13px; color: var(--muted); }
+  label.c { display: flex; align-items: center; gap: 8px; font-size: 14px; color: var(--text); }
+  select, input[type=number] {
+    padding: 8px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-size: 14px;
+  }
+  .list { max-height: 360px; overflow: auto; border: 1px solid var(--border); border-radius: 8px; }
+  .item {
+    display: flex; align-items: center; gap: 10px; padding: 8px 10px;
+    border-bottom: 1px solid var(--border); font-size: 14px;
+  }
+  .item:last-child { border-bottom: 0; }
+  .item.off { opacity: .5; }
+  .item .name { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .tag {
+    font-size: 11px; padding: 2px 8px; border-radius: 99px; background: var(--row);
+    color: var(--muted); text-transform: uppercase; letter-spacing: .03em;
+  }
+  .size { color: var(--muted); font-size: 12px; min-width: 62px; text-align: right; }
+  .mv { display: flex; gap: 2px; }
+  .mv button {
+    border: 1px solid var(--border); background: var(--bg); color: var(--text);
+    border-radius: 6px; width: 28px; height: 28px; cursor: pointer;
+  }
+  .row { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; margin-top: 14px; }
+  button.main {
+    background: var(--accent); color: var(--accent-text); border: 0; border-radius: 10px;
+    padding: 12px 22px; font-size: 16px; font-weight: 600; cursor: pointer;
+  }
+  button.main:disabled { opacity: .5; cursor: not-allowed; }
+  button.ghost {
+    background: transparent; color: var(--text); border: 1px solid var(--border);
+    border-radius: 8px; padding: 8px 12px; cursor: pointer; font-size: 13px;
+  }
+  .bar { height: 8px; background: var(--row); border-radius: 99px; overflow: hidden; margin-top: 14px; display: none; }
+  .bar i { display: block; height: 100%; width: 0; background: var(--accent); transition: width .15s; }
+  .status { margin-top: 10px; font-size: 14px; color: var(--muted); }
+  .log { font-size: 13px; margin-top: 10px; }
+  .log div { padding: 2px 0; }
+  .log .ok { color: var(--ok); } .log .warn { color: var(--warn); } .log .err { color: var(--err); }
+  .hidden { display: none !important; }
+  a.dl {
+    display: inline-block; text-decoration: none; background: var(--ok); color: #fff;
+    padding: 12px 22px; border-radius: 10px; font-weight: 600;
+  }
+  .note { font-size: 12.5px; color: var(--muted); margin-top: 10px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tabs button {
+    flex: 1; padding: 11px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--card); color: var(--text); font-size: 15px; font-weight: 600; cursor: pointer;
+  }
+  .tabs button.active { background: var(--accent); color: var(--accent-text); border-color: var(--accent); }
+  input[type=text] {
+    padding: 8px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-size: 14px; width: 100%;
+  }
+  a.dlsm {
+    text-decoration: none; border: 1px solid var(--border); border-radius: 8px; padding: 6px 12px;
+    font-size: 13px; color: var(--text); background: var(--bg); white-space: nowrap;
+  }
+  a.dlsm:hover { border-color: var(--accent); }
+  video { width: 100%; max-height: 440px; background: #000; border-radius: 10px; margin-top: 12px; }
+  .timer { font-variant-numeric: tabular-nums; font-size: 22px; font-weight: 700; min-width: 80px; }
+  .rec-dot { display: inline-block; width: 10px; height: 10px; border-radius: 50%; background: var(--err); margin-right: 6px; animation: blink 1s infinite; }
+  @keyframes blink { 50% { opacity: .25; } }
+  button.stop { background: var(--err); color: #fff; }
+  .tabs { flex-wrap: wrap; }
+  .tabs button { min-width: 130px; }
+  textarea {
+    width: 100%; padding: 12px; border-radius: 10px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-size: 18px; line-height: 1.9; resize: vertical;
+    font-family: "Noto Nastaliq Urdu", "Jameel Noori Nastaleeq", "Segoe UI", Tahoma, system-ui, sans-serif;
+  }
+  input[type=range] { width: 100%; }
+  .nowread { margin-top: 12px; padding: 12px; border-radius: 10px; background: var(--row); font-size: 18px; line-height: 1.9; }
+  audio { width: 100%; margin-top: 12px; }
+  details.help { margin-top: 10px; font-size: 13.5px; color: var(--muted); }
+  details.help summary { cursor: pointer; color: var(--accent); font-weight: 600; }
+  details.help ol { margin: 8px 0 8px 18px; padding: 0; }
+  details.help code { background: var(--row); padding: 1px 5px; border-radius: 4px; }
+  input[type=password] {
+    padding: 8px; border-radius: 8px; border: 1px solid var(--border);
+    background: var(--bg); color: var(--text); font-size: 14px; width: 100%;
+  }
+  .prompter {
+    margin-top: 10px; height: 220px; overflow: auto; padding: 14px; border-radius: 10px;
+    background: var(--row); font-size: 30px; line-height: 1.9; white-space: pre-wrap;
+  }
+  .meter { height: 10px; background: var(--row); border-radius: 99px; overflow: hidden; margin-top: 12px; }
+  .meter i { display: block; height: 100%; width: 0; background: var(--ok); }
+  canvas.wave {
+    display: block; width: 100%; height: 140px; margin-top: 12px; border: 1px solid var(--border);
+    border-radius: 8px; background: var(--bg); touch-action: none; cursor: crosshair;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <h1>All-in-One Toolkit</h1>
+  <p class="sub">Works fully in your browser. Nothing is uploaded anywhere.</p>
+
+  <div class="tabs">
+    <button id="tabZip" class="active">ZIP → PDF</button>
+    <button id="tabSplit">Split PDF</button>
+    <button id="tabRec">Screen Recorder</button>
+    <button id="tabTts">Text to Speech (Urdu)</button>
+    <button id="tabVs">Voice Studio</button>
+  </div>
+
+  <div id="zipPanel">
+  <div class="card">
+    <div class="drop" id="drop">
+      <strong>Drop a ZIP file here, or click to choose</strong>
+      <span>Images, PDFs and text/code files inside the ZIP become pages of one PDF</span>
+    </div>
+    <input type="file" id="file" accept=".zip,application/zip,application/x-zip-compressed">
+  </div>
+
+  <div class="card hidden" id="filesCard">
+    <h2>Files in ZIP <span id="count" style="color:var(--muted);font-weight:400"></span></h2>
+    <div class="row" style="margin:0 0 10px">
+      <button class="ghost" id="selAll">Select all</button>
+      <button class="ghost" id="selNone">Select none</button>
+    </div>
+    <div class="list" id="list"></div>
+  </div>
+
+  <div class="card hidden" id="optCard">
+    <h2>Options</h2>
+    <div class="opts">
+      <label class="f">Page size
+        <select id="pageSize"><option value="a4">A4</option><option value="letter">US Letter</option></select>
+      </label>
+      <label class="f">Margin (points)
+        <input type="number" id="margin" value="36" min="0" max="120">
+      </label>
+      <label class="f">Text font size
+        <input type="number" id="fontSize" value="10" min="6" max="20">
+      </label>
+    </div>
+    <div class="row" style="flex-direction:column;align-items:flex-start;gap:8px">
+      <label class="c"><input type="checkbox" id="optToc" checked> Add a contents page</label>
+      <label class="c"><input type="checkbox" id="optNames" checked> Show file name above each file</label>
+      <label class="c"><input type="checkbox" id="optNums" checked> Add page numbers</label>
+    </div>
+    <div class="row">
+      <button class="main" id="go">Convert to PDF</button>
+      <span id="dlSlot"></span>
+    </div>
+    <div class="bar" id="bar"><i id="barFill"></i></div>
+    <div class="status" id="status"></div>
+    <div class="log" id="log"></div>
+    <div class="note">Text pages support Latin characters. Other characters are replaced with “?”. Files of unsupported types are listed but skipped.</div>
+  </div>
+  </div>
+
+  <div id="splitPanel" class="hidden">
+    <div class="card">
+      <div class="drop" id="dropPdf">
+        <strong>Drop a PDF here, or click to choose</strong>
+        <span>Split it into smaller PDF files (1 PDF → 2, 3, 10 or more)</span>
+      </div>
+      <input type="file" id="filePdf" accept=".pdf,application/pdf">
+      <div class="status" id="pdfInfo"></div>
+    </div>
+
+    <div class="card hidden" id="splitOpts">
+      <h2>How to split</h2>
+      <div class="opts">
+        <label class="f">Method
+          <select id="splitMode">
+            <option value="parts">Into equal parts (e.g. 1 PDF → 2 PDFs)</option>
+            <option value="every">Every N pages</option>
+            <option value="ranges">Custom page ranges</option>
+            <option value="each">Every page as its own PDF</option>
+          </select>
+        </label>
+        <label class="f" id="partsBox">Number of parts
+          <input type="number" id="splitParts" value="2" min="2">
+        </label>
+        <label class="f hidden" id="everyBox">Pages per file
+          <input type="number" id="splitEvery" value="10" min="1">
+        </label>
+        <label class="f hidden" id="rangesBox" style="grid-column:1/-1">Page ranges, one file per range, separated by commas
+          <input type="text" id="splitRanges" placeholder="e.g. 1-3, 4-7, 8-">
+        </label>
+      </div>
+      <div class="note" id="splitPreview"></div>
+      <div class="row">
+        <button class="main" id="splitGo">Split PDF</button>
+      </div>
+      <div class="bar" id="sbar"><i id="sbarFill"></i></div>
+      <div class="status" id="splitStatus"></div>
+
+      <div class="hidden" id="splitResult">
+        <div class="row">
+          <button class="main" id="zipAll">Download all as ZIP</button>
+        </div>
+        <div class="list" id="splitList" style="margin-top:12px"></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="recPanel" class="hidden">
+    <div class="card">
+      <h2>Screen recorder</h2>
+      <div class="opts">
+        <label class="f">Quality
+          <select id="recQuality">
+            <option value="720">720p (smaller file)</option>
+            <option value="1080" selected>1080p (recommended)</option>
+            <option value="source">Source resolution (largest)</option>
+          </select>
+        </label>
+        <label class="f">Frame rate
+          <select id="recFps">
+            <option value="15">15 fps</option>
+            <option value="30" selected>30 fps</option>
+            <option value="60">60 fps</option>
+          </select>
+        </label>
+      </div>
+      <div class="row" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <label class="c"><input type="checkbox" id="recSys" checked> Record system / tab audio (if you tick “share audio” in the browser prompt)</label>
+        <label class="c"><input type="checkbox" id="recMic"> Record microphone (voice-over)</label>
+        <label class="c"><input type="checkbox" id="recCursor" checked> Show mouse cursor</label>
+      </div>
+      <div class="row">
+        <button class="main" id="recStart">Start recording</button>
+        <button class="ghost hidden" id="recPause">Pause</button>
+        <button class="main stop hidden" id="recStop">Stop &amp; save</button>
+        <span class="timer hidden" id="recTimer">00:00</span>
+      </div>
+      <div class="status" id="recStatus"></div>
+      <div class="note">Your browser will ask what to share: a whole screen, a window, or a browser tab. Recording stays on your device and is never uploaded.</div>
+    </div>
+
+    <div class="card hidden" id="recResult">
+      <h2>Your recording</h2>
+      <video id="recPlayback" controls playsinline></video>
+      <div class="row">
+        <a class="dl" id="recDl" href="#">Download</a>
+        <button class="ghost" id="recDiscard">Discard</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="ttsPanel" class="hidden">
+    <div class="card">
+      <h2>Text to speech: Urdu narration</h2>
+      <textarea id="ttsText" dir="auto" lang="ur" rows="9" placeholder="اپنا متن یہاں لکھیں یا پیسٹ کریں…"></textarea>
+      <div class="row" style="margin-top:8px">
+        <button class="ghost" id="ttsSample">Insert Urdu sample</button>
+        <button class="ghost" id="ttsLoad">Load .txt file</button>
+        <button class="ghost" id="ttsClear">Clear</button>
+        <input type="file" id="ttsFile" accept=".txt,text/plain">
+        <span class="note" id="ttsCount" style="margin:0"></span>
+      </div>
+    </div>
+
+    <div class="card">
+      <h2>Voice</h2>
+      <label class="f">Voice engine
+        <select id="ttsEngine">
+          <option value="azure">Natural Urdu neural voice (best quality, downloadable MP3)</option>
+          <option value="browser">Browser voice (no setup, play only, may have no Urdu)</option>
+        </select>
+      </label>
+
+      <div id="azBox">
+        <div class="opts" style="margin-top:12px">
+          <label class="f">Speaker
+            <select id="azVoice">
+              <option value="ur-PK-UzmaNeural">Uzma (female, Urdu – Pakistan)</option>
+              <option value="ur-PK-AsadNeural">Asad (male, Urdu – Pakistan)</option>
+            </select>
+          </label>
+          <label class="f">Azure region
+            <input type="text" id="azRegion" placeholder="e.g. eastus" autocomplete="off" spellcheck="false">
+          </label>
+          <label class="f" style="grid-column:1/-1">Azure Speech key
+            <input type="password" id="azKey" placeholder="Paste your Speech key here" autocomplete="off">
+          </label>
+        </div>
+        <label class="c" style="margin-top:8px"><input type="checkbox" id="azRemember"> Remember key and region on this device only (stored in this browser)</label>
+        <details class="help">
+          <summary>How do I get a key? (Microsoft Azure Speech has a free tier)</summary>
+          <ol>
+            <li>Sign in at portal.azure.com (you need a free Azure account).</li>
+            <li>Click “Create a resource”, search for <b>Speech</b>, and create it. Choose the Free (F0) pricing tier if offered.</li>
+            <li>Open the new resource and go to <b>Keys and Endpoint</b>.</li>
+            <li>Copy <b>KEY 1</b> and the <b>Location/Region</b> (for example <code>eastus</code>) and paste them above.</li>
+          </ol>
+          <p>Free-tier limits and sign-up requirements are set by Microsoft and can change. Your text is sent directly from your browser to Microsoft's speech service to create the audio. It does not pass through any other server.</p>
+        </details>
+      </div>
+
+      <div id="brBox" class="hidden">
+        <div class="row">
+          <label class="c"><input type="checkbox" id="ttsUrOnly" checked> Show Urdu voices only</label>
+          <button class="ghost" id="ttsRefresh">Refresh voices</button>
+        </div>
+        <label class="f" style="margin-top:8px">Browser voice
+          <select id="ttsVoice"></select>
+        </label>
+        <div class="note" id="ttsVoiceInfo"></div>
+      </div>
+
+      <div class="opts" style="margin-top:14px">
+        <label class="f"><span>Speed: <b id="ttsRateV"></b></span>
+          <input type="range" id="ttsRate" min="0.5" max="1.5" step="0.05" value="0.9">
+        </label>
+        <label class="f"><span>Pitch: <b id="ttsPitchV"></b></span>
+          <input type="range" id="ttsPitch" min="0.5" max="1.5" step="0.05" value="1">
+        </label>
+        <label class="f"><span>Volume: <b id="ttsVolV"></b></span>
+          <input type="range" id="ttsVol" min="0" max="1" step="0.05" value="1">
+        </label>
+      </div>
+
+      <div class="row">
+        <button class="main" id="ttsPlay">Generate natural speech</button>
+        <button class="ghost hidden" id="ttsPause">Pause</button>
+        <button class="main stop hidden" id="ttsStop">Stop</button>
+      </div>
+      <div class="bar" id="tbar"><i id="tbarFill"></i></div>
+      <div class="nowread hidden" id="ttsNow" dir="auto"></div>
+      <div class="status" id="ttsStatus"></div>
+
+      <div class="hidden" id="ttsAudioBox">
+        <audio id="ttsAudio" controls></audio>
+        <div class="row">
+          <a class="dl" id="ttsDl" href="#">Download</a>
+          <button class="ghost" id="ttsAudioDiscard">Discard</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="card hidden" id="ttsRecCard">
+      <h2>Save browser-voice narration as audio (experimental)</h2>
+      <label class="c"><input type="checkbox" id="ttsRecord"> Record the narration into an audio file while it plays</label>
+      <div class="note">Browsers cannot export their built-in voices, so this captures the sound while it plays. When the share window opens, choose “Entire screen” (or “This tab”) and tick “Share system audio” / “Share tab audio”. Results vary. For reliable downloads, use the natural neural voice above.</div>
+    </div>
+  </div>
+
+  <div id="vsPanel" class="hidden">
+    <div class="card">
+      <h2>Voice Studio: record, clean up and polish your own voice</h2>
+      <div class="note" style="margin-top:0">Read your script, press <b>M</b> when you fumble, then get a cleaner, more even, more “studio” sound. Everything happens on your device. Nothing is uploaded.</div>
+    </div>
+
+    <div class="card">
+      <h2>1. Script (teleprompter)</h2>
+      <textarea id="vsScript" dir="auto" lang="ur" rows="5" placeholder="Paste your script here…"></textarea>
+      <div class="opts" style="margin-top:10px">
+        <label class="f"><span>Text size: <b id="vsFsV"></b></span>
+          <input type="range" id="vsFs" min="18" max="64" step="2" value="30"></label>
+        <label class="f"><span>Auto-scroll while recording: <b id="vsSpV"></b></span>
+          <input type="range" id="vsSp" min="0" max="10" step="1" value="0"></label>
+      </div>
+      <div class="prompter" id="vsPrompter" dir="auto"></div>
+    </div>
+
+    <div class="card">
+      <h2>2. Record</h2>
+      <div class="opts">
+        <label class="f">Microphone
+          <select id="vsMic"><option value="">Default microphone</option></select>
+        </label>
+        <label class="f">One mistake mark removes
+          <select id="vsBack">
+            <option value="1">the last phrase</option>
+            <option value="2" selected>the last 2 phrases</option>
+            <option value="3">the last 3 phrases</option>
+            <option value="4">the last 4 phrases</option>
+          </select>
+        </label>
+      </div>
+      <div class="row" style="flex-direction:column;align-items:flex-start;gap:8px">
+        <label class="c"><input type="checkbox" id="vsNs" checked> Browser noise suppression while recording</label>
+        <label class="c"><input type="checkbox" id="vsAgc"> Automatic gain control (only if your recording is too quiet)</label>
+      </div>
+      <div class="row">
+        <button class="main" id="vsRec">● Start recording</button>
+        <button class="main stop hidden" id="vsStopRec">■ Stop</button>
+        <button class="ghost hidden" id="vsMark">Mark mistake (press M)</button>
+        <span class="timer hidden" id="vsTimer">00:00</span>
+      </div>
+      <div class="meter"><i id="vsMeter"></i></div>
+      <div class="status" id="vsRecStatus"></div>
+      <div class="row">
+        <button class="ghost" id="vsLoad">Or load an existing audio file…</button>
+        <input type="file" id="vsFile" accept="audio/*,video/*">
+      </div>
+      <div class="note">When you make a mistake: stop for about a second, press <b>M</b>, then re-read the whole sentence. Use headphones and record in a quiet, soft room (curtains, sofa, close to the mic). That makes the biggest difference to the final sound.</div>
+    </div>
+
+    <div class="card hidden" id="vsEdit">
+      <h2>3. Clean up</h2>
+      <div class="opts">
+        <label class="f">Longest pause to keep (ms)
+          <input type="number" id="vsPause" value="450" min="150" max="2000" step="50"></label>
+        <label class="f">Pause that separates phrases (ms)
+          <input type="number" id="vsGap" value="300" min="150" max="1000" step="50"></label>
+      </div>
+      <label class="c" style="margin-top:8px"><input type="checkbox" id="vsUseMarks" checked> Remove the phrases I marked as mistakes</label>
+      <div class="row">
+        <button class="main" id="vsClean">Clean up automatically</button>
+        <button class="ghost" id="vsUndo">Undo</button>
+      </div>
+      <canvas id="vsWave" class="wave"></canvas>
+      <div class="row">
+        <button class="ghost" id="vsPlayAll">▶ Play all</button>
+        <button class="ghost" id="vsPlaySel">▶ Play selection</button>
+        <button class="ghost" id="vsPlayStop">■ Stop</button>
+        <button class="ghost" id="vsDelSel">Delete selection</button>
+      </div>
+      <div class="note" id="vsInfo"></div>
+      <div class="note">Drag across the waveform to select a part (a fumble, an “um”, a cough), listen to it with Play selection, then Delete selection. Red lines show where you pressed M.</div>
+    </div>
+
+    <div class="card hidden" id="vsEnh">
+      <h2>4. Studio polish</h2>
+      <div class="opts">
+        <label class="f"><span>Background noise reduction: <b id="vsNrV"></b></span>
+          <input type="range" id="vsNr" min="0" max="100" step="5" value="60"></label>
+        <label class="f">Voice tone
+          <select id="vsPreset">
+            <option value="clear" selected>Clear and present</option>
+            <option value="warm">Warm and full</option>
+            <option value="none">Natural (no EQ or compression)</option>
+          </select>
+        </label>
+      </div>
+      <label class="c" style="margin-top:8px"><input type="checkbox" id="vsNorm" checked> Normalize the volume to a YouTube-ready level</label>
+      <div class="row"><button class="main" id="vsEnhance">Enhance my voice</button></div>
+      <div class="bar" id="vbar"><i id="vbarFill"></i></div>
+      <div class="status" id="vsStatus"></div>
+      <div class="hidden" id="vsResult">
+        <div class="note">Before</div>
+        <audio id="vsBefore" controls></audio>
+        <div class="note">After</div>
+        <audio id="vsAfter" controls></audio>
+        <div class="row"><a class="dl" id="vsDl" href="#">Download WAV</a></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
+<script>
+(function () {
+  "use strict";
+
+  var IMG = ["jpg", "jpeg", "png", "gif", "webp", "bmp", "svg", "avif"];
+  var TXT = ["txt", "md", "markdown", "csv", "tsv", "json", "xml", "html", "htm", "css", "js", "ts", "jsx", "tsx",
+    "py", "java", "c", "h", "cpp", "hpp", "cs", "go", "rs", "rb", "php", "sh", "bat", "sql", "yml", "yaml",
+    "ini", "cfg", "conf", "log", "toml", "swift", "kt", "r", "tex", "rtf"];
+  var MIME = { jpg: "image/jpeg", jpeg: "image/jpeg", png: "image/png", gif: "image/gif", webp: "image/webp",
+    bmp: "image/bmp", svg: "image/svg+xml", avif: "image/avif" };
+
+  var $ = function (id) { return document.getElementById(id); };
+  var entries = [], zipName = "converted", dlUrl = null, busy = false;
+
+  if (!window.JSZip || !window.PDFLib) {
+    $("status").textContent = "Could not load required libraries. Check your internet connection once, then reload.";
+  }
+
+  /* ---------- helpers ---------- */
+  function ext(p) { var m = /\.([^.\/]+)$/.exec(p); return m ? m[1].toLowerCase() : ""; }
+  function kindOf(p) {
+    var e = ext(p);
+    if (IMG.indexOf(e) > -1) return "image";
+    if (e === "pdf") return "pdf";
+    if (TXT.indexOf(e) > -1) return "text";
+    return "unsupported";
+  }
+  function fmtSize(n) {
+    if (n < 1024) return n + " B";
+    if (n < 1048576) return (n / 1024).toFixed(1) + " KB";
+    return (n / 1048576).toFixed(1) + " MB";
+  }
+  function log(msg, cls) {
+    var d = document.createElement("div");
+    d.className = cls || ""; d.textContent = msg; $("log").appendChild(d);
+  }
+  function progress(p, text) {
+    $("bar").style.display = "block";
+    $("barFill").style.width = Math.round(p * 100) + "%";
+    if (text) $("status").textContent = text;
+  }
+  var tick = function () { return new Promise(function (r) { setTimeout(r, 0); }); };
+
+  /* ---------- loading the ZIP ---------- */
+  function loadZip(file) {
+    if (!file) return;
+    zipName = file.name.replace(/\.zip$/i, "") || "converted";
+    clearOutput();
+    $("status").textContent = "Reading ZIP…";
+    JSZip.loadAsync(file).then(function (zip) {
+      entries = [];
+      zip.forEach(function (path, entry) {
+        if (entry.dir) return;
+        var base = path.split("/").pop();
+        if (path.indexOf("__MACOSX/") === 0 || base === ".DS_Store" || base.indexOf("._") === 0) return;
+        var k = kindOf(path);
+        entries.push({ path: path, entry: entry, kind: k, selected: k !== "unsupported",
+          size: (entry._data && entry._data.uncompressedSize) || 0 });
+      });
+      entries.sort(function (a, b) {
+        return a.path.localeCompare(b.path, undefined, { numeric: true, sensitivity: "base" });
+      });
+      $("filesCard").classList.toggle("hidden", !entries.length);
+      $("optCard").classList.toggle("hidden", !entries.length);
+      $("status").textContent = entries.length ? "" : "This ZIP contains no files.";
+      render();
+    }).catch(function (e) {
+      $("filesCard").classList.add("hidden"); $("optCard").classList.add("hidden");
+      alert("Could not read this file as a ZIP archive.\n\n" + (e && e.message ? e.message : e));
+      $("status").textContent = "";
+    });
+  }
+
+  function render() {
+    var list = $("list"); list.innerHTML = "";
+    var sel = entries.filter(function (e) { return e.selected; }).length;
+    $("count").textContent = "(" + sel + " of " + entries.length + " selected)";
+    entries.forEach(function (it, i) {
+      var row = document.createElement("div");
+      row.className = "item" + (it.kind === "unsupported" ? " off" : "");
+      var cb = document.createElement("input");
+      cb.type = "checkbox"; cb.checked = it.selected; cb.disabled = it.kind === "unsupported";
+      cb.onchange = function () { it.selected = cb.checked; render(); };
+      var nm = document.createElement("div"); nm.className = "name"; nm.textContent = it.path; nm.title = it.path;
+      var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = it.kind;
+      var sz = document.createElement("span"); sz.className = "size"; sz.textContent = it.size ? fmtSize(it.size) : "";
+      var mv = document.createElement("div"); mv.className = "mv";
+      var up = document.createElement("button"); up.textContent = "↑"; up.title = "Move up"; up.disabled = i === 0;
+      var dn = document.createElement("button"); dn.textContent = "↓"; dn.title = "Move down"; dn.disabled = i === entries.length - 1;
+      up.onclick = function () { swap(i, i - 1); };
+      dn.onclick = function () { swap(i, i + 1); };
+      mv.appendChild(up); mv.appendChild(dn);
+      [cb, nm, tag, sz, mv].forEach(function (x) { row.appendChild(x); });
+      list.appendChild(row);
+    });
+    $("go").disabled = busy || sel === 0;
+  }
+  function swap(a, b) { var t = entries[a]; entries[a] = entries[b]; entries[b] = t; render(); }
+  function clearOutput() {
+    if (dlUrl) { URL.revokeObjectURL(dlUrl); dlUrl = null; }
+    $("dlSlot").innerHTML = ""; $("log").innerHTML = "";
+    $("bar").style.display = "none"; $("barFill").style.width = "0";
+  }
+
+  /* ---------- image conversion ---------- */
+  function loadImage(blob) {
+    return new Promise(function (res, rej) {
+      var url = URL.createObjectURL(blob), img = new Image();
+      img.onload = function () { URL.revokeObjectURL(url); res(img); };
+      img.onerror = function () { URL.revokeObjectURL(url); rej(new Error("image could not be decoded")); };
+      img.src = url;
+    });
+  }
+  function toPngBytes(blob) {
+    return loadImage(blob).then(function (img) {
+      var w = img.naturalWidth || img.width || 800, h = img.naturalHeight || img.height || 600;
+      var s = Math.min(1, 4000 / Math.max(w, h));
+      var c = document.createElement("canvas");
+      c.width = Math.max(1, Math.round(w * s)); c.height = Math.max(1, Math.round(h * s));
+      var ctx = c.getContext("2d");
+      ctx.fillStyle = "#fff"; ctx.fillRect(0, 0, c.width, c.height);
+      ctx.drawImage(img, 0, 0, c.width, c.height);
+      return new Promise(function (res, rej) {
+        c.toBlob(function (b) { b ? b.arrayBuffer().then(res) : rej(new Error("canvas export failed")); }, "image/png");
+      });
+    });
+  }
+  async function embedImage(pdf, bytes, e, blob) {
+    var x = ext(e.path);
+    try {
+      if (x === "jpg" || x === "jpeg") return await pdf.embedJpg(bytes);
+      if (x === "png") return await pdf.embedPng(bytes);
+    } catch (err) { /* fall through to canvas path */ }
+    var png = await toPngBytes(blob);
+    return await pdf.embedPng(png);
+  }
+
+  /* ---------- text ---------- */
+  function clean(s) {
+    return s.replace(/\r\n?/g, "\n").replace(/\t/g, "    ")
+      .replace(/[\u2018\u2019]/g, "'").replace(/[\u201C\u201D]/g, '"')
+      .replace(/[\u2013\u2014]/g, "-").replace(/\u2026/g, "...")
+      .replace(/[^\n\x20-\x7E\u00A0-\u00FF]/g, "?");
+  }
+  function wrapLines(text, perLine) {
+    var out = [], src = text.split("\n");
+    for (var i = 0; i < src.length; i++) {
+      var l = src[i];
+      if (!l.length) { out.push(""); continue; }
+      while (l.length > perLine) { out.push(l.slice(0, perLine)); l = l.slice(perLine); }
+      out.push(l);
+    }
+    return out;
+  }
+
+  /* ---------- conversion ---------- */
+  async function convert() {
+    if (busy) return;
+    var chosen = entries.filter(function (e) { return e.selected; });
+    if (!chosen.length) return;
+    busy = true; $("go").disabled = true; clearOutput();
+
+    var PS = { a4: [595.28, 841.89], letter: [612, 792] }[$("pageSize").value];
+    var M = Math.max(0, +$("margin").value || 0);
+    var FS = Math.min(20, Math.max(6, +$("fontSize").value || 10));
+    var showNames = $("optNames").checked, withToc = $("optToc").checked, withNums = $("optNums").checked;
+    var HEAD = showNames ? 22 : 0;
+
+    try {
+      var pdf = await PDFLib.PDFDocument.create();
+      var helv = await pdf.embedFont(PDFLib.StandardFonts.Helvetica);
+      var helvB = await pdf.embedFont(PDFLib.StandardFonts.HelveticaBold);
+      var mono = await pdf.embedFont(PDFLib.StandardFonts.Courier);
+      var gray = PDFLib.rgb(0.35, 0.35, 0.4), black = PDFLib.rgb(0, 0, 0);
+      var toc = [], done = 0, failed = 0;
+
+      function header(page, name, cont) {
+        if (!showNames) return;
+        var t = clean(name) + (cont ? " (continued)" : "");
+        var size = 10;
+        while (size > 6 && helvB.widthOfTextAtSize(t, size) > PS[0] - 2 * M) size -= 1;
+        while (t.length > 3 && helvB.widthOfTextAtSize(t, size) > PS[0] - 2 * M) t = t.slice(0, -2);
+        page.drawText(t, { x: M, y: PS[1] - M - 10, size: size, font: helvB, color: gray });
+      }
+
+      for (var i = 0; i < chosen.length; i++) {
+        var e = chosen[i];
+        progress(i / chosen.length, "Converting " + (i + 1) + " of " + chosen.length + ": " + e.path);
+        await tick();
+        var startPage = pdf.getPageCount();
+        try {
+          if (e.kind === "image") {
+            var blob = await e.entry.async("blob");
+            blob = blob.slice(0, blob.size, MIME[ext(e.path)] || "application/octet-stream");
+            var bytes = await blob.arrayBuffer();
+            var im = await embedImage(pdf, bytes, e, blob);
+            var page = pdf.addPage(PS);
+            var bw = PS[0] - 2 * M, bh = PS[1] - 2 * M - HEAD;
+            var sc = Math.min(bw / im.width, bh / im.height);
+            var w = im.width * sc, h = im.height * sc;
+            page.drawImage(im, { x: (PS[0] - w) / 2, y: M + (bh - h) / 2, width: w, height: h });
+            header(page, e.path, false);
+          } else if (e.kind === "pdf") {
+            var pb = await e.entry.async("uint8array");
+            var src = await PDFLib.PDFDocument.load(pb, { ignoreEncryption: true });
+            var copied = await pdf.copyPages(src, src.getPageIndices());
+            copied.forEach(function (p) { pdf.addPage(p); });
+          } else if (e.kind === "text") {
+            var raw = await e.entry.async("string");
+            var lines = wrapLines(clean(raw), Math.max(10, Math.floor((PS[0] - 2 * M) / (FS * 0.6))));
+            var lh = FS * 1.3, per = Math.max(1, Math.floor((PS[1] - 2 * M - HEAD) / lh));
+            var n = Math.max(1, Math.ceil(lines.length / per));
+            for (var pg = 0; pg < n; pg++) {
+              var tp = pdf.addPage(PS);
+              header(tp, e.path, pg > 0);
+              var chunk = lines.slice(pg * per, (pg + 1) * per), y = PS[1] - M - HEAD - FS;
+              for (var li = 0; li < chunk.length; li++) {
+                if (chunk[li]) tp.drawText(chunk[li], { x: M, y: y, size: FS, font: mono, color: black });
+                y -= lh;
+              }
+            }
+          }
+          toc.push({ name: e.path, start: startPage });
+          done++;
+          log("✓ " + e.path, "ok");
+        } catch (err) {
+          failed++;
+          // roll back any partial pages of this file
+          while (pdf.getPageCount() > startPage) pdf.removePage(pdf.getPageCount() - 1);
+          log("✗ " + e.path + " — " + (err && err.message ? err.message : "failed"), "err");
+        }
+      }
+
+      if (!pdf.getPageCount()) throw new Error("No pages could be created from the selected files.");
+
+      /* contents page(s) */
+      var covers = 0;
+      if (withToc && toc.length) {
+        var lineH = 16, topY = PS[1] - M - 40, rowsPer = Math.max(1, Math.floor((topY - M) / lineH));
+        covers = Math.ceil(toc.length / rowsPer);
+        for (var c = 0; c < covers; c++) {
+          var cp = pdf.insertPage(c, PS);
+          if (c === 0) cp.drawText("Contents", { x: M, y: PS[1] - M - 20, size: 20, font: helvB, color: black });
+          var yy = topY;
+          toc.slice(c * rowsPer, (c + 1) * rowsPer).forEach(function (t) {
+            var pn = String(t.start + covers + 1);
+            var name = clean(t.name);
+            var maxW = PS[0] - 2 * M - 40;
+            while (name.length > 4 && helv.widthOfTextAtSize(name, 10) > maxW) name = name.slice(0, -2);
+            if (name !== clean(t.name)) name += "...";
+            cp.drawText(name, { x: M, y: yy, size: 10, font: helv, color: black });
+            cp.drawText(pn, { x: PS[0] - M - helv.widthOfTextAtSize(pn, 10), y: yy, size: 10, font: helv, color: gray });
+            yy -= lineH;
+          });
+        }
+      }
+
+      /* page numbers */
+      if (withNums) {
+        var all = pdf.getPages();
+        all.forEach(function (p, idx) {
+          var s = p.getSize(), t = (idx + 1) + " / " + all.length;
+          p.drawText(t, { x: s.width / 2 - helv.widthOfTextAtSize(t, 9) / 2, y: 14, size: 9, font: helv, color: gray });
+        });
+      }
+
+      pdf.setTitle(zipName); pdf.setProducer("ZIP to PDF Converter");
+      progress(0.97, "Saving PDF…"); await tick();
+      var out = await pdf.save();
+      var url = URL.createObjectURL(new Blob([out], { type: "application/pdf" }));
+      dlUrl = url;
+      var a = document.createElement("a");
+      a.className = "dl"; a.href = url; a.download = zipName + ".pdf";
+      a.textContent = "Download " + zipName + ".pdf (" + fmtSize(out.length) + ")";
+      $("dlSlot").appendChild(a);
+      var sb = document.createElement("button");
+      sb.className = "ghost"; sb.style.marginLeft = "8px"; sb.textContent = "Split this PDF →";
+      sb.onclick = function () { loadPdfBytes(out, zipName + ".pdf"); };
+      $("dlSlot").appendChild(sb);
+      progress(1, "Done: " + done + " file(s) converted" + (failed ? ", " + failed + " failed" : "") +
+        ", " + pdf.getPageCount() + " pages.");
+    } catch (err) {
+      $("status").textContent = "Conversion failed: " + (err && err.message ? err.message : err);
+    } finally {
+      busy = false; render();
+    }
+  }
+
+  /* ---------- split PDF ---------- */
+  var splitSrc = null, splitUrls = [], splitFiles = [], splitBusy = false;
+
+  function showTab(name) {
+    $("zipPanel").classList.toggle("hidden", name !== "zip");
+    $("splitPanel").classList.toggle("hidden", name !== "split");
+    $("recPanel").classList.toggle("hidden", name !== "rec");
+    $("ttsPanel").classList.toggle("hidden", name !== "tts");
+    $("vsPanel").classList.toggle("hidden", name !== "vs");
+    $("tabZip").classList.toggle("active", name === "zip");
+    $("tabSplit").classList.toggle("active", name === "split");
+    $("tabRec").classList.toggle("active", name === "rec");
+    $("tabTts").classList.toggle("active", name === "tts");
+    $("tabVs").classList.toggle("active", name === "vs");
+    if (name === "vs") vsDraw();
+  }
+  $("tabZip").onclick = function () { showTab("zip"); };
+  $("tabSplit").onclick = function () { showTab("split"); };
+
+  function progress2(p, text) {
+    $("sbar").style.display = "block";
+    $("sbarFill").style.width = Math.round(p * 100) + "%";
+    if (text) $("splitStatus").textContent = text;
+  }
+  function clearSplitOutput() {
+    splitUrls.forEach(function (u) { URL.revokeObjectURL(u); });
+    splitUrls = []; splitFiles = [];
+    $("splitList").innerHTML = ""; $("splitResult").classList.add("hidden");
+    $("sbar").style.display = "none"; $("sbarFill").style.width = "0";
+    $("splitStatus").textContent = "";
+  }
+
+  async function loadPdfBytes(bytes, name) {
+    clearSplitOutput();
+    showTab("split");
+    $("pdfInfo").textContent = "Reading PDF…";
+    try {
+      var doc = await PDFLib.PDFDocument.load(bytes, { ignoreEncryption: true });
+      splitSrc = { name: name.replace(/\.pdf$/i, "") || "document", doc: doc, total: doc.getPageCount() };
+      $("pdfInfo").textContent = splitSrc.name + ".pdf — " + splitSrc.total + " pages, " + fmtSize(bytes.length);
+      $("splitOpts").classList.remove("hidden");
+      updateModeBoxes();
+    } catch (err) {
+      splitSrc = null; $("splitOpts").classList.add("hidden");
+      $("pdfInfo").textContent = "Could not read this PDF: " + (err && err.message ? err.message : err);
+    }
+  }
+
+  function computeGroups() {
+    if (!splitSrc) return { error: "Load a PDF first." };
+    var T = splitSrc.total, mode = $("splitMode").value, g = [];
+    if (mode === "parts") {
+      var n = Math.floor(+$("splitParts").value);
+      if (!(n >= 2)) return { error: "Enter at least 2 parts." };
+      if (n > T) return { error: "This PDF has only " + T + " pages, so it cannot be split into " + n + " parts." };
+      var base = Math.floor(T / n), extra = T % n, st = 1;
+      for (var i = 0; i < n; i++) { var len = base + (i < extra ? 1 : 0); g.push([st, st + len - 1]); st += len; }
+    } else if (mode === "every") {
+      var k = Math.floor(+$("splitEvery").value);
+      if (!(k >= 1)) return { error: "Enter at least 1 page per file." };
+      for (var p = 1; p <= T; p += k) g.push([p, Math.min(T, p + k - 1)]);
+    } else if (mode === "each") {
+      for (var q = 1; q <= T; q++) g.push([q, q]);
+    } else {
+      var txt = $("splitRanges").value.trim();
+      if (!txt) return { error: "Enter page ranges, for example 1-3, 4-7, 8-  (this PDF has " + T + " pages)." };
+      var toks = txt.split(/[,;]+/);
+      for (var j = 0; j < toks.length; j++) {
+        var t = toks[j].trim();
+        if (!t) continue;
+        var m = /^(\d*)\s*(-)?\s*(\d*)$/.exec(t);
+        if (!m || (!m[1] && !m[3]) || (!m[2] && m[3])) return { error: "Invalid range: \"" + t + "\"" };
+        var a, b;
+        if (!m[2]) { a = b = +m[1]; }
+        else { a = m[1] ? +m[1] : 1; b = m[3] ? +m[3] : T; }
+        if (a < 1 || b > T || a > b) return { error: "Range \"" + t + "\" is not valid for a " + T + "-page PDF." };
+        g.push([a, b]);
+      }
+      if (!g.length) return { error: "Enter at least one page range." };
+    }
+    return { groups: g };
+  }
+
+  function updatePreview() {
+    var r = computeGroups(), el = $("splitPreview");
+    $("splitGo").disabled = !!r.error || splitBusy;
+    if (r.error) { el.textContent = r.error; return; }
+    var g = r.groups;
+    var desc = g.slice(0, 8).map(function (x) {
+      return x[0] === x[1] ? "p." + x[0] : "pp." + x[0] + "–" + x[1];
+    }).join(", ");
+    el.textContent = "Will create " + g.length + " PDF file" + (g.length === 1 ? "" : "s") + ": " + desc + (g.length > 8 ? ", …" : "");
+  }
+  function updateModeBoxes() {
+    var m = $("splitMode").value;
+    $("partsBox").classList.toggle("hidden", m !== "parts");
+    $("everyBox").classList.toggle("hidden", m !== "every");
+    $("rangesBox").classList.toggle("hidden", m !== "ranges");
+    updatePreview();
+  }
+
+  function renderSplitResults() {
+    var list = $("splitList"); list.innerHTML = "";
+    splitFiles.forEach(function (f) {
+      var row = document.createElement("div"); row.className = "item";
+      var nm = document.createElement("div"); nm.className = "name"; nm.textContent = f.name; nm.title = f.name;
+      var tag = document.createElement("span"); tag.className = "tag";
+      tag.textContent = f.a === f.b ? "page " + f.a : "pages " + f.a + "–" + f.b;
+      var sz = document.createElement("span"); sz.className = "size"; sz.textContent = fmtSize(f.bytes.length);
+      var dl = document.createElement("a"); dl.className = "dlsm"; dl.href = f.url; dl.download = f.name; dl.textContent = "Download";
+      [nm, tag, sz, dl].forEach(function (x) { row.appendChild(x); });
+      list.appendChild(row);
+    });
+    $("splitResult").classList.remove("hidden");
+  }
+
+  async function doSplit() {
+    if (splitBusy) return;
+    var r = computeGroups();
+    if (r.error) { $("splitStatus").textContent = r.error; return; }
+    splitBusy = true; $("splitGo").disabled = true; clearSplitOutput();
+    var groups = r.groups, mode = $("splitMode").value;
+    var digits = String(groups.length).length, label = mode === "each" ? "page" : "part";
+    try {
+      for (var i = 0; i < groups.length; i++) {
+        var a = groups[i][0], b = groups[i][1];
+        progress2(i / groups.length, "Creating file " + (i + 1) + " of " + groups.length + "…");
+        await tick();
+        var doc = await PDFLib.PDFDocument.create(), idx = [];
+        for (var p = a - 1; p <= b - 1; p++) idx.push(p);
+        var pages = await doc.copyPages(splitSrc.doc, idx);
+        pages.forEach(function (pg) { doc.addPage(pg); });
+        var bytes = await doc.save();
+        var num = String(i + 1);
+        while (num.length < digits) num = "0" + num;
+        var f = { name: splitSrc.name + "_" + label + num + ".pdf", bytes: bytes, a: a, b: b };
+        f.url = URL.createObjectURL(new Blob([bytes], { type: "application/pdf" }));
+        splitUrls.push(f.url); splitFiles.push(f);
+      }
+      renderSplitResults();
+      progress2(1, "Done: " + splitFiles.length + " PDF file" + (splitFiles.length === 1 ? "" : "s") + " created.");
+    } catch (err) {
+      $("splitStatus").textContent = "Split failed: " + (err && err.message ? err.message : err);
+    } finally {
+      splitBusy = false; updatePreview();
+    }
+  }
+
+  $("zipAll").onclick = async function () {
+    if (!splitFiles.length) return;
+    $("splitStatus").textContent = "Building ZIP…";
+    try {
+      var z = new JSZip();
+      splitFiles.forEach(function (f) { z.file(f.name, f.bytes); });
+      var blob = await z.generateAsync({ type: "blob", compression: "STORE" });
+      var url = URL.createObjectURL(blob), a = document.createElement("a");
+      a.href = url; a.download = splitSrc.name + "_split.zip";
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+      $("splitStatus").textContent = "ZIP downloaded.";
+    } catch (err) {
+      $("splitStatus").textContent = "Could not build ZIP: " + (err && err.message ? err.message : err);
+    }
+  };
+
+  function readPdfFile(file) {
+    if (!file) return;
+    file.arrayBuffer().then(function (buf) { loadPdfBytes(new Uint8Array(buf), file.name); });
+  }
+  var dropP = $("dropPdf"), finP = $("filePdf");
+  dropP.onclick = function () { finP.click(); };
+  finP.onchange = function () { readPdfFile(finP.files[0]); finP.value = ""; };
+  ["dragenter", "dragover"].forEach(function (ev) {
+    dropP.addEventListener(ev, function (e) { e.preventDefault(); dropP.classList.add("over"); });
+  });
+  ["dragleave", "drop"].forEach(function (ev) {
+    dropP.addEventListener(ev, function (e) { e.preventDefault(); dropP.classList.remove("over"); });
+  });
+  dropP.addEventListener("drop", function (e) { readPdfFile(e.dataTransfer.files[0]); });
+  $("splitMode").onchange = updateModeBoxes;
+  ["splitParts", "splitEvery", "splitRanges"].forEach(function (id) { $(id).oninput = updatePreview; });
+  $("splitGo").onclick = doSplit;
+
+  /* ---------- screen recorder ---------- */
+  var rec = { mr: null, chunks: [], streams: [], ctx: null, url: null, mime: "", t0: 0, acc: 0, timer: null, active: false };
+  $("tabRec").onclick = function () { showTab("rec"); };
+
+  var recSupported = !!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia && window.MediaRecorder);
+  if (!recSupported) {
+    $("recStart").disabled = true;
+    $("recStatus").textContent = "Screen recording is not supported in this browser. Use desktop Chrome, Edge, Firefox or Safari (mobile browsers generally cannot record the screen).";
+  }
+
+  function pickMime() {
+    if (!window.MediaRecorder) return "";
+    var c = ["video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm", "video/mp4;codecs=avc1,mp4a.40.2", "video/mp4"];
+    for (var i = 0; i < c.length; i++) { if (MediaRecorder.isTypeSupported(c[i])) return c[i]; }
+    return "";
+  }
+  function pad2(n) { return n < 10 ? "0" + n : "" + n; }
+  function fmtTime(ms) {
+    var t = Math.floor(ms / 1000), h = Math.floor(t / 3600), m = Math.floor((t % 3600) / 60), sec = t % 60;
+    return (h ? h + ":" + pad2(m) : pad2(m)) + ":" + pad2(sec);
+  }
+  function elapsed() { return rec.acc + (rec.mr && rec.mr.state === "recording" ? Date.now() - rec.t0 : 0); }
+  function recUI(state) {
+    var on = state !== "idle";
+    $("recStart").classList.toggle("hidden", on);
+    $("recPause").classList.toggle("hidden", !on);
+    $("recStop").classList.toggle("hidden", !on);
+    $("recTimer").classList.toggle("hidden", !on);
+    $("recPause").textContent = state === "paused" ? "Resume" : "Pause";
+  }
+  function releaseStreams() {
+    rec.streams.forEach(function (st) { st.getTracks().forEach(function (t) { try { t.stop(); } catch (e) {} }); });
+    rec.streams = [];
+    if (rec.ctx) { try { rec.ctx.close(); } catch (e) {} rec.ctx = null; }
+    clearInterval(rec.timer); rec.timer = null;
+  }
+  function recDiscard() {
+    if (rec.url) { URL.revokeObjectURL(rec.url); rec.url = null; }
+    $("recPlayback").removeAttribute("src"); $("recPlayback").load();
+    $("recResult").classList.add("hidden");
+    rec.chunks = [];
+  }
+
+  async function recStart() {
+    if (!recSupported || rec.active) return;
+    recDiscard();
+    var q = $("recQuality").value, fps = +$("recFps").value;
+    var video = { frameRate: { ideal: fps }, cursor: $("recCursor").checked ? "always" : "never" };
+    if (q !== "source") video.height = { ideal: +q };
+    var screen, mic = null, note = "";
+    try {
+      screen = await navigator.mediaDevices.getDisplayMedia({ video: video, audio: $("recSys").checked });
+    } catch (err) {
+      $("recStatus").textContent = (err && err.name === "NotAllowedError")
+        ? "Recording was cancelled or permission was denied."
+        : "Could not start recording: " + (err && err.message ? err.message : err);
+      return;
+    }
+    if ($("recMic").checked) {
+      try {
+        mic = await navigator.mediaDevices.getUserMedia({ audio: { echoCancellation: true, noiseSuppression: true } });
+      } catch (err) { note = " (Microphone unavailable, recording without it.)"; }
+    }
+    rec.streams = mic ? [screen, mic] : [screen];
+
+    var tracks = screen.getVideoTracks().slice();
+    var sysAudio = screen.getAudioTracks();
+    if (sysAudio.length && mic) {
+      try {
+        var AC = window.AudioContext || window.webkitAudioContext;
+        rec.ctx = new AC();
+        var dest = rec.ctx.createMediaStreamDestination();
+        rec.ctx.createMediaStreamSource(new MediaStream(sysAudio)).connect(dest);
+        rec.ctx.createMediaStreamSource(mic).connect(dest);
+        tracks = tracks.concat(dest.stream.getAudioTracks());
+      } catch (err) { tracks = tracks.concat(sysAudio); }
+    } else if (sysAudio.length) {
+      tracks = tracks.concat(sysAudio);
+    } else if (mic) {
+      tracks = tracks.concat(mic.getAudioTracks());
+    }
+    if ($("recSys").checked && !sysAudio.length) note += " (No system audio was shared. Tick “share audio” in the browser prompt next time.)";
+
+    rec.mime = pickMime();
+    var opts = { videoBitsPerSecond: q === "720" ? 4e6 : (q === "1080" ? 8e6 : 12e6) };
+    if (rec.mime) opts.mimeType = rec.mime;
+    var mr;
+    try { mr = new MediaRecorder(new MediaStream(tracks), opts); }
+    catch (err) {
+      try { mr = new MediaRecorder(new MediaStream(tracks)); }
+      catch (err2) { releaseStreams(); $("recStatus").textContent = "Could not start the recorder: " + err2.message; return; }
+    }
+    rec.mr = mr; rec.chunks = []; rec.acc = 0; rec.t0 = Date.now(); rec.active = true;
+    mr.ondataavailable = function (e) { if (e.data && e.data.size) rec.chunks.push(e.data); };
+    mr.onstop = recFinish;
+    mr.onerror = function (e) { $("recStatus").textContent = "Recorder error: " + (e.error && e.error.message ? e.error.message : "unknown"); };
+    screen.getVideoTracks()[0].addEventListener("ended", recStop);   // browser's own "Stop sharing" button
+    mr.start(1000);
+
+    recUI("recording");
+    $("recStatus").innerHTML = '<span class="rec-dot"></span>Recording…';
+    if (note) $("recStatus").appendChild(document.createTextNode(note));
+    $("recTimer").textContent = "00:00";
+    rec.timer = setInterval(function () { $("recTimer").textContent = fmtTime(elapsed()); }, 250);
+  }
+
+  function recPause() {
+    var mr = rec.mr; if (!mr) return;
+    if (mr.state === "recording") {
+      rec.acc += Date.now() - rec.t0; mr.pause(); recUI("paused");
+      $("recStatus").textContent = "Paused";
+    } else if (mr.state === "paused") {
+      rec.t0 = Date.now(); mr.resume(); recUI("recording");
+      $("recStatus").innerHTML = '<span class="rec-dot"></span>Recording…';
+    }
+  }
+  function recStop() {
+    var mr = rec.mr;
+    if (mr && mr.state !== "inactive") { rec.acc = elapsed(); mr.stop(); }
+  }
+  function recFinish() {
+    var total = rec.acc;
+    rec.active = false; releaseStreams(); recUI("idle");
+    if (!rec.chunks.length) { $("recStatus").textContent = "Nothing was recorded."; return; }
+    var type = (rec.mr && rec.mr.mimeType) || rec.mime || "video/webm";
+    var blob = new Blob(rec.chunks, { type: type });
+    rec.url = URL.createObjectURL(blob);
+    var extn = type.indexOf("mp4") > -1 ? "mp4" : "webm", d = new Date();
+    var name = "screen-recording-" + d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()) + "-" +
+      pad2(d.getHours()) + pad2(d.getMinutes()) + pad2(d.getSeconds()) + "." + extn;
+    $("recPlayback").src = rec.url;
+    $("recDl").href = rec.url; $("recDl").download = name;
+    $("recDl").textContent = "Download " + extn.toUpperCase() + " (" + fmtSize(blob.size) + ")";
+    $("recResult").classList.remove("hidden");
+    $("recStatus").textContent = "Saved: " + fmtTime(total) + " recorded.";
+  }
+
+  $("recStart").onclick = recStart;
+  $("recPause").onclick = recPause;
+  $("recStop").onclick = recStop;
+  $("recDiscard").onclick = function () { recDiscard(); $("recStatus").textContent = ""; };
+  window.addEventListener("beforeunload", function (e) {
+    if (rec.active) { e.preventDefault(); e.returnValue = ""; }
+  });
+
+  /* ---------- text to speech ---------- */
+  var synth = window.speechSynthesis || null;
+  var tts = { chunks: [], i: 0, token: 0, playing: false, paused: false };
+  var cap = null, audioUrl = null, azCtl = null;
+  $("tabTts").onclick = function () { showTab("tts"); };
+
+  var SAMPLE = "السلام علیکم! یہ اردو آواز کا ایک چھوٹا سا نمونہ ہے۔ آپ اپنا متن یہاں لکھ سکتے ہیں اور اسے سن سکتے ہیں۔ کیا آپ کو یہ آواز پسند آئی؟";
+
+  function azureMode() { return $("ttsEngine").value === "azure"; }
+  function isUrdu(v) { return /^ur([-_]|$)/i.test(v.lang || "") || /urdu|اردو/i.test(v.name || ""); }
+  function vKey(v) { return v.name + "|" + v.lang; }
+
+  /* ----- browser voices ----- */
+  function loadVoices() {
+    if (!synth) return;
+    var all = synth.getVoices() || [], sel = $("ttsVoice"), prev = sel.value;
+    var urdu = all.filter(isUrdu), other = all.filter(function (v) { return !isUrdu(v); });
+    var onlyUr = $("ttsUrOnly").checked && urdu.length > 0;
+    sel.innerHTML = "";
+    function add(list, label) {
+      if (!list.length) return;
+      var g = document.createElement("optgroup"); g.label = label;
+      list.forEach(function (v) {
+        var o = document.createElement("option");
+        o.value = vKey(v);
+        o.textContent = v.name + " (" + v.lang + ")" + (v.localService ? "" : " · online");
+        g.appendChild(o);
+      });
+      sel.appendChild(g);
+    }
+    add(urdu, "Urdu voices");
+    if (!onlyUr) add(other, urdu.length ? "Other languages" : "Available voices");
+    if (prev && Array.prototype.some.call(sel.options, function (o) { return o.value === prev; })) sel.value = prev;
+    var info = $("ttsVoiceInfo");
+    if (!all.length) {
+      info.textContent = "No voices reported yet. If this stays empty, this browser may not support speech synthesis. Try Refresh voices.";
+    } else if (!urdu.length) {
+      info.textContent = "No Urdu voice was found on this device, so browser speech will not read Urdu properly. Use the natural neural voice above instead, or install an Urdu voice " +
+        "(Windows: Settings → Time & language → Speech; Android: Text-to-speech → Google → Urdu voice data).";
+    } else {
+      info.textContent = urdu.length + " Urdu voice" + (urdu.length === 1 ? "" : "s") + " found on this device.";
+    }
+  }
+  function curVoice() {
+    if (!synth) return null;
+    var k = $("ttsVoice").value, all = synth.getVoices() || [];
+    for (var i = 0; i < all.length; i++) { if (vKey(all[i]) === k) return all[i]; }
+    return null;
+  }
+  function updSliders() {
+    $("ttsRateV").textContent = (+$("ttsRate").value).toFixed(2) + "×";
+    $("ttsPitchV").textContent = (+$("ttsPitch").value).toFixed(2);
+    $("ttsVolV").textContent = Math.round($("ttsVol").value * 100) + "%";
+  }
+
+  function makeChunks(text, max) {
+    var parts = text.replace(/\r\n?/g, "\n").match(/[^۔؟!?.\n]+[۔؟!?.]*|\n+/g) || [];
+    var out = [], buf = "";
+    function flush() { if (buf.trim()) out.push(buf.trim()); buf = ""; }
+    parts.forEach(function (s) {
+      s = s.replace(/\s+/g, " ").trim();
+      if (!s) return;
+      while (s.length > max) {
+        var cut = s.lastIndexOf(" ", max);
+        if (cut < max / 2) cut = max;
+        flush(); out.push(s.slice(0, cut).trim()); s = s.slice(cut).trim();
+      }
+      if (buf && (buf + " " + s).length > max) flush();
+      buf = buf ? buf + " " + s : s;
+    });
+    flush();
+    return out;
+  }
+
+  function ttsUI(state) {
+    var on = state !== "idle";
+    $("ttsPlay").classList.toggle("hidden", on);
+    $("ttsPause").classList.toggle("hidden", !on || azureMode());
+    $("ttsStop").classList.toggle("hidden", !on);
+    $("ttsStop").textContent = azureMode() ? "Cancel" : "Stop";
+    $("ttsPause").textContent = state === "paused" ? "Resume" : "Pause";
+    if (!on) $("ttsNow").classList.add("hidden");
+  }
+  function ttsProgress() {
+    var n = tts.chunks.length;
+    $("tbar").style.display = "block";
+    $("tbarFill").style.width = (n ? Math.round(tts.i / n * 100) : 0) + "%";
+    $("ttsStatus").textContent = "Part " + Math.min(tts.i + 1, n) + " of " + n;
+  }
+  function ttsDone(msg) {
+    tts.playing = false; tts.paused = false; ttsUI("idle");
+    $("ttsStatus").textContent = msg;
+    stopCapture();
+  }
+
+  /* ----- shared audio result (download) ----- */
+  function clearTtsAudio() {
+    if (audioUrl) { URL.revokeObjectURL(audioUrl); audioUrl = null; }
+    $("ttsAudio").pause();
+    $("ttsAudio").removeAttribute("src"); $("ttsAudio").load();
+    $("ttsAudioBox").classList.add("hidden");
+  }
+  function showAudio(blob, extn, autoplay) {
+    var d = new Date();
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
+    audioUrl = URL.createObjectURL(blob);
+    $("ttsAudio").src = audioUrl;
+    $("ttsDl").href = audioUrl;
+    $("ttsDl").download = "urdu-narration-" + d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()) + "-" +
+      pad2(d.getHours()) + pad2(d.getMinutes()) + pad2(d.getSeconds()) + "." + extn;
+    $("ttsDl").textContent = "Download " + extn.toUpperCase() + " (" + fmtSize(blob.size) + ")";
+    $("ttsAudioBox").classList.remove("hidden");
+    if (autoplay) {
+      $("ttsAudio").volume = +$("ttsVol").value;
+      var pr = $("ttsAudio").play();
+      if (pr && pr.catch) pr.catch(function () {});
+    }
+  }
+
+  /* ----- natural neural voice (Microsoft Azure Speech, called straight from the browser) ----- */
+  function escXml(t) { return t.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;"); }
+  function pctStr(v) { var n = Math.round(v); return (n >= 0 ? "+" : "") + n + "%"; }
+  function azMsg(st) {
+    if (st === 401) return "Microsoft rejected the key (401). Make sure the key and the region come from the same Speech resource.";
+    if (st === 403) return "Access denied (403). The free quota may be used up or the key is disabled.";
+    if (st === 429) return "Too many requests (429). Wait a moment and try again.";
+    if (st === 400) return "The request was rejected (400). Try a shorter text or a different speaker.";
+    return "The speech service returned error " + st + ".";
+  }
+  function saveAz() {
+    try {
+      if ($("azRemember").checked) {
+        localStorage.setItem("urduTts.key", $("azKey").value.trim());
+        localStorage.setItem("urduTts.region", $("azRegion").value.trim());
+        localStorage.setItem("urduTts.remember", "1");
+      } else {
+        localStorage.removeItem("urduTts.key"); localStorage.removeItem("urduTts.region"); localStorage.removeItem("urduTts.remember");
+      }
+    } catch (e) {}
+  }
+  function loadAz() {
+    try {
+      if (localStorage.getItem("urduTts.remember") === "1") {
+        $("azKey").value = localStorage.getItem("urduTts.key") || "";
+        $("azRegion").value = localStorage.getItem("urduTts.region") || "";
+        $("azRemember").checked = true;
+      }
+    } catch (e) {}
+  }
+
+  async function azureSpeak(text) {
+    var key = $("azKey").value.trim();
+    var region = $("azRegion").value.trim().toLowerCase().replace(/\s+/g, "");
+    if (!key || !region) {
+      $("ttsStatus").textContent = "Enter your Azure Speech key and region first (see “How do I get a key?”).";
+      return;
+    }
+    if (!/^[a-z0-9]+$/.test(region)) {
+      $("ttsStatus").textContent = "The region should be a short name like eastus (letters and numbers only).";
+      return;
+    }
+    saveAz(); clearTtsAudio();
+    var voice = $("azVoice").value;
+    var rate = pctStr((+$("ttsRate").value - 1) * 100), pitch = pctStr((+$("ttsPitch").value - 1) * 100);
+    var chunks = makeChunks(text, 800), parts = [], ctl = new AbortController();
+    var url = "https://" + region + ".tts.speech.microsoft.com/cognitiveservices/v1";
+    azCtl = ctl; tts.chunks = chunks; tts.i = 0; tts.playing = true; ttsUI("playing");
+    try {
+      for (var i = 0; i < chunks.length; i++) {
+        tts.i = i; ttsProgress();
+        $("ttsStatus").textContent = "Generating part " + (i + 1) + " of " + chunks.length + "…";
+        var ssml = '<speak version="1.0" xmlns="http://www.w3.org/2001/10/synthesis" xml:lang="ur-PK">' +
+          '<voice name="' + voice + '"><prosody rate="' + rate + '" pitch="' + pitch + '">' + escXml(chunks[i]) +
+          '</prosody></voice></speak>';
+        var res;
+        try {
+          res = await fetch(url, {
+            method: "POST", signal: ctl.signal, body: ssml,
+            headers: {
+              "Ocp-Apim-Subscription-Key": key,
+              "Content-Type": "application/ssml+xml",
+              "X-Microsoft-OutputFormat": "audio-24khz-96kbitrate-mono-mp3"
+            }
+          });
+        } catch (e) {
+          if (e && e.name === "AbortError") throw e;
+          throw new Error("Could not reach Microsoft's speech service. Check your internet connection and the region name (for example eastus). If it keeps failing, your browser may be blocking the request.");
+        }
+        if (!res.ok) throw new Error(azMsg(res.status));
+        parts.push(await res.arrayBuffer());
+      }
+      var blob = new Blob(parts, { type: "audio/mpeg" });
+      showAudio(blob, "mp3", true);
+      $("tbarFill").style.width = "100%";
+      ttsDone("Done. Your Urdu narration is ready to play and download.");
+    } catch (err) {
+      if (err && err.name === "AbortError") return;
+      ttsDone("Failed: " + (err && err.message ? err.message : err));
+    } finally {
+      if (azCtl === ctl) azCtl = null;
+    }
+  }
+
+  /* ----- browser voice ----- */
+  function speakNext(token) {
+    if (token !== tts.token) return;
+    if (tts.i >= tts.chunks.length) {
+      $("tbarFill").style.width = "100%";
+      ttsDone("Finished.");
+      return;
+    }
+    ttsProgress();
+    $("ttsNow").textContent = tts.chunks[tts.i];
+    $("ttsNow").classList.remove("hidden");
+    var u = new SpeechSynthesisUtterance(tts.chunks[tts.i]), v = curVoice();
+    if (v) { u.voice = v; u.lang = v.lang; } else { u.lang = "ur-PK"; }
+    u.rate = +$("ttsRate").value; u.pitch = +$("ttsPitch").value; u.volume = +$("ttsVol").value;
+    u.onend = function () {
+      if (token !== tts.token) return;
+      tts.i++; speakNext(token);
+    };
+    u.onerror = function (e) {
+      if (token !== tts.token) return;
+      if (e && (e.error === "interrupted" || e.error === "canceled")) return;
+      tts.token++;
+      ttsDone("Speech error: " + (e && e.error ? e.error : "unknown") + ". Try the natural neural voice instead.");
+    };
+    synth.speak(u);
+  }
+
+  async function ttsPlay() {
+    var text = $("ttsText").value.trim();
+    if (!text) { $("ttsStatus").textContent = "Please enter some text first."; return; }
+    if (azureMode()) { tts.token++; return azureSpeak(text); }
+    if (!synth) { $("ttsStatus").textContent = "This browser does not support built-in speech. Use the natural neural voice instead."; return; }
+    tts.token++; synth.cancel(); stopCapture(0);
+    var token = tts.token;
+    tts.chunks = makeChunks(text, 180); tts.i = 0; tts.playing = true; tts.paused = false;
+    clearTtsAudio();
+    ttsUI("playing");
+    if ($("ttsRecord").checked) await startCapture();
+    if (token !== tts.token) return;
+    speakNext(token);
+  }
+  function ttsPause() {
+    if (!synth || !tts.playing || azureMode()) return;
+    if (!tts.paused) { synth.pause(); tts.paused = true; ttsUI("paused"); }
+    else { synth.resume(); tts.paused = false; ttsUI("playing"); }
+  }
+  function ttsStop() {
+    tts.token++;
+    if (azCtl) { azCtl.abort(); azCtl = null; }
+    if (synth) synth.cancel();
+    ttsDone(azureMode() ? "Cancelled." : "Stopped.");
+  }
+
+  /* ----- optional: capture browser-voice sound into an audio file ----- */
+  async function startCapture() {
+    if (!(navigator.mediaDevices && navigator.mediaDevices.getDisplayMedia && window.MediaRecorder)) {
+      $("ttsStatus").textContent = "Audio capture is not supported in this browser. Playing without saving.";
+      return;
+    }
+    var st;
+    try { st = await navigator.mediaDevices.getDisplayMedia({ video: true, audio: true }); }
+    catch (err) { $("ttsStatus").textContent = "Capture was cancelled. Playing without saving."; return; }
+    var at = st.getAudioTracks();
+    if (!at.length) {
+      st.getTracks().forEach(function (t) { t.stop(); });
+      $("ttsStatus").textContent = "No audio was shared (tick “Share system audio” or “Share tab audio”). Playing without saving.";
+      return;
+    }
+    var mime = "", opts = ["audio/webm;codecs=opus", "audio/webm", "audio/mp4"];
+    for (var i = 0; i < opts.length; i++) { if (MediaRecorder.isTypeSupported(opts[i])) { mime = opts[i]; break; } }
+    var mr;
+    try { mr = new MediaRecorder(new MediaStream(at), mime ? { mimeType: mime } : undefined); }
+    catch (err) { st.getTracks().forEach(function (t) { t.stop(); }); return; }
+    var c = { stream: st, mr: mr, chunks: [], active: true, mime: mime || "audio/webm" };
+    cap = c;
+    mr.ondataavailable = function (e) { if (e.data && e.data.size) c.chunks.push(e.data); };
+    mr.onstop = function () { capFinish(c); };
+    st.getVideoTracks()[0].addEventListener("ended", function () { stopCapture(0); });
+    mr.start(500);
+  }
+  function stopCapture(delay) {
+    var c = cap;
+    if (!c || !c.active) return;
+    c.active = false;
+    setTimeout(function () {
+      try { if (c.mr.state !== "inactive") c.mr.stop(); } catch (e) {}
+      c.stream.getTracks().forEach(function (t) { try { t.stop(); } catch (e) {} });
+    }, delay === undefined ? 900 : delay);
+  }
+  function capFinish(c) {
+    if (!c.chunks.length) return;
+    var blob = new Blob(c.chunks, { type: c.mime });
+    showAudio(blob, c.mime.indexOf("mp4") > -1 ? "m4a" : "webm", false);
+  }
+
+  /* ----- wiring ----- */
+  function ttsEngineChange() {
+    var az = azureMode();
+    $("azBox").classList.toggle("hidden", !az);
+    $("brBox").classList.toggle("hidden", az);
+    $("ttsRecCard").classList.toggle("hidden", az);
+    $("ttsPlay").textContent = az ? "Generate natural speech" : "▶ Speak";
+    $("ttsStatus").textContent = "";
+  }
+  if (synth) {
+    synth.onvoiceschanged = loadVoices;
+    loadVoices(); setTimeout(loadVoices, 600);
+  } else {
+    $("ttsVoiceInfo").textContent = "Speech synthesis is not supported in this browser. Use the natural neural voice instead.";
+  }
+  loadAz();
+  updSliders();
+  ttsEngineChange();
+  $("ttsEngine").onchange = ttsEngineChange;
+  ["ttsRate", "ttsPitch", "ttsVol"].forEach(function (id) { $(id).oninput = updSliders; });
+  $("ttsVol").addEventListener("input", function () { $("ttsAudio").volume = +$("ttsVol").value; });
+  $("ttsUrOnly").onchange = loadVoices;
+  $("ttsRefresh").onclick = loadVoices;
+  $("ttsPlay").onclick = ttsPlay;
+  $("ttsPause").onclick = ttsPause;
+  $("ttsStop").onclick = ttsStop;
+  $("ttsAudioDiscard").onclick = clearTtsAudio;
+  $("azRemember").onchange = saveAz;
+  $("ttsSample").onclick = function () { $("ttsText").value = SAMPLE; $("ttsText").dispatchEvent(new Event("input")); };
+  $("ttsClear").onclick = function () { $("ttsText").value = ""; $("ttsText").dispatchEvent(new Event("input")); };
+  $("ttsLoad").onclick = function () { $("ttsFile").click(); };
+  $("ttsFile").onchange = function () {
+    var f = $("ttsFile").files[0]; if (!f) return;
+    f.text().then(function (t) { $("ttsText").value = t; $("ttsText").dispatchEvent(new Event("input")); });
+    $("ttsFile").value = "";
+  };
+  $("ttsText").oninput = function () {
+    var n = $("ttsText").value.length;
+    $("ttsCount").textContent = n ? n + " characters" : "";
+  };
+  window.addEventListener("beforeunload", function () { if (synth) synth.cancel(); });
+
+  /* ---------- voice studio ---------- */
+  /* DSP-START */
+  function percentile(arr, p) {
+    var a = Array.prototype.slice.call(arr).sort(function (x, y) { return x - y; });
+    return a.length ? a[Math.min(a.length - 1, Math.floor(p * a.length))] : 0;
+  }
+  function frameRms(x, fl) {
+    var n = Math.floor(x.length / fl), out = new Float32Array(n);
+    for (var i = 0; i < n; i++) {
+      var s = 0, o = i * fl;
+      for (var j = 0; j < fl; j++) { var v = x[o + j]; s += v * v; }
+      out[i] = Math.sqrt(s / fl);
+    }
+    return out;
+  }
+  /* finds the stretches of speech; gaps shorter than minSilMs stay inside one phrase */
+  function detectSegments(x, sr, minSilMs) {
+    var fl = Math.max(1, Math.round(sr * 0.02)), r = frameRms(x, fl), n = r.length;
+    if (!n) return [];
+    var lo = percentile(r, 0.1), hi = percentile(r, 0.95);
+    var thr = Math.max(lo + 0.2 * (hi - lo), lo * 2, 1e-4);
+    var minSil = Math.max(1, Math.round(minSilMs / 20)), runs = [], i = 0;
+    while (i < n) {
+      if (r[i] > thr) { var st = i; while (i < n && r[i] > thr) i++; runs.push([st, i]); } else i++;
+    }
+    var merged = [];
+    runs.forEach(function (q) {
+      var l = merged[merged.length - 1];
+      if (l && q[0] - l[1] < minSil) l[1] = q[1]; else merged.push([q[0], q[1]]);
+    });
+    var padS = Math.round(sr * 0.04), padE = Math.round(sr * 0.06);
+    return merged.filter(function (q) { return q[1] - q[0] >= 4; }).map(function (q) {
+      return { s: Math.max(0, q[0] * fl - padS), e: Math.min(x.length, q[1] * fl + padE) };
+    });
+  }
+  function joinParts(parts, fade) {
+    var total = 0, i;
+    parts.forEach(function (p) { total += p.length; });
+    var out = new Float32Array(total), o = 0;
+    parts.forEach(function (p, idx) {
+      out.set(p, o);
+      var f = Math.min(fade, p.length >> 1);
+      if (idx > 0) for (i = 0; i < f; i++) out[o + i] *= i / f;
+      if (idx < parts.length - 1) for (i = 0; i < f; i++) out[o + p.length - 1 - i] *= i / f;
+      o += p.length;
+    });
+    return out;
+  }
+  /* a mistake mark removes the phrase it falls in (or the last one before it) plus nBack-1 earlier phrases */
+  function removeMarked(x, segs, marks, nBack, fade) {
+    var kill = [], count = 0;
+    marks.forEach(function (m) {
+      var idx = -1, i, k;
+      for (i = 0; i < segs.length; i++) { if (segs[i].s <= m) idx = i; else break; }
+      if (idx < 0) return;
+      for (k = 0; k < nBack && idx - k >= 0; k++) kill.push([segs[idx - k].s, segs[idx - k].e]);
+      count++;
+    });
+    kill.sort(function (a, b) { return a[0] - b[0]; });
+    var merged = [];
+    kill.forEach(function (r) {
+      var l = merged[merged.length - 1];
+      if (l && r[0] <= l[1]) l[1] = Math.max(l[1], r[1]); else merged.push([r[0], r[1]]);
+    });
+    var parts = [], pos = 0, removed = 0;
+    merged.forEach(function (r) {
+      if (r[0] > pos) parts.push(x.subarray(pos, r[0]));
+      pos = r[1]; removed += r[1] - r[0];
+    });
+    if (pos < x.length) parts.push(x.subarray(pos));
+    if (!parts.length) return { data: x, count: 0, removed: 0 };
+    return { data: joinParts(parts, fade), count: count, removed: removed };
+  }
+  /* pauses longer than maxPauseMs are cut down to maxPauseMs; shorter pauses are left alone */
+  function shortenPauses(x, segs, sr, maxPauseMs) {
+    if (!segs.length) return x;
+    var half = Math.round(sr * maxPauseMs / 2000), parts = [];
+    var rs = Math.max(0, segs[0].s - half), re = segs[0].e;
+    for (var i = 1; i < segs.length; i++) {
+      var gap = segs[i].s - segs[i - 1].e;
+      if (gap <= 2 * half) { re = segs[i].e; }
+      else { parts.push(x.subarray(rs, Math.min(x.length, re + half))); rs = segs[i].s - half; re = segs[i].e; }
+    }
+    parts.push(x.subarray(rs, Math.min(x.length, re + half)));
+    return joinParts(parts, Math.round(sr * 0.008));
+  }
+  function makeFFT(N) {
+    var levels = Math.round(Math.log(N) / Math.LN2), rev = new Uint32Array(N);
+    var cs = new Float64Array(N / 2), sn = new Float64Array(N / 2), i, b;
+    for (i = 0; i < N; i++) { var r = 0, v = i; for (b = 0; b < levels; b++) { r = (r << 1) | (v & 1); v >>= 1; } rev[i] = r; }
+    for (i = 0; i < N / 2; i++) { cs[i] = Math.cos(2 * Math.PI * i / N); sn[i] = Math.sin(2 * Math.PI * i / N); }
+    return function (re, im, inverse) {
+      var a, j, k, t;
+      for (a = 0; a < N; a++) {
+        j = rev[a];
+        if (j > a) { t = re[a]; re[a] = re[j]; re[j] = t; t = im[a]; im[a] = im[j]; im[j] = t; }
+      }
+      for (var size = 2; size <= N; size <<= 1) {
+        var half = size >> 1, step = N / size;
+        for (a = 0; a < N; a += size) {
+          for (j = a, k = 0; j < a + half; j++, k += step) {
+            var l = j + half, c = cs[k], s2 = inverse ? sn[k] : -sn[k];
+            var tre = re[l] * c - im[l] * s2, tim = re[l] * s2 + im[l] * c;
+            re[l] = re[j] - tre; im[l] = im[j] - tim; re[j] += tre; im[j] += tim;
+          }
+        }
+      }
+      if (inverse) for (a = 0; a < N; a++) { re[a] /= N; im[a] /= N; }
+    };
+  }
+  /* spectral noise reduction: learns the room noise from the quietest moments and subtracts it */
+  async function noiseReduce(x, strength, onProgress, unity) {
+    if (!(strength > 0) && !unity) return x;
+    var N = 1024, H = 512, K = N / 2 + 1, len = x.length, fft = makeFFT(N), i, k;
+    var win = new Float64Array(N);
+    for (i = 0; i < N; i++) win[i] = Math.sin(Math.PI * (i + 0.5) / N);
+    var nFrames = Math.ceil((len + H) / H) + 1;
+    var re = new Float64Array(N), im = new Float64Array(N);
+    function load(f) {
+      var st = f * H - H;
+      for (var j = 0; j < N; j++) { var p = st + j; re[j] = (p >= 0 && p < len ? x[p] : 0) * win[j]; im[j] = 0; }
+    }
+    var noise = new Float64Array(K);
+    if (!unity) {
+      var en = new Float64Array(nFrames), f, j, p;
+      for (f = 0; f < nFrames; f++) {
+        var st0 = f * H - H, s0 = 0, c0 = 0;
+        for (j = 0; j < N; j += 4) { p = st0 + j; if (p >= 0 && p < len) { s0 += x[p] * x[p]; c0++; } }
+        en[f] = c0 > N / 16 ? s0 / c0 : 1e9;
+      }
+      var order = [];
+      for (f = 0; f < nFrames; f++) order.push(f);
+      order.sort(function (a, b) { return en[a] - en[b]; });
+      var take = Math.max(8, Math.min(300, Math.floor(nFrames * 0.1))), used = 0;
+      for (var q = 0; q < take && q < order.length; q++) {
+        if (en[order[q]] >= 1e9) break;
+        load(order[q]); fft(re, im, false);
+        for (k = 0; k < K; k++) noise[k] += Math.sqrt(re[k] * re[k] + im[k] * im[k]);
+        used++;
+      }
+      if (used) for (k = 0; k < K; k++) noise[k] /= used;
+    }
+    var alpha = 1 + 2.5 * strength, beta = 0.03 + 0.17 * (1 - strength);
+    var out = new Float32Array(len), prev = new Float64Array(K), g = new Float64Array(K), gs = new Float64Array(K);
+    for (k = 0; k < K; k++) prev[k] = 1;
+    for (var f2 = 0; f2 < nFrames; f2++) {
+      load(f2); fft(re, im, false);
+      if (!unity) {
+        for (k = 0; k < K; k++) {
+          var mag = Math.sqrt(re[k] * re[k] + im[k] * im[k]) + 1e-12;
+          var gg = 1 - alpha * noise[k] / mag;
+          g[k] = gg < beta ? beta : gg;
+        }
+        for (k = 0; k < K; k++) {
+          var a0 = g[k > 0 ? k - 1 : 0], a2 = g[k < K - 1 ? k + 1 : K - 1];
+          var gf = 0.25 * a0 + 0.5 * g[k] + 0.25 * a2;
+          gs[k] = gf > prev[k] ? 0.2 * prev[k] + 0.8 * gf : 0.6 * prev[k] + 0.4 * gf;
+          prev[k] = gs[k];
+        }
+        for (k = 0; k < K; k++) {
+          re[k] *= gs[k]; im[k] *= gs[k];
+          if (k > 0 && k < N / 2) { re[N - k] *= gs[k]; im[N - k] *= gs[k]; }
+        }
+      }
+      fft(re, im, true);
+      var st2 = f2 * H - H;
+      for (var j2 = 0; j2 < N; j2++) { var p2 = st2 + j2; if (p2 >= 0 && p2 < len) out[p2] += re[j2] * win[j2]; }
+      if (onProgress && f2 % 400 === 0) { onProgress(f2 / nFrames); await tick(); }
+    }
+    return out;
+  }
+  /* brings the speech to a steady level and gently limits peaks */
+  function normalizeSpeech(x, sr, targetDb) {
+    var fl = Math.max(1, Math.round(sr * 0.02)), r = frameRms(x, fl);
+    var thr = Math.max(percentile(r, 0.1) * 3, percentile(r, 0.95) * 0.15, 1e-4), s = 0, c = 0, i;
+    for (i = 0; i < r.length; i++) { if (r[i] > thr) { s += r[i] * r[i]; c++; } }
+    var rms = c ? Math.sqrt(s / c) : 0;
+    if (!rms) { for (i = 0; i < r.length; i++) { s += r[i] * r[i]; } rms = Math.sqrt(s / Math.max(1, r.length)); }
+    var g = Math.min(Math.pow(10, targetDb / 20) / Math.max(rms, 1e-6), 31.6);
+    var out = new Float32Array(x.length), knee = 0.8, top = 0.98;
+    for (i = 0; i < x.length; i++) {
+      var v = x[i] * g, a = Math.abs(v);
+      if (a > knee) { a = knee + (top - knee) * Math.tanh((a - knee) / (top - knee)); v = v < 0 ? -a : a; }
+      out[i] = v;
+    }
+    return out;
+  }
+  function encodeWav(x, sr) {
+    var n = x.length, buf = new ArrayBuffer(44 + n * 2), v = new DataView(buf), i;
+    function str(o, t) { for (var q = 0; q < t.length; q++) v.setUint8(o + q, t.charCodeAt(q)); }
+    str(0, "RIFF"); v.setUint32(4, 36 + n * 2, true); str(8, "WAVE"); str(12, "fmt ");
+    v.setUint32(16, 16, true); v.setUint16(20, 1, true); v.setUint16(22, 1, true);
+    v.setUint32(24, sr, true); v.setUint32(28, sr * 2, true); v.setUint16(32, 2, true); v.setUint16(34, 16, true);
+    str(36, "data"); v.setUint32(40, n * 2, true);
+    for (i = 0; i < n; i++) {
+      var t = Math.max(-1, Math.min(1, x[i]));
+      v.setInt16(44 + i * 2, t < 0 ? t * 32768 : t * 32767, true);
+    }
+    return new Blob([buf], { type: "audio/wav" });
+  }
+  /* DSP-END */
+
+  /* EQ and gentle compression through the browser's audio engine */
+  async function eqChain(x, sr, preset) {
+    if (preset === "none") return x;
+    var OAC = window.OfflineAudioContext || window.webkitOfflineAudioContext;
+    var oc = new OAC(1, x.length, sr), b = oc.createBuffer(1, x.length, sr);
+    b.copyToChannel(x, 0);
+    var src = oc.createBufferSource(); src.buffer = b;
+    function flt(type, freq, q, gain) {
+      var n = oc.createBiquadFilter(); n.type = type; n.frequency.value = freq; n.Q.value = q;
+      if (gain !== undefined) n.gain.value = gain;
+      return n;
+    }
+    var chain = [flt("highpass", 80, 0.707)], air = sr / 2 > 11000;
+    if (preset === "clear") {
+      chain.push(flt("peaking", 250, 1, -2), flt("peaking", 3500, 0.9, 3));
+      if (air) chain.push(flt("highshelf", 9000, 0.7, 2));
+    } else {
+      chain.push(flt("lowshelf", 160, 0.7, 2), flt("peaking", 3000, 0.9, 1.5));
+      if (air) chain.push(flt("highshelf", 9000, 0.7, -1));
+    }
+    var comp = oc.createDynamicsCompressor();
+    comp.threshold.value = -26; comp.knee.value = 18; comp.ratio.value = 3; comp.attack.value = 0.005; comp.release.value = 0.18;
+    chain.push(comp);
+    var prev = src;
+    chain.forEach(function (n) { prev.connect(n); prev = n; });
+    prev.connect(oc.destination);
+    src.start();
+    var r = await oc.startRendering();
+    return r.getChannelData(0).slice();
+  }
+
+  var vs = { buf: null, sr: 48000, marks: [], undo: [], sel: null, playCtx: null, playSrc: null, urls: [], pkBuf: null, pkW: 0, pk: null };
+  var vsr = null;
+  $("tabVs").onclick = function () { showTab("vs"); };
+
+  function vsDur(n) { return fmtTime(n / vs.sr * 1000); }
+
+  /* teleprompter */
+  function vsPrompt() {
+    $("vsPrompter").textContent = $("vsScript").value;
+    $("vsPrompter").style.fontSize = $("vsFs").value + "px";
+    $("vsFsV").textContent = $("vsFs").value + " px";
+    $("vsSpV").textContent = $("vsSp").value === "0" ? "off" : $("vsSp").value;
+  }
+
+  /* microphones */
+  async function vsListMics() {
+    try {
+      var devs = await navigator.mediaDevices.enumerateDevices(), sel = $("vsMic"), cur = sel.value;
+      sel.innerHTML = '<option value="">Default microphone</option>';
+      devs.filter(function (d) { return d.kind === "audioinput"; }).forEach(function (d, i) {
+        var o = document.createElement("option");
+        o.value = d.deviceId; o.textContent = d.label || "Microphone " + (i + 1);
+        sel.appendChild(o);
+      });
+      sel.value = cur;
+    } catch (e) {}
+  }
+
+  /* recording (raw audio, no compression) */
+  async function vsStartRec() {
+    if (vsr) return;
+    if (!(navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) {
+      $("vsRecStatus").textContent = "This browser cannot access the microphone. Use a recent Chrome, Edge, Firefox or Safari.";
+      return;
+    }
+    var a = { echoCancellation: false, noiseSuppression: $("vsNs").checked, autoGainControl: $("vsAgc").checked, channelCount: 1 };
+    var dev = $("vsMic").value;
+    if (dev) a.deviceId = { exact: dev };
+    var stream;
+    try { stream = await navigator.mediaDevices.getUserMedia({ audio: a }); }
+    catch (err) {
+      $("vsRecStatus").textContent = (err && err.name === "NotAllowedError")
+        ? "Microphone permission was denied. Allow it in the browser's address bar and try again."
+        : "Could not open the microphone: " + (err && err.message ? err.message : err);
+      return;
+    }
+    vsListMics();
+    var AC = window.AudioContext || window.webkitAudioContext, ctx = new AC();
+    if (ctx.resume) ctx.resume();
+    var src = ctx.createMediaStreamSource(stream), an = ctx.createAnalyser(), proc = ctx.createScriptProcessor(4096, 1, 1);
+    an.fftSize = 1024;
+    var r = { stream: stream, ctx: ctx, src: src, an: an, proc: proc, chunks: [], total: 0, marks: [], raf: 0, timer: 0, scroll: 0, pos: 0 };
+    proc.onaudioprocess = function (e) {
+      var d = e.inputBuffer.getChannelData(0);
+      r.chunks.push(new Float32Array(d)); r.total += d.length;
+    };
+    src.connect(an); src.connect(proc); proc.connect(ctx.destination);
+    vsr = r;
+    var tb = new Float32Array(an.fftSize);
+    (function loop() {
+      if (vsr !== r) return;
+      an.getFloatTimeDomainData(tb);
+      var pk = 0;
+      for (var i = 0; i < tb.length; i++) { var v = Math.abs(tb[i]); if (v > pk) pk = v; }
+      var m = $("vsMeter");
+      m.style.width = Math.min(100, pk * 100) + "%";
+      m.style.background = pk > 0.97 ? "var(--err)" : (pk > 0.7 ? "var(--warn)" : "var(--ok)");
+      r.raf = requestAnimationFrame(loop);
+    })();
+    r.timer = setInterval(function () { $("vsTimer").textContent = fmtTime(r.total / ctx.sampleRate * 1000); }, 250);
+    r.pos = $("vsPrompter").scrollTop;
+    r.scroll = setInterval(function () {
+      var sp = +$("vsSp").value;
+      if (sp > 0) { r.pos += sp * 0.4; $("vsPrompter").scrollTop = r.pos; }
+    }, 50);
+    $("vsRec").classList.add("hidden");
+    $("vsStopRec").classList.remove("hidden"); $("vsMark").classList.remove("hidden"); $("vsTimer").classList.remove("hidden");
+    $("vsTimer").textContent = "00:00";
+    $("vsRecStatus").innerHTML = '<span class="rec-dot"></span>Recording… read your script. Press M when you make a mistake.';
+  }
+  function vsMarkNow() {
+    if (!vsr) return;
+    vsr.marks.push(vsr.total);
+    $("vsRecStatus").innerHTML = '<span class="rec-dot"></span>Mistake marked at ' + fmtTime(vsr.total / vsr.ctx.sampleRate * 1000) +
+      " (" + vsr.marks.length + " so far). Pause a second, then re-read the sentence.";
+  }
+  function vsStopRec() {
+    var r = vsr;
+    if (!r) return;
+    vsr = null;
+    cancelAnimationFrame(r.raf); clearInterval(r.timer); clearInterval(r.scroll);
+    r.proc.onaudioprocess = null;
+    try { r.src.disconnect(); r.proc.disconnect(); } catch (e) {}
+    r.stream.getTracks().forEach(function (t) { t.stop(); });
+    var sr = r.ctx.sampleRate;
+    try { r.ctx.close(); } catch (e) {}
+    var out = new Float32Array(r.total), o = 0;
+    r.chunks.forEach(function (c) { out.set(c, o); o += c.length; });
+    $("vsMeter").style.width = "0";
+    $("vsRec").classList.remove("hidden");
+    $("vsStopRec").classList.add("hidden"); $("vsMark").classList.add("hidden"); $("vsTimer").classList.add("hidden");
+    if (!out.length) { $("vsRecStatus").textContent = "Nothing was recorded."; return; }
+    $("vsRecStatus").textContent = "Recorded " + fmtTime(out.length / sr * 1000) + " with " + r.marks.length + " mistake mark" + (r.marks.length === 1 ? "" : "s") + ". Continue with step 3.";
+    vsSetBuffer(out, sr, r.marks);
+  }
+
+  async function vsLoadFile(file) {
+    if (!file) return;
+    $("vsRecStatus").textContent = "Reading audio file…";
+    try {
+      var ab = await file.arrayBuffer(), AC = window.AudioContext || window.webkitAudioContext, ctx = new AC();
+      var buf = await ctx.decodeAudioData(ab);
+      try { ctx.close(); } catch (e) {}
+      var n = buf.length, mono = new Float32Array(n), ch, i;
+      for (ch = 0; ch < buf.numberOfChannels; ch++) {
+        var d = buf.getChannelData(ch);
+        for (i = 0; i < n; i++) mono[i] += d[i] / buf.numberOfChannels;
+      }
+      vsSetBuffer(mono, buf.sampleRate, []);
+      $("vsRecStatus").textContent = "Loaded " + file.name + " (" + fmtTime(n / buf.sampleRate * 1000) + "). Continue with step 3.";
+    } catch (err) {
+      $("vsRecStatus").textContent = "Could not read that file as audio.";
+    }
+  }
+
+  function vsSetBuffer(x, sr, marks) {
+    vs.buf = x; vs.sr = sr; vs.marks = marks.slice(); vs.undo = []; vs.sel = null;
+    $("vsEdit").classList.remove("hidden"); $("vsEnh").classList.remove("hidden");
+    $("vsResult").classList.add("hidden");
+    $("vsUseMarks").checked = vs.marks.length > 0;
+    vsRefresh();
+  }
+  function vsPushUndo() {
+    vs.undo.push({ buf: vs.buf, marks: vs.marks.slice() });
+    if (vs.undo.length > 4) vs.undo.shift();
+  }
+  function vsRefresh() {
+    vsDraw();
+    var t = "Length " + vsDur(vs.buf ? vs.buf.length : 0);
+    if (vs.marks.length) t += " · " + vs.marks.length + " mistake mark" + (vs.marks.length === 1 ? "" : "s") + " (red lines)";
+    if (vs.sel) t += " · Selected " + (vs.sel.a / vs.sr).toFixed(2) + " s – " + (vs.sel.b / vs.sr).toFixed(2) + " s (" + ((vs.sel.b - vs.sel.a) / vs.sr).toFixed(2) + " s)";
+    $("vsInfo").textContent = t;
+    $("vsUndo").disabled = !vs.undo.length;
+  }
+
+  /* waveform */
+  function vsPeaks(w) {
+    if (vs.pkBuf === vs.buf && vs.pkW === w) return vs.pk;
+    var x = vs.buf, step = x.length / w, pk = new Float32Array(w * 2);
+    for (var px = 0; px < w; px++) {
+      var a = Math.floor(px * step), b = Math.min(x.length, Math.max(a + 1, Math.floor((px + 1) * step)));
+      var inc = Math.max(1, Math.floor((b - a) / 48)), mn = 0, mx = 0;
+      for (var i = a; i < b; i += inc) { var v = x[i]; if (v < mn) mn = v; if (v > mx) mx = v; }
+      pk[px * 2] = mn; pk[px * 2 + 1] = mx;
+    }
+    vs.pkBuf = vs.buf; vs.pkW = w; vs.pk = pk;
+    return pk;
+  }
+  function vsDraw() {
+    var c = $("vsWave"), x = vs.buf;
+    if (!x || !c.clientWidth) return;
+    var dpr = window.devicePixelRatio || 1, w = c.clientWidth, h = c.clientHeight;
+    c.width = Math.round(w * dpr); c.height = Math.round(h * dpr);
+    var g = c.getContext("2d"), cs = getComputedStyle(document.documentElement), mid = h / 2;
+    g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    var pk = vsPeaks(Math.round(w));
+    g.fillStyle = cs.getPropertyValue("--accent").trim() || "#2f6feb";
+    for (var px = 0; px < w; px++) {
+      var mn = pk[px * 2], mx = pk[px * 2 + 1];
+      g.fillRect(px, mid - mx * mid * 0.95, 1, Math.max(1, (mx - mn) * mid * 0.95));
+    }
+    if (vs.sel) {
+      g.fillStyle = "rgba(255,180,0,0.28)";
+      var sa = vs.sel.a / x.length * w, sb = vs.sel.b / x.length * w;
+      g.fillRect(sa, 0, Math.max(1, sb - sa), h);
+    }
+    g.fillStyle = cs.getPropertyValue("--err").trim() || "#c0262d";
+    vs.marks.forEach(function (m) { g.fillRect(m / x.length * w - 1, 0, 2, h); });
+  }
+  function vsPos(e) {
+    var c = $("vsWave"), rc = c.getBoundingClientRect();
+    return Math.round(Math.max(0, Math.min(1, (e.clientX - rc.left) / rc.width)) * vs.buf.length);
+  }
+  (function () {
+    var c = $("vsWave"), dragging = false, start = 0;
+    c.addEventListener("pointerdown", function (e) {
+      if (!vs.buf) return;
+      c.setPointerCapture(e.pointerId); dragging = true; start = vsPos(e); vs.sel = null; vsRefresh();
+    });
+    c.addEventListener("pointermove", function (e) {
+      if (!dragging) return;
+      var cur = vsPos(e);
+      vs.sel = { a: Math.min(start, cur), b: Math.max(start, cur) };
+      vsRefresh();
+    });
+    c.addEventListener("pointerup", function () {
+      dragging = false;
+      if (vs.sel && vs.sel.b - vs.sel.a < vs.sr * 0.02) vs.sel = null;
+      vsRefresh();
+    });
+    window.addEventListener("resize", function () { if (!$("vsPanel").classList.contains("hidden")) vsDraw(); });
+  })();
+
+  /* playback of the working audio */
+  function vsPlayStop() {
+    if (vs.playSrc) { try { vs.playSrc.onended = null; vs.playSrc.stop(); } catch (e) {} vs.playSrc = null; }
+  }
+  function vsPlay(a, b) {
+    vsPlayStop();
+    var x = vs.buf;
+    if (!x) return;
+    if (b - a < 2) return;
+    var AC = window.AudioContext || window.webkitAudioContext;
+    if (!vs.playCtx) vs.playCtx = new AC();
+    var ctx = vs.playCtx, buf = ctx.createBuffer(1, b - a, vs.sr);
+    buf.copyToChannel(x.subarray(a, b), 0);
+    var s = ctx.createBufferSource(); s.buffer = buf; s.connect(ctx.destination);
+    s.onended = function () { if (vs.playSrc === s) vs.playSrc = null; };
+    vs.playSrc = s;
+    if (ctx.resume) ctx.resume();
+    s.start();
+  }
+
+  /* editing */
+  function vsDelete() {
+    if (!vs.buf || !vs.sel) { $("vsInfo").textContent = "Drag across the waveform to select the part you want to delete."; return; }
+    vsPlayStop(); vsPushUndo();
+    var a = vs.sel.a, b = vs.sel.b, x = vs.buf, cut = b - a;
+    vs.buf = joinParts([x.subarray(0, a), x.subarray(b)], Math.round(vs.sr * 0.008));
+    vs.marks = vs.marks.filter(function (m) { return m < a || m >= b; }).map(function (m) { return m >= b ? m - cut : m; });
+    vs.sel = null; vsRefresh();
+  }
+  function vsUndoOne() {
+    var u = vs.undo.pop();
+    if (!u) return;
+    vsPlayStop(); vs.buf = u.buf; vs.marks = u.marks; vs.sel = null; vsRefresh();
+  }
+  async function vsClean() {
+    if (!vs.buf) return;
+    vsPlayStop(); vsPushUndo();
+    $("vsClean").disabled = true; $("vsInfo").textContent = "Cleaning up…";
+    await tick();
+    var x = vs.buf, sr = vs.sr, gap = +$("vsGap").value || 300, pause = +$("vsPause").value || 450, notes = [];
+    var before = x.length;
+    if ($("vsUseMarks").checked && vs.marks.length) {
+      var res = removeMarked(x, detectSegments(x, sr, gap), vs.marks, +$("vsBack").value, Math.round(sr * 0.008));
+      x = res.data;
+      notes.push("removed " + res.count + " marked mistake" + (res.count === 1 ? "" : "s") + " (" + (res.removed / sr).toFixed(1) + " s)");
+    }
+    x = shortenPauses(x, detectSegments(x, sr, gap), sr, pause);
+    notes.push("shortened long pauses");
+    vs.buf = x; vs.marks = []; vs.sel = null;
+    $("vsClean").disabled = false;
+    vsRefresh();
+    $("vsInfo").textContent = "Done: " + notes.join(", ") + ". " + vsDur(before) + " → " + vsDur(x.length) + ". Listen, then fix anything left by hand. " + $("vsInfo").textContent;
+  }
+
+  /* studio polish */
+  function vprog(p, text) {
+    $("vbar").style.display = "block";
+    $("vbarFill").style.width = Math.round(p * 100) + "%";
+    if (text) $("vsStatus").textContent = text;
+  }
+  async function vsEnhance() {
+    if (!vs.buf) return;
+    vsPlayStop();
+    $("vsEnhance").disabled = true; $("vsResult").classList.add("hidden");
+    try {
+      var x = vs.buf, sr = vs.sr, nr = +$("vsNr").value / 100;
+      vprog(0.02, "Reducing background noise…"); await tick();
+      x = await noiseReduce(x, nr, function (p) { vprog(0.02 + 0.7 * p); });
+      vprog(0.75, "Shaping the voice…"); await tick();
+      x = await eqChain(x, sr, $("vsPreset").value);
+      if ($("vsNorm").checked) { vprog(0.92, "Balancing the volume…"); await tick(); x = normalizeSpeech(x, sr, -19); }
+      else {
+        var pk = 0, i;
+        for (i = 0; i < x.length; i++) { var a = Math.abs(x[i]); if (a > pk) pk = a; }
+        if (pk > 0.98) { var f = 0.98 / pk; x = x.map(function (v) { return v * f; }); }
+      }
+      vs.urls.forEach(function (u) { URL.revokeObjectURL(u); }); vs.urls = [];
+      var d = new Date(), stamp = d.getFullYear() + pad2(d.getMonth() + 1) + pad2(d.getDate()) + "-" + pad2(d.getHours()) + pad2(d.getMinutes()) + pad2(d.getSeconds());
+      var ub = URL.createObjectURL(encodeWav(vs.buf, sr)), ua = URL.createObjectURL(encodeWav(x, sr));
+      vs.urls.push(ub, ua);
+      $("vsBefore").src = ub; $("vsAfter").src = ua;
+      var blob = encodeWav(x, sr), ud = URL.createObjectURL(blob);
+      vs.urls.push(ud);
+      $("vsDl").href = ud; $("vsDl").download = "voice-enhanced-" + stamp + ".wav";
+      $("vsDl").textContent = "Download WAV (" + fmtSize(blob.size) + ")";
+      $("vsResult").classList.remove("hidden");
+      vprog(1, "Done. Compare Before and After, then download.");
+    } catch (err) {
+      vprog(0, "Enhancement failed: " + (err && err.message ? err.message : err));
+    }
+    $("vsEnhance").disabled = false;
+  }
+
+  /* wiring */
+  $("vsScript").oninput = vsPrompt;
+  $("vsFs").oninput = vsPrompt;
+  $("vsSp").oninput = vsPrompt;
+  $("vsNr").oninput = function () { $("vsNrV").textContent = $("vsNr").value + "%"; };
+  $("vsNrV").textContent = $("vsNr").value + "%";
+  vsPrompt();
+  $("vsRec").onclick = vsStartRec;
+  $("vsStopRec").onclick = vsStopRec;
+  $("vsMark").onclick = vsMarkNow;
+  $("vsLoad").onclick = function () { $("vsFile").click(); };
+  $("vsFile").onchange = function () { vsLoadFile($("vsFile").files[0]); $("vsFile").value = ""; };
+  $("vsClean").onclick = vsClean;
+  $("vsUndo").onclick = vsUndoOne;
+  $("vsDelSel").onclick = vsDelete;
+  $("vsPlayAll").onclick = function () { if (vs.buf) vsPlay(0, vs.buf.length); };
+  $("vsPlaySel").onclick = function () {
+    if (vs.buf && vs.sel) vsPlay(vs.sel.a, vs.sel.b);
+    else $("vsInfo").textContent = "Drag across the waveform to select a part first.";
+  };
+  $("vsPlayStop").onclick = vsPlayStop;
+  $("vsEnhance").onclick = vsEnhance;
+  document.addEventListener("keydown", function (e) {
+    var t = e.target && e.target.tagName;
+    if (t === "TEXTAREA" || t === "INPUT" || t === "SELECT") return;
+    if ((e.key === "m" || e.key === "M") && vsr) { e.preventDefault(); vsMarkNow(); }
+  });
+  navigator.mediaDevices && navigator.mediaDevices.enumerateDevices && vsListMics();
+
+  /* ---------- events ---------- */
+  var drop = $("drop"), fin = $("file");
+  drop.onclick = function () { fin.click(); };
+  fin.onchange = function () { loadZip(fin.files[0]); fin.value = ""; };
+  ["dragenter", "dragover"].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.add("over"); });
+  });
+  ["dragleave", "drop"].forEach(function (ev) {
+    drop.addEventListener(ev, function (e) { e.preventDefault(); drop.classList.remove("over"); });
+  });
+  drop.addEventListener("drop", function (e) { loadZip(e.dataTransfer.files[0]); });
+  $("selAll").onclick = function () { entries.forEach(function (e) { if (e.kind !== "unsupported") e.selected = true; }); render(); };
+  $("selNone").onclick = function () { entries.forEach(function (e) { e.selected = false; }); render(); };
+  $("go").onclick = convert;
+})();
+</script>
+</body>
+</html>
