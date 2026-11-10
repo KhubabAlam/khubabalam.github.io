@@ -3,18 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Free Online Toolkit: ZIP to PDF, Word to PDF, PDF to Word, PDF Splitter, Voice Studio, Video Upscaler</title>
+<title>Toolkit Studio: Free ZIP to PDF, Word to PDF, PDF Splitter, Voice Studio and Video Upscaler</title>
+<meta name="description" content="ZIP to PDF, Word to PDF, PDF to Word, PDF splitter, background remover, voice cleaner, video upscaler and screen recorder. Free, private, no sign-up.">
+<meta name="theme-color" content="#6366f1">
+<link rel="canonical" href="https://khubabalam.github.io/">
+<meta property="og:type" content="website">
+<meta property="og:title" content="Toolkit Studio: free tools that run in your browser">
+<meta property="og:description" content="ZIP to PDF, Word to PDF, PDF splitter, voice cleaner, video upscaler and screen recorder. Your files stay on your device.">
+<meta property="og:url" content="https://khubabalam.github.io/">
+<meta name="twitter:card" content="summary">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M36 10L16 36h14l-2 18 20-26H34l2-18z' fill='white'/%3E%3C/svg%3E">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Toolkit Studio","url":"https://khubabalam.github.io/","description":"Free browser tools: ZIP to PDF, Word to PDF, PDF to Word, PDF splitter, voice recorder with noise removal, video upscaler and screen recorder.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["ZIP to PDF","Word to PDF","PDF to Word","Split PDF","Background remover","Voice recorder with noise removal","Video upscaler","Screen recorder"]}</script>
 <style>
   :root {
-    --bg: #f5f6f8; --card: #ffffff; --text: #1d2330; --muted: #667085;
-    --border: #dde1e8; --accent: #2f6feb; --accent-text: #ffffff;
-    --ok: #16794c; --warn: #b54708; --err: #c0262d; --row: #f0f3f9;
+    --bg: #f3f5fb; --card: #ffffff; --text: #0f172a; --muted: #5b6478;
+    --border: #e1e6f1; --accent: #5b5bf0; --accent-text: #ffffff;
+    --ok: #0f9d6a; --warn: #b45309; --err: #dc2626; --row: #eef1fa;
+    --bar: rgba(255,255,255,.8); --shadow: 0 12px 32px rgba(30,41,90,.10);
+    --g: linear-gradient(135deg, #6366f1 0%, #8b5cf6 48%, #06b6d4 100%);
+    --blob1: rgba(99,102,241,.22); --blob2: rgba(6,182,212,.18); --blob3: rgba(236,72,153,.10);
+    color-scheme: light;
+  }
+  :root[data-theme="dark"] {
+    --bg: #0a0f1f; --card: #111832; --text: #e9edf9; --muted: #97a3c2;
+    --border: #222c4d; --accent: #8b8dff; --accent-text: #0a0f1f;
+    --ok: #4ade80; --warn: #fbbf24; --err: #fb7185; --row: #18214a;
+    --bar: rgba(10,15,31,.72); --shadow: 0 14px 36px rgba(0,0,0,.45);
+    --blob1: rgba(99,102,241,.30); --blob2: rgba(6,182,212,.20); --blob3: rgba(236,72,153,.12);
+    color-scheme: dark;
   }
   @media (prefers-color-scheme: dark) {
-    :root {
-      --bg: #12151c; --card: #1b2029; --text: #e7eaf0; --muted: #98a2b3;
-      --border: #2d3441; --accent: #5b8cff; --accent-text: #0b1020;
-      --ok: #4cc38a; --warn: #f5a455; --err: #ff7b80; --row: #232a36;
+    :root:not([data-theme="light"]) {
+      --bg: #0a0f1f; --card: #111832; --text: #e9edf9; --muted: #97a3c2;
+      --border: #222c4d; --accent: #8b8dff; --accent-text: #0a0f1f;
+      --ok: #4ade80; --warn: #fbbf24; --err: #fb7185; --row: #18214a;
+      --bar: rgba(10,15,31,.72); --shadow: 0 14px 36px rgba(0,0,0,.45);
+      --blob1: rgba(99,102,241,.30); --blob2: rgba(6,182,212,.20); --blob3: rgba(236,72,153,.12);
+      color-scheme: dark;
     }
   }
   * { box-sizing: border-box; }
@@ -147,23 +172,261 @@
   .docprev table { border-collapse: collapse; max-width: 100%; }
   .docprev td, .docprev th { border: 1px solid #888; padding: 4px 6px; vertical-align: top; }
   .docprev p { margin: 0 0 .7em; }
+
+  /* ===== Toolkit Studio design ===== (icons: Feather, MIT licence) */
+  html { scroll-behavior: smooth; }
+  body { padding: 0; min-height: 100vh; display: flex; flex-direction: column; font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif; }
+  svg.i { width: 1em; height: 1em; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; flex: none; }
+  .bgfx {
+    position: fixed; inset: 0; z-index: -1; pointer-events: none;
+    background: radial-gradient(900px 520px at 8% -8%, var(--blob1), transparent 60%),
+      radial-gradient(760px 480px at 96% 2%, var(--blob2), transparent 60%),
+      radial-gradient(700px 500px at 50% 108%, var(--blob3), transparent 60%), var(--bg);
+  }
+  .wrap { max-width: 1120px; width: 100%; margin: 0 auto; padding: 0 20px 56px; flex: 1; }
+  .topbar { position: sticky; top: 0; z-index: 30; background: var(--bar); -webkit-backdrop-filter: saturate(1.5) blur(14px); backdrop-filter: saturate(1.5) blur(14px); border-bottom: 1px solid var(--border); }
+  .topin { max-width: 1120px; margin: 0 auto; padding: 12px 20px; display: flex; align-items: center; gap: 12px; }
+  .brand { display: flex; align-items: center; gap: 10px; background: none; border: 0; color: var(--text); cursor: pointer; font: inherit; font-size: 18px; font-weight: 800; letter-spacing: -.02em; padding: 0; }
+  .logo { width: 34px; height: 34px; border-radius: 10px; background: var(--g); display: grid; place-items: center; color: #fff; box-shadow: 0 6px 16px rgba(99,102,241,.4); font-size: 19px; }
+  .spacer { flex: 1; }
+  .iconbtn { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border); background: var(--card); color: var(--text); cursor: pointer; display: grid; place-items: center; font-size: 18px; }
+  .iconbtn .sun { display: none; }
+  :root[data-theme="dark"] .iconbtn .sun { display: block; }
+  :root[data-theme="dark"] .iconbtn .moon { display: none; }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) .iconbtn .sun { display: block; }
+    :root:not([data-theme="light"]) .iconbtn .moon { display: none; }
+  }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+  .hero { text-align: center; padding: 56px 0 28px; }
+  .badge { display: inline-flex; align-items: center; gap: 8px; padding: 6px 14px; border-radius: 99px; border: 1px solid var(--border); background: var(--card); color: var(--muted); font-size: 13px; font-weight: 600; box-shadow: var(--shadow); }
+  .badge i { width: 8px; height: 8px; border-radius: 50%; background: var(--ok); display: inline-block; }
+  .hero h1 { font-size: clamp(34px, 6vw, 60px); line-height: 1.07; letter-spacing: -.035em; margin: 18px auto 14px; max-width: 840px; font-weight: 800; }
+  .grad { color: var(--accent); }
+  @supports ((-webkit-background-clip: text) or (background-clip: text)) {
+    .grad { background: var(--g); -webkit-background-clip: text; background-clip: text; color: transparent; -webkit-text-fill-color: transparent; }
+  }
+  .hero p { color: var(--muted); font-size: clamp(16px, 2.2vw, 19px); max-width: 640px; margin: 0 auto 26px; }
+  .cta { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn { display: inline-flex; align-items: center; gap: 8px; padding: 13px 24px; border-radius: 12px; font: inherit; font-weight: 700; font-size: 16px; cursor: pointer; border: 1px solid transparent; }
+  .btn.pri { background: var(--g); color: #fff; box-shadow: 0 10px 26px rgba(99,102,241,.38); }
+  .btn.sec { background: var(--card); color: var(--text); border-color: var(--border); }
+  .chips { display: flex; gap: 10px; justify-content: center; flex-wrap: wrap; margin-top: 26px; }
+  .chip { padding: 7px 14px; border-radius: 99px; background: var(--row); color: var(--muted); font-size: 13px; font-weight: 600; }
+
+  .sec-title { font-size: 28px; letter-spacing: -.02em; margin: 48px 0 6px; text-align: center; }
+  .sec-sub { color: var(--muted); text-align: center; margin: 0 0 26px; }
+  .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); gap: 18px; }
+  a.tool { text-decoration: none; }
+  .tool { text-align: start; display: flex; flex-direction: column; gap: 12px; padding: 22px; border-radius: 16px; background: var(--card); border: 1px solid var(--border); color: var(--text); cursor: pointer; box-shadow: var(--shadow); transition: transform .18s, border-color .18s, box-shadow .18s; font: inherit; }
+  .tool:hover { transform: translateY(-4px); border-color: var(--accent); box-shadow: 0 18px 40px rgba(99,102,241,.22); }
+  .ico { width: 48px; height: 48px; border-radius: 14px; display: grid; place-items: center; color: #fff; background: var(--g); font-size: 24px; box-shadow: 0 8px 18px rgba(99,102,241,.28); }
+  .ico.c2 { background: linear-gradient(135deg, #06b6d4, #3b82f6); }
+  .ico.c3 { background: linear-gradient(135deg, #f59e0b, #ef4444); }
+  .ico.c4 { background: linear-gradient(135deg, #10b981, #06b6d4); }
+  .ico.c5 { background: linear-gradient(135deg, #ec4899, #8b5cf6); }
+  .ico.c6 { background: linear-gradient(135deg, #ef4444, #f97316); }
+  .tool h3 { margin: 0; font-size: 19px; letter-spacing: -.01em; }
+  .tool p { margin: 0; color: var(--muted); font-size: 14.5px; }
+  .tags { display: flex; gap: 6px; flex-wrap: wrap; }
+  .tags span { font-size: 12px; padding: 3px 9px; border-radius: 99px; background: var(--row); color: var(--muted); font-weight: 600; }
+  .open { margin-top: auto; color: var(--accent); font-weight: 700; font-size: 14px; display: flex; align-items: center; gap: 6px; }
+
+  .steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 18px; }
+  .step { padding: 22px; border-radius: 16px; background: var(--card); border: 1px solid var(--border); }
+  .step b { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; background: var(--g); color: #fff; margin-bottom: 10px; }
+  .step h3 { margin: 0 0 6px; font-size: 17px; }
+  .step p { margin: 0; color: var(--muted); font-size: 14.5px; }
+  .faq { max-width: 780px; margin: 0 auto; display: grid; gap: 10px; }
+  .faq details { background: var(--card); border: 1px solid var(--border); border-radius: 12px; padding: 14px 18px; }
+  .faq summary { cursor: pointer; font-weight: 700; }
+  .faq details[open] summary { margin-bottom: 8px; }
+  .faq p { margin: 0; color: var(--muted); }
+
+  #toolArea { max-width: 900px; margin: 0 auto; padding-top: 22px; }
+  .toolhead { margin-bottom: 4px; }
+  .back { display: inline-flex; align-items: center; gap: 6px; background: var(--card); border: 1px solid var(--border); color: var(--text); border-radius: 10px; padding: 8px 14px; cursor: pointer; font: inherit; font-size: 14px; font-weight: 600; }
+  .toolhead h1 { font-size: clamp(26px, 4vw, 36px); letter-spacing: -.03em; margin: 14px 0 4px; }
+  .toolhead p { color: var(--muted); margin: 0; }
+  .tabs { position: relative; display: flex; flex-wrap: nowrap; gap: 6px; overflow-x: auto; padding: 6px; margin: 16px 0 18px; background: var(--card); border: 1px solid var(--border); border-radius: 14px; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+  .tabs::-webkit-scrollbar { display: none; }
+  .tabs button { flex: 0 0 auto; min-width: 0; display: inline-flex; align-items: center; gap: 8px; padding: 9px 14px; border-radius: 10px; border: 0; background: transparent; color: var(--muted); font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; white-space: nowrap; }
+  .tabs button:hover { background: var(--row); color: var(--text); }
+  .tabs button.active { background: var(--g); color: #fff; box-shadow: 0 6px 16px rgba(99,102,241,.35); }
+
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 16px; padding: 20px; margin-bottom: 16px; box-shadow: var(--shadow); }
+  .card h2 { font-size: 18px; letter-spacing: -.01em; }
+  .drop { border: 2px dashed var(--border); border-radius: 14px; background: var(--row); padding: 40px 16px; }
+  .drop:hover, .drop.over { border-color: var(--accent); background: var(--row); box-shadow: 0 0 0 4px rgba(99,102,241,.14); }
+  button.main { background: var(--g); color: #fff; border-radius: 12px; padding: 13px 24px; box-shadow: 0 8px 22px rgba(99,102,241,.32); transition: transform .15s, filter .15s; }
+  button.main:hover:not(:disabled) { transform: translateY(-1px); filter: brightness(1.07); }
+  button.main.stop { background: var(--err); box-shadow: 0 8px 22px rgba(220,38,38,.28); }
+  button.ghost { border-radius: 10px; padding: 9px 14px; background: var(--card); transition: border-color .15s; }
+  button.ghost:hover { border-color: var(--accent); }
+
+  .foot { border-top: 1px solid var(--border); padding: 26px 20px; text-align: center; color: var(--muted); font-size: 14px; }
+  .foot b { color: var(--text); }
+
+  @keyframes rise { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  #homePanel > *, #toolArea > div:not(.hidden) { animation: rise .45s ease both; }
+  .tool { animation: rise .5s ease both; }
+  @media (prefers-reduced-motion: reduce) { * { animation: none !important; transition: none !important; scroll-behavior: auto !important; } }
+  @media (max-width: 640px) {
+    .wrap { padding: 0 14px 40px; }
+    .topin { padding: 10px 14px; }
+    .hero { padding: 34px 0 18px; }
+    .grid { grid-template-columns: 1fr; }
+    .tool { padding: 18px; }
+    .card { padding: 16px; }
+    .tabs button { padding: 9px 12px; }
+    .btn { width: 100%; justify-content: center; }
+  }
+  .ico.c7 { background: linear-gradient(135deg, #8b5cf6, #ec4899); }
+  input[type=color] { width: 100%; height: 40px; padding: 2px; border: 1px solid var(--border); border-radius: 8px; background: var(--card); cursor: pointer; }
+  .checker { background-color: #fff; background-image: linear-gradient(45deg, #d5d9e4 25%, transparent 25%, transparent 75%, #d5d9e4 75%), linear-gradient(45deg, #d5d9e4 25%, transparent 25%, transparent 75%, #d5d9e4 75%); background-size: 20px 20px; background-position: 0 0, 10px 10px; }
+  .bgwrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 12px; line-height: 0; }
+  .bgwrap canvas { display: block; margin: 0 auto; max-width: 100%; max-height: 70vh; width: auto; height: auto; }
 </style>
 </head>
 <body>
-<div class="wrap">
-  <h1>All-in-One Toolkit</h1>
-  <p class="sub">Works fully in your browser. Nothing is uploaded anywhere.</p>
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="i-logo" viewBox="0 0 24 24"><path d="M13 2L4 14h7l-1 8 9-12h-7l1-8z"/></symbol>
+  <symbol id="i-zip" viewBox="0 0 24 24"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></symbol>
+  <symbol id="i-split" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></symbol>
+  <symbol id="i-wp" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
+  <symbol id="i-vs" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
+  <symbol id="i-up" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></symbol>
+  <symbol id="i-rec" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
+  <symbol id="i-bg" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></symbol>
+  <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
+  <symbol id="i-moon" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></symbol>
+  <symbol id="i-arrow" viewBox="0 0 24 24"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></symbol>
+  <symbol id="i-back" viewBox="0 0 24 24"><line x1="19" y1="12" x2="5" y2="12"/><polyline points="12 19 5 12 12 5"/></symbol>
+</svg>
+<div class="bgfx" aria-hidden="true"></div>
 
-  <div class="tabs">
-    <button id="tabZip" class="active">ZIP → PDF</button>
-    <button id="tabSplit">Split PDF</button>
-    <button id="tabRec">Screen Recorder</button>
-    <button id="tabVs">Voice Studio</button>
-    <button id="tabUp">Video Upscaler</button>
-    <button id="tabWp">Word ⇄ PDF</button>
+<header class="topbar">
+  <div class="topin">
+    <button class="brand" id="brandBtn" aria-label="Toolkit Studio home">
+      <span class="logo"><svg class="i"><use href="#i-logo"/></svg></span>
+      <span>Toolkit Studio</span>
+    </button>
+    <span class="spacer"></span>
+    <button class="iconbtn" id="themeBtn" aria-label="Switch light or dark theme" title="Switch theme">
+      <svg class="i moon"><use href="#i-moon"/></svg><svg class="i sun"><use href="#i-sun"/></svg>
+    </button>
   </div>
+</header>
 
-  <div id="zipPanel">
+<div class="wrap">
+  <noscript><p>Toolkit Studio needs JavaScript to run its tools in your browser.</p></noscript>
+
+  <section id="homePanel">
+    <div class="hero">
+      <span class="badge"><i></i> Free · Private · No sign-up</span>
+      <h1>Powerful tools that run <span class="grad">right in your browser</span></h1>
+      <p>Convert documents, split PDFs, clean up your voice and enlarge videos. Your files stay on your device, and there is nothing to install.</p>
+      <div class="cta">
+        <button class="btn pri" id="ctaExplore">Explore the tools <svg class="i"><use href="#i-arrow"/></svg></button>
+        <button class="btn sec" data-tool="wp">Convert Word ⇄ PDF</button>
+      </div>
+      <div class="chips">
+        <span class="chip">✓ 100% private</span><span class="chip">✓ Phone and desktop</span>
+        <span class="chip">✓ Nothing to install</span><span class="chip">✓ Free to use</span>
+      </div>
+    </div>
+
+    <h2 class="sec-title">Choose a tool</h2>
+    <p class="sec-sub">Everything works right here, with no account and no uploads.</p>
+    <div class="grid" id="toolGrid">
+      <a class="tool" href="#wp" data-tool="wp">
+        <span class="ico c1"><svg class="i"><use href="#i-wp"/></svg></span>
+        <h3>Word ⇄ PDF</h3>
+        <p>Turn Word documents into PDFs and PDFs back into editable Word files, with right-to-left (Urdu, Arabic) support.</p>
+        <span class="tags"><span>DOCX</span><span>PDF</span><span>Urdu · Arabic</span></span>
+        <span class="open">Open tool <svg class="i"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tool" href="#zip" data-tool="zip">
+        <span class="ico c2"><svg class="i"><use href="#i-zip"/></svg></span>
+        <h3>ZIP → PDF</h3>
+        <p>Combine the images, PDFs and text files inside a ZIP into one tidy PDF with a contents page.</p>
+        <span class="tags"><span>Images</span><span>PDF</span><span>Text</span></span>
+        <span class="open">Open tool <svg class="i"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tool" href="#split" data-tool="split">
+        <span class="ico c3"><svg class="i"><use href="#i-split"/></svg></span>
+        <h3>Split PDF</h3>
+        <p>Cut a PDF into equal parts, every N pages, custom ranges or single pages, then download everything as a ZIP.</p>
+        <span class="tags"><span>Parts</span><span>Ranges</span><span>ZIP</span></span>
+        <span class="open">Open tool <svg class="i"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tool" href="#vs" data-tool="vs">
+        <span class="ico c4"><svg class="i"><use href="#i-vs"/></svg></span>
+        <h3>Voice Studio</h3>
+        <p>Record with a teleprompter, drop mistakes with one key, remove background noise and polish the sound.</p>
+        <span class="tags"><span>Record</span><span>Denoise</span><span>WAV</span></span>
+        <span class="open">Open tool <svg class="i"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tool" href="#up" data-tool="up">
+        <span class="ico c5"><svg class="i"><use href="#i-up"/></svg></span>
+        <h3>Video Upscaler</h3>
+        <p>Enlarge low-resolution video to 720p, 1080p or higher with smooth sharpening and a quick 5-second test.</p>
+        <span class="tags"><span>1080p</span><span>Sharpen</span><span>Smooth</span></span>
+        <span class="open">Open tool <svg class="i"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tool" href="#bg" data-tool="bg">
+        <span class="ico c7"><svg class="i"><use href="#i-bg"/></svg></span>
+        <h3>Background Remover</h3>
+        <p>Cut people, products and animals out of a photo with AI, fix the edges with a brush, and save a transparent PNG.</p>
+        <span class="tags"><span>AI</span><span>PNG</span><span>Touch-up</span></span>
+        <span class="open">Open tool <svg class="i"><use href="#i-arrow"/></svg></span>
+      </a>
+      <a class="tool" id="cardRec" href="#rec" data-tool="rec">
+        <span class="ico c6"><svg class="i"><use href="#i-rec"/></svg></span>
+        <h3>Screen Recorder</h3>
+        <p>Record your screen, a window or a browser tab, with system sound and your microphone.</p>
+        <span class="tags"><span>Screen</span><span>Audio</span><span>Desktop</span></span>
+        <span class="open">Open tool <svg class="i"><use href="#i-arrow"/></svg></span>
+      </a>
+    </div>
+
+    <h2 class="sec-title">How it works</h2>
+    <p class="sec-sub">Three simple steps, every time.</p>
+    <div class="steps">
+      <div class="step"><b>1</b><h3>Pick a tool</h3><p>Choose what you need from the list above.</p></div>
+      <div class="step"><b>2</b><h3>Add your file</h3><p>Drop it in or tap to choose. It is processed on your own device.</p></div>
+      <div class="step"><b>3</b><h3>Download the result</h3><p>Save the finished PDF, Word file, audio or video straight away.</p></div>
+    </div>
+
+    <h2 class="sec-title">Questions</h2>
+    <p class="sec-sub">Quick answers before you start.</p>
+    <div class="faq">
+      <details><summary>Is Toolkit Studio really free?</summary><p>Yes. There is no sign-up, no watermark and no limit on how often you use it.</p></details>
+      <details><summary>Are my files uploaded anywhere?</summary><p>No. Files are processed in your browser, on your own device. Some tools load helper libraries from a public content network the first time you use them, but your files are never sent.</p></details>
+      <details><summary>Does it work on my phone?</summary><p>Yes, for every tool except the Screen Recorder, because phone browsers do not let web pages record the screen. Very large videos and files can be slow on a phone.</p></details>
+      <details><summary>Which browser should I use?</summary><p>A recent Chrome, Edge, Firefox or Safari. Voice Studio and Video Upscaler work best in Chrome or Edge.</p></details>
+    </div>
+  </section>
+
+  <div id="toolArea" class="hidden">
+    <div class="toolhead">
+      <button class="back" id="homeBtn"><svg class="i"><use href="#i-back"/></svg> All tools</button>
+      <h1 id="toolTitle">Tool</h1>
+      <p id="toolDesc"></p>
+    </div>
+
+    <div class="tabs">
+      <button id="tabWp"><svg class="i"><use href="#i-wp"/></svg> Word ⇄ PDF</button>
+      <button id="tabZip"><svg class="i"><use href="#i-zip"/></svg> ZIP → PDF</button>
+      <button id="tabSplit"><svg class="i"><use href="#i-split"/></svg> Split PDF</button>
+      <button id="tabVs"><svg class="i"><use href="#i-vs"/></svg> Voice Studio</button>
+      <button id="tabUp"><svg class="i"><use href="#i-up"/></svg> Video Upscaler</button>
+      <button id="tabBg"><svg class="i"><use href="#i-bg"/></svg> Background Remover</button>
+      <button id="tabRec"><svg class="i"><use href="#i-rec"/></svg> Screen Recorder</button>
+    </div>
+
+  <div id="zipPanel" class="hidden">
   <div class="card">
     <div class="drop" id="drop">
       <strong>Drop a ZIP file here, or click to choose</strong>
@@ -529,7 +792,78 @@
       </div>
     </div>
   </div>
+
+  <div id="bgPanel" class="hidden">
+    <div class="card">
+      <div class="drop" id="bgDrop">
+        <strong>Choose a photo to remove its background</strong>
+        <span>Tap here or drop a JPG, PNG or WebP image. It is processed on your device.</span>
+      </div>
+      <input type="file" id="bgFile" accept="image/*">
+      <div class="status" id="bgInfo"></div>
+    </div>
+
+    <div class="card hidden" id="bgCard">
+      <div class="opts">
+        <label class="f">Method
+          <select id="bgMethod">
+            <option value="ai" selected>AI (people, products, animals)</option>
+            <option value="solid">Plain colour background (fast)</option>
+          </select>
+        </label>
+        <label class="f">Background
+          <select id="bgBgSel">
+            <option value="transparent" selected>Transparent</option>
+            <option value="#ffffff">White</option>
+            <option value="#000000">Black</option>
+            <option value="custom">Pick a colour…</option>
+          </select>
+        </label>
+        <label class="f hidden" id="bgColorBox">Colour
+          <input type="color" id="bgColor" value="#6366f1">
+        </label>
+      </div>
+      <div class="opts" style="margin-top:12px">
+        <label class="f" id="bgTightBox"><span>Cut-out tightness: <b id="bgTightV"></b></span>
+          <input type="range" id="bgTight" min="0" max="100" step="5" value="50"></label>
+        <label class="f hidden" id="bgTolBox"><span>Colour tolerance: <b id="bgTolV"></b></span>
+          <input type="range" id="bgTol" min="1" max="60" step="1" value="12"></label>
+        <label class="f"><span>Edge softness: <b id="bgSoftV"></b></span>
+          <input type="range" id="bgSoft" min="0" max="100" step="5" value="30"></label>
+      </div>
+      <label class="c hidden" id="bgContigBox" style="margin-top:8px"><input type="checkbox" id="bgContig" checked> Only remove background connected to the edges (keeps holes inside the subject)</label>
+      <div class="opts" style="margin-top:12px">
+        <label class="f">Touch-up brush
+          <select id="bgBrush">
+            <option value="none">Off</option>
+            <option value="restore">Restore (paint back)</option>
+            <option value="erase">Erase (paint away)</option>
+          </select>
+        </label>
+        <label class="f"><span>Brush size: <b id="bgBrushV"></b></span>
+          <input type="range" id="bgBrushSize" min="1" max="20" step="1" value="4"></label>
+      </div>
+      <div class="row">
+        <button class="ghost" id="bgReset">Reset touch-ups</button>
+        <label class="c" style="margin:0"><input type="checkbox" id="bgCrop" checked> Crop empty space when saving</label>
+      </div>
+      <div class="bar" id="bgBar"><i id="bgBarFill"></i></div>
+      <div class="status" id="bgStatus"></div>
+      <div class="bgwrap checker" id="bgWrap"><canvas id="bgOut"></canvas></div>
+      <div class="row">
+        <button class="main" id="bgPng">Download PNG</button>
+        <button class="ghost" id="bgJpg">Download JPG with background</button>
+      </div>
+      <div class="note">The AI works best on clear subjects. Use the brush to fix thin arms, hair or shadows: choose Restore or Erase, then paint on the picture.</div>
+    </div>
+  </div>
+  </div>
 </div>
+
+<footer class="foot">
+  <b>Toolkit Studio</b> · Free tools that run in your browser. Your files stay on your device.<br>
+  Background removal uses the open-source U²-Net model (Apache-2.0, via the rembg project) and ONNX Runtime Web (MIT).
+</footer>
 
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf-lib/1.17.1/pdf-lib.min.js"></script>
@@ -1317,19 +1651,32 @@ run();
   var splitSrc = null, splitUrls = [], splitFiles = [], splitBusy = false;
 
   function showTab(name) {
+    if (name !== "home" && !TOOLS[name]) name = "home";
+    $("homePanel").classList.toggle("hidden", name !== "home");
+    $("toolArea").classList.toggle("hidden", name === "home");
+    if (name !== "home") { $("toolTitle").textContent = TOOLS[name][0]; $("toolDesc").textContent = TOOLS[name][1]; }
     $("zipPanel").classList.toggle("hidden", name !== "zip");
     $("splitPanel").classList.toggle("hidden", name !== "split");
     $("recPanel").classList.toggle("hidden", name !== "rec");
     $("vsPanel").classList.toggle("hidden", name !== "vs");
     $("upPanel").classList.toggle("hidden", name !== "up");
     $("wpPanel").classList.toggle("hidden", name !== "wp");
+    $("bgPanel").classList.toggle("hidden", name !== "bg");
     $("tabZip").classList.toggle("active", name === "zip");
     $("tabSplit").classList.toggle("active", name === "split");
     $("tabRec").classList.toggle("active", name === "rec");
     $("tabVs").classList.toggle("active", name === "vs");
     $("tabUp").classList.toggle("active", name === "up");
     $("tabWp").classList.toggle("active", name === "wp");
+    $("tabBg").classList.toggle("active", name === "bg");
     if (name === "vs") vsDraw();
+    var act = document.querySelector(".tabs button.active");
+    if (act && act.parentNode.scrollTo) act.parentNode.scrollTo({ left: Math.max(0, act.offsetLeft - 12), behavior: "smooth" });
+    var hash = name === "home" ? "" : "#" + name;
+    if ((location.hash || "") !== hash) {
+      try { if (hash) location.hash = hash; else history.pushState(null, "", location.href.split("#")[0]); } catch (e) {}
+    }
+    try { window.scrollTo(0, 0); } catch (e) {}
   }
   $("tabZip").onclick = function () { showTab("zip"); };
   $("tabSplit").onclick = function () { showTab("split"); };
@@ -2275,7 +2622,7 @@ run();
 
   /* ---------- video upscaler ---------- */
   var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
-  if (!recSupported) $("tabRec").classList.add("hidden");   // phones cannot record the screen from a web page
+  if (!recSupported) { $("tabRec").classList.add("hidden"); $("cardRec").classList.add("hidden"); }   // phones cannot record the screen from a web page
   $("tabUp").onclick = function () { showTab("up"); };
 
   /* UPHELP-START */
@@ -2877,6 +3224,356 @@ run();
   $("selAll").onclick = function () { entries.forEach(function (e) { if (e.kind !== "unsupported") e.selected = true; }); render(); };
   $("selNone").onclick = function () { entries.forEach(function (e) { e.selected = false; }); render(); };
   $("go").onclick = convert;
+
+
+  /* ---------- background remover ---------- */
+  $("tabBg").onclick = function () { showTab("bg"); };
+  /* BG-START */
+  var BG_SIZE = 320;
+  /* image (already resized to size x size, RGBA) -> model input */
+  function bgToTensor(rgba, size) {
+    var mean = [0.485, 0.456, 0.406], sd = [0.229, 0.224, 0.225], n = size * size, out = new Float32Array(3 * n), i, c;
+    for (i = 0; i < n; i++) for (c = 0; c < 3; c++) out[c * n + i] = (rgba[i * 4 + c] / 255 - mean[c]) / sd[c];
+    return out;
+  }
+  /* model output -> mask between 0 and 1 */
+  function bgMaskNorm(d) {
+    var n = d.length, mn = Infinity, mx = -Infinity, i, out = new Float32Array(n);
+    for (i = 0; i < n; i++) { if (d[i] < mn) mn = d[i]; if (d[i] > mx) mx = d[i]; }
+    var r = mx - mn || 1;
+    for (i = 0; i < n; i++) out[i] = (d[i] - mn) / r;
+    return out;
+  }
+  function smoothstep(a, b, x) {
+    if (b <= a) return x >= a ? 1 : 0;
+    var t = (x - a) / (b - a); t = t < 0 ? 0 : (t > 1 ? 1 : t);
+    return t * t * (3 - 2 * t);
+  }
+  /* writes the alpha channel of rgba (w x h) from a small mask; tight and soft are 0..1 */
+  function bgApplyMask(rgba, w, h, mask, size, tight, soft) {
+    var th = 0.25 + 0.5 * tight, wd = 0.04 + 0.46 * soft, a = th - wd / 2, b = th + wd / 2, i;
+    var lut = new Uint8ClampedArray(1024);
+    for (i = 0; i < 1024; i++) lut[i] = Math.round(255 * smoothstep(a, b, i / 1023));
+    var last = size - 1;
+    for (var y = 0; y < h; y++) {
+      var fy = (y + 0.5) * size / h - 0.5, y0 = Math.floor(fy), ty = fy - y0;
+      var ya = y0 < 0 ? 0 : (y0 > last ? last : y0), yb = y0 + 1 < 0 ? 0 : (y0 + 1 > last ? last : y0 + 1);
+      for (var x = 0; x < w; x++) {
+        var fx = (x + 0.5) * size / w - 0.5, x0 = Math.floor(fx), tx = fx - x0;
+        var xa = x0 < 0 ? 0 : (x0 > last ? last : x0), xb = x0 + 1 < 0 ? 0 : (x0 + 1 > last ? last : x0 + 1);
+        var top = mask[ya * size + xa] * (1 - tx) + mask[ya * size + xb] * tx;
+        var bot = mask[yb * size + xa] * (1 - tx) + mask[yb * size + xb] * tx;
+        rgba[(y * w + x) * 4 + 3] = lut[Math.round((top * (1 - ty) + bot * ty) * 1023)];
+      }
+    }
+  }
+  function bgMed(a) { a.sort(function (p, q) { return p - q; }); return a[a.length >> 1]; }
+  /* plain-colour backgrounds: tol 0..100, soft 0..1, contiguous = only remove background connected to the edges */
+  function bgSolid(rgba, w, h, tol, soft, contiguous) {
+    var v = [[], [], []], x, y, c, i;
+    function take(px) { for (c = 0; c < 3; c++) v[c].push(rgba[px * 4 + c]); }
+    for (x = 0; x < w; x++) { take(x); take((h - 1) * w + x); if (h > 1) { take(w + x); take((h - 2) * w + x); } }
+    for (y = 0; y < h; y++) { take(y * w); take(y * w + w - 1); if (w > 1) { take(y * w + 1); take(y * w + w - 2); } }
+    var br = bgMed(v[0]), bgc = bgMed(v[1]), bb = bgMed(v[2]);
+    var thr = tol * 2.5, band = Math.max(8, thr * soft * 1.5), n = w * h, dist = new Float32Array(n);
+    for (i = 0; i < n; i++) {
+      var dr = rgba[i * 4] - br, dg = rgba[i * 4 + 1] - bgc, db = rgba[i * 4 + 2] - bb;
+      dist[i] = Math.sqrt(dr * dr + dg * dg + db * db);
+    }
+    function ramp(d) { return d <= thr ? 0 : (d >= thr + band ? 255 : 255 * (d - thr) / band); }
+    if (!contiguous) { for (i = 0; i < n; i++) rgba[i * 4 + 3] = ramp(dist[i]); return { r: br, g: bgc, b: bb }; }
+    var isBg = new Uint8Array(n), q = new Int32Array(n), qh = 0, qt = 0;
+    function push(p) { if (!isBg[p] && dist[p] <= thr) { isBg[p] = 1; q[qt++] = p; } }
+    for (x = 0; x < w; x++) { push(x); push((h - 1) * w + x); }
+    for (y = 0; y < h; y++) { push(y * w); push(y * w + w - 1); }
+    while (qh < qt) {
+      var p = q[qh++], px = p % w, py = (p - px) / w;
+      if (px > 0) push(p - 1); if (px < w - 1) push(p + 1); if (py > 0) push(p - w); if (py < h - 1) push(p + w);
+    }
+    for (i = 0; i < n; i++) {
+      if (isBg[i]) { rgba[i * 4 + 3] = 0; continue; }
+      var px2 = i % w, py2 = (i - px2) / w;
+      var edge = (px2 > 0 && isBg[i - 1]) || (px2 < w - 1 && isBg[i + 1]) || (py2 > 0 && isBg[i - w]) || (py2 < h - 1 && isBg[i + w]);
+      rgba[i * 4 + 3] = edge ? ramp(dist[i]) : 255;
+    }
+    return { r: br, g: bgc, b: bb };
+  }
+  /* joins the downloaded model parts */
+  function bgJoin(a, b) {
+    var out = new Uint8Array(a.byteLength + b.byteLength);
+    out.set(new Uint8Array(a), 0); out.set(new Uint8Array(b), a.byteLength);
+    return out;
+  }
+  /* brush: val 1 = keep, -1 = remove, 0 = automatic; returns the touched rectangle */
+  function bgPaint(edit, w, h, cx, cy, r, val) {
+    var x0 = Math.max(0, Math.floor(cx - r)), x1 = Math.min(w - 1, Math.ceil(cx + r));
+    var y0 = Math.max(0, Math.floor(cy - r)), y1 = Math.min(h - 1, Math.ceil(cy + r)), r2 = r * r;
+    for (var y = y0; y <= y1; y++) for (var x = x0; x <= x1; x++) {
+      var dx = x - cx, dy = y - cy;
+      if (dx * dx + dy * dy <= r2) edit[y * w + x] = val;
+    }
+    return { x0: x0, y0: y0, x1: x1 + 1, y1: y1 + 1 };
+  }
+  /* box around everything that is not transparent */
+  function bgBounds(rgba, w, h, minA) {
+    var x0 = w, y0 = h, x1 = -1, y1 = -1;
+    for (var y = 0; y < h; y++) for (var x = 0; x < w; x++) {
+      if (rgba[(y * w + x) * 4 + 3] > minA) { if (x < x0) x0 = x; if (x > x1) x1 = x; if (y < y0) y0 = y; if (y > y1) y1 = y; }
+    }
+    return x1 < 0 ? null : { x0: x0, y0: y0, x1: x1 + 1, y1: y1 + 1 };
+  }
+  /* BG-END */
+
+  var ORT_URL = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.3/dist/ort.min.js";
+  var ORT_BASE = "https://cdn.jsdelivr.net/npm/onnxruntime-web@1.17.3/dist/";
+  var BG_PARTS = ["silueta-1.bin", "silueta-2.bin"];
+  var bg = { src: null, srcCanvas: null, w: 0, h: 0, base: null, edit: null, imgData: null, ctx: null, mask: null, sess: null, busy: false, name: "image", painting: false, last: null };
+
+  function bgBarSet(p, text) {
+    $("bgBar").style.display = "block";
+    $("bgBarFill").style.width = Math.round(Math.max(0, Math.min(1, p)) * 100) + "%";
+    if (text) $("bgStatus").textContent = text;
+  }
+  /* downloads a file with progress; keeps a copy in the browser so the next visit is instant */
+  async function bgFetch(url, onP) {
+    var cache = null, key = new Request(url).url;
+    try {
+      if (window.caches) { cache = await caches.open("tk-models-v1"); var hit = await cache.match(key); if (hit) return await hit.arrayBuffer(); }
+    } catch (e) { cache = null; }
+    var res = await fetch(url);
+    if (!res.ok) throw new Error("model file missing: " + url);
+    var total = +res.headers.get("Content-Length") || 0, out;
+    if (res.body && res.body.getReader) {
+      var rd = res.body.getReader(), chunks = [], got = 0;
+      for (;;) {
+        var r = await rd.read();
+        if (r.done) break;
+        chunks.push(r.value); got += r.value.length;
+        if (onP) onP(total ? got / total : 0);
+      }
+      out = new Uint8Array(got); var o = 0;
+      chunks.forEach(function (c) { out.set(c, o); o += c.length; });
+    } else { out = new Uint8Array(await res.arrayBuffer()); }
+    try { if (cache) await cache.put(key, new Response(out)); } catch (e) {}
+    return out.buffer;
+  }
+  async function bgModel() {
+    if (bg.sess) return bg.sess;
+    bgBarSet(0.02, "Loading the AI engine…");
+    await loadLib(ORT_URL, function () { return !!window.ort; });
+    window.ort.env.wasm.wasmPaths = ORT_BASE; window.ort.env.wasm.numThreads = 1;
+    var bufs = [];
+    for (var i = 0; i < BG_PARTS.length; i++) {
+      bufs.push(await bgFetch(BG_PARTS[i], function (f) {
+        var all = (bufs.length + f) / BG_PARTS.length;
+        bgBarSet(0.05 + 0.75 * all, "Downloading the AI model (about 44 MB, first time only): " + Math.round(all * 100) + "%");
+      }));
+    }
+    bgBarSet(0.85, "Starting the AI model…"); await tick();
+    bg.sess = await window.ort.InferenceSession.create(bgJoin(bufs[0], bufs[1]), { executionProviders: ["wasm"] });
+    return bg.sess;
+  }
+  async function bgInfer() {
+    var sess = await bgModel(), ort = window.ort;
+    var sc = document.createElement("canvas"); sc.width = sc.height = BG_SIZE;
+    var sx = sc.getContext("2d", { willReadFrequently: true }); sx.imageSmoothingQuality = "high";
+    sx.drawImage(bg.srcCanvas, 0, 0, BG_SIZE, BG_SIZE);
+    var small = sx.getImageData(0, 0, BG_SIZE, BG_SIZE).data;
+    var feeds = {}; feeds[sess.inputNames[0]] = new ort.Tensor("float32", bgToTensor(small, BG_SIZE), [1, 3, BG_SIZE, BG_SIZE]);
+    bgBarSet(0.92, "Finding the subject… (the page may pause for a few seconds)"); await tick(); await tick();
+    var out = await sess.run(feeds);
+    bg.mask = bgMaskNorm(out[sess.outputNames[0]].data);
+  }
+
+  function bgCompose(x0, y0, x1, y1) {
+    var d = bg.imgData.data, e = bg.edit, w = bg.w;
+    for (var y = y0; y < y1; y++) for (var x = x0; x < x1; x++) {
+      var i = y * w + x, v = e[i];
+      d[i * 4 + 3] = v === 1 ? 255 : (v === -1 ? 0 : bg.base[i]);
+    }
+    bg.ctx.putImageData(bg.imgData, 0, 0, x0, y0, x1 - x0, y1 - y0);
+  }
+  function bgCompute() {
+    if (!bg.src) return;
+    var d = bg.imgData.data, n = bg.w * bg.h, i;
+    d.set(bg.src);
+    if ($("bgMethod").value === "ai") {
+      if (!bg.mask) return;
+      bgApplyMask(d, bg.w, bg.h, bg.mask, BG_SIZE, +$("bgTight").value / 100, +$("bgSoft").value / 100);
+    } else {
+      bgSolid(d, bg.w, bg.h, +$("bgTol").value, +$("bgSoft").value / 100, $("bgContig").checked);
+    }
+    for (i = 0; i < n; i++) bg.base[i] = d[i * 4 + 3];
+    bgCompose(0, 0, bg.w, bg.h);
+  }
+  var bgRaf = 0;
+  function bgSchedule() {
+    if (bgRaf) return;
+    bgRaf = requestAnimationFrame(function () { bgRaf = 0; bgCompute(); });
+  }
+  function bgLabels() {
+    $("bgTightV").textContent = $("bgTight").value + "%"; $("bgTolV").textContent = $("bgTol").value;
+    $("bgSoftV").textContent = $("bgSoft").value + "%"; $("bgBrushV").textContent = $("bgBrushSize").value;
+  }
+  function bgMethodUI() {
+    var ai = $("bgMethod").value === "ai";
+    $("bgTightBox").classList.toggle("hidden", !ai);
+    $("bgTolBox").classList.toggle("hidden", ai);
+    $("bgContigBox").classList.toggle("hidden", ai);
+  }
+  function bgFill() { var v = $("bgBgSel").value; return v === "custom" ? $("bgColor").value : (v === "transparent" ? "#ffffff" : v); }
+  function bgPreviewBg() {
+    var v = $("bgBgSel").value, wrap = $("bgWrap");
+    $("bgColorBox").classList.toggle("hidden", v !== "custom");
+    if (v === "transparent") { wrap.classList.add("checker"); wrap.style.background = ""; }
+    else { wrap.classList.remove("checker"); wrap.style.background = bgFill(); }
+  }
+
+  async function bgDecode(file) {
+    try { var a = await createImageBitmap(file, { imageOrientation: "from-image" }); return { el: a, w: a.width, h: a.height }; } catch (e) {}
+    try { var b = await createImageBitmap(file); return { el: b, w: b.width, h: b.height }; } catch (e) {}
+    var url = URL.createObjectURL(file), img = new Image();
+    await new Promise(function (res, rej) { img.onload = res; img.onerror = function () { rej(new Error("This image could not be opened.")); }; img.src = url; });
+    setTimeout(function () { URL.revokeObjectURL(url); }, 10000);
+    return { el: img, w: img.naturalWidth, h: img.naturalHeight };
+  }
+  async function bgProcess() {
+    if ($("bgMethod").value === "ai") {
+      try { await bgInfer(); }
+      catch (err) {
+        var msg = err && err.message ? err.message : String(err);
+        $("bgStatus").textContent = (/model file missing|Failed to fetch|NetworkError|Load failed/i.test(msg)
+          ? "The AI model files could not be loaded. Open the website (not the file from your computer) and make sure silueta-1.bin and silueta-2.bin are uploaded next to index.html."
+          : "The AI step failed: " + msg) + " Using the plain-colour method instead.";
+        $("bgMethod").value = "solid"; bgMethodUI();
+        bgCompute(); $("bgBar").style.display = "none";
+        return;
+      }
+    }
+    bgCompute();
+    bgBarSet(1, "Done. Adjust the sliders, or use the brush to fix the edges.");
+  }
+  async function bgLoad(file) {
+    if (!file || bg.busy) return;
+    if (!/^image\//.test(file.type) && !/\.(png|jpe?g|webp|bmp|gif|avif)$/i.test(file.name)) { $("bgInfo").textContent = "Please choose an image file (JPG, PNG or WebP)."; return; }
+    bg.busy = true;
+    try {
+      $("bgInfo").textContent = "Reading image…";
+      var im = await bgDecode(file);
+      var sc = Math.min(1, 4096 / Math.max(im.w, im.h)), w = Math.max(1, Math.round(im.w * sc)), h = Math.max(1, Math.round(im.h * sc));
+      var cv = document.createElement("canvas"); cv.width = w; cv.height = h;
+      var cx = cv.getContext("2d", { willReadFrequently: true }); cx.drawImage(im.el, 0, 0, w, h);
+      bg.srcCanvas = cv; bg.src = cx.getImageData(0, 0, w, h).data; bg.w = w; bg.h = h; bg.mask = null;
+      bg.name = file.name.replace(/\.[^.]+$/, "") || "image";
+      var out = $("bgOut"); out.width = w; out.height = h;
+      bg.ctx = out.getContext("2d"); bg.imgData = bg.ctx.createImageData(w, h);
+      bg.base = new Uint8ClampedArray(w * h); bg.edit = new Int8Array(w * h);
+      $("bgCard").classList.remove("hidden");
+      $("bgInfo").textContent = file.name + " · " + w + "×" + h + (sc < 1 ? " (reduced to fit)" : "");
+      bgLabels(); bgMethodUI(); bgPreviewBg();
+      await bgProcess();
+    } catch (err) {
+      $("bgInfo").textContent = "Could not use this image: " + (err && err.message ? err.message : err);
+    }
+    bg.busy = false;
+  }
+
+  function bgSave(kind) {
+    if (!bg.src) return;
+    var d = bg.imgData.data, box = $("bgCrop").checked ? bgBounds(d, bg.w, bg.h, 8) : null;
+    if (!box) box = { x0: 0, y0: 0, x1: bg.w, y1: bg.h };
+    var cw = box.x1 - box.x0, ch = box.y1 - box.y0, t = document.createElement("canvas"), tx;
+    t.width = cw; t.height = ch; tx = t.getContext("2d");
+    if (kind === "jpg") { tx.fillStyle = bgFill(); tx.fillRect(0, 0, cw, ch); }
+    tx.drawImage($("bgOut"), box.x0, box.y0, cw, ch, 0, 0, cw, ch);
+    t.toBlob(function (blob) {
+      if (!blob) { $("bgStatus").textContent = "Could not create the file. Try a smaller image."; return; }
+      var u = URL.createObjectURL(blob), a = document.createElement("a");
+      a.href = u; a.download = bg.name + "-no-background." + (kind === "jpg" ? "jpg" : "png");
+      document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(function () { URL.revokeObjectURL(u); }, 20000);
+    }, kind === "jpg" ? "image/jpeg" : "image/png", 0.93);
+  }
+
+  (function () {
+    var cv = $("bgOut");
+    function pt(e) { var r = cv.getBoundingClientRect(); return { x: (e.clientX - r.left) * bg.w / r.width, y: (e.clientY - r.top) * bg.h / r.height }; }
+    function radius() { return Math.max(2, +$("bgBrushSize").value / 100 * Math.max(bg.w, bg.h) / 2); }
+    function stamp(p) {
+      var m = $("bgBrush").value;
+      if (m === "none" || !bg.src) return;
+      var b = bgPaint(bg.edit, bg.w, bg.h, p.x, p.y, radius(), m === "restore" ? 1 : -1);
+      bgCompose(b.x0, b.y0, b.x1, b.y1);
+    }
+    cv.addEventListener("pointerdown", function (e) {
+      if ($("bgBrush").value === "none" || !bg.src) return;
+      cv.setPointerCapture(e.pointerId); bg.painting = true; bg.last = pt(e); stamp(bg.last); e.preventDefault();
+    });
+    cv.addEventListener("pointermove", function (e) {
+      if (!bg.painting) return;
+      var p = pt(e), dx = p.x - bg.last.x, dy = p.y - bg.last.y, dist = Math.sqrt(dx * dx + dy * dy), step = Math.max(1, radius() / 2), n = Math.ceil(dist / step);
+      for (var i = 1; i <= n; i++) stamp({ x: bg.last.x + dx * i / n, y: bg.last.y + dy * i / n });
+      bg.last = p; e.preventDefault();
+    });
+    function stop() { bg.painting = false; }
+    cv.addEventListener("pointerup", stop); cv.addEventListener("pointercancel", stop);
+    $("bgBrush").onchange = function () {
+      var on = $("bgBrush").value !== "none";
+      cv.style.touchAction = on ? "none" : "auto"; cv.style.cursor = on ? "crosshair" : "default";
+    };
+  })();
+
+  var bgDrop = $("bgDrop");
+  bgDrop.onclick = function () { $("bgFile").click(); };
+  $("bgFile").onchange = function () { bgLoad($("bgFile").files[0]); $("bgFile").value = ""; };
+  ["dragenter", "dragover"].forEach(function (ev) { bgDrop.addEventListener(ev, function (e) { e.preventDefault(); bgDrop.classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function (ev) { bgDrop.addEventListener(ev, function (e) { e.preventDefault(); bgDrop.classList.remove("over"); }); });
+  bgDrop.addEventListener("drop", function (e) { bgLoad(e.dataTransfer.files[0]); });
+  $("bgMethod").onchange = async function () {
+    bgMethodUI();
+    if (!bg.src) return;
+    if ($("bgMethod").value === "ai" && !bg.mask) { bg.busy = true; await bgProcess(); bg.busy = false; } else bgCompute();
+  };
+  ["bgTight", "bgTol", "bgSoft"].forEach(function (id) { $(id).oninput = function () { bgLabels(); bgSchedule(); }; });
+  $("bgBrushSize").oninput = bgLabels;
+  $("bgContig").onchange = bgSchedule;
+  $("bgBgSel").onchange = bgPreviewBg; $("bgColor").oninput = bgPreviewBg;
+  $("bgReset").onclick = function () { if (bg.src) { bg.edit.fill(0); bgCompose(0, 0, bg.w, bg.h); } };
+  $("bgPng").onclick = function () { bgSave("png"); };
+  $("bgJpg").onclick = function () { bgSave("jpg"); };
+  bgLabels();
+
+  /* ---------- site shell: pages, theme, home page ---------- */
+  var TOOLS = {
+    wp: ["Word ⇄ PDF", "Turn Word documents into PDFs and PDFs back into editable Word files."],
+    zip: ["ZIP → PDF", "Combine the images, PDFs and text files in a ZIP into one PDF."],
+    split: ["Split PDF", "Cut a PDF into equal parts, page ranges or single pages."],
+    vs: ["Voice Studio", "Record your voice, remove mistakes and noise, and polish the sound."],
+    up: ["Video Upscaler", "Enlarge low-resolution video with smooth sharpening."],
+    bg: ["Background Remover", "Cut the subject out of a photo and save a transparent PNG."],
+    rec: ["Screen Recorder", "Record your screen, a window or a tab, with sound."]
+  };
+  function themeNow() {
+    var a = document.documentElement.getAttribute("data-theme");
+    if (a) return a;
+    return window.matchMedia && window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
+  }
+  try {
+    var savedTheme = localStorage.getItem("tk.theme");
+    if (savedTheme === "light" || savedTheme === "dark") document.documentElement.setAttribute("data-theme", savedTheme);
+  } catch (e) {}
+  $("themeBtn").onclick = function () {
+    var next = themeNow() === "dark" ? "light" : "dark";
+    document.documentElement.setAttribute("data-theme", next);
+    try { localStorage.setItem("tk.theme", next); } catch (e) {}
+  };
+  Array.prototype.forEach.call(document.querySelectorAll("[data-tool]"), function (b) {
+    b.onclick = function (e) { if (e && e.preventDefault) e.preventDefault(); showTab(b.getAttribute("data-tool")); };
+  });
+  $("brandBtn").onclick = $("homeBtn").onclick = function () { showTab("home"); };
+  $("ctaExplore").onclick = function () { $("toolGrid").scrollIntoView({ behavior: "smooth", block: "start" }); };
+  window.addEventListener("hashchange", function () { showTab((location.hash || "").slice(1) || "home"); });
+  showTab((location.hash || "").slice(1) || "home");
 })();
 </script>
 </body>
