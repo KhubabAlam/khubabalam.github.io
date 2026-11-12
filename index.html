@@ -3,17 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Toolkit Studio: Free ZIP to PDF, Word to PDF, PDF Splitter, Voice Studio and Video Upscaler</title>
-<meta name="description" content="ZIP to PDF, Word to PDF, PDF to Word, PDF splitter, background remover, voice cleaner, video upscaler and screen recorder. Free, private, no sign-up.">
+<title>Toolkit Studio: Free ZIP to PDF, Word to PDF, PDF Splitter, Voice Studio and Video Joiner</title>
+<meta name="description" content="ZIP to PDF, Word to PDF, PDF to Word, PDF splitter, background remover, voice cleaner, video joiner and screen recorder. Free, private, no sign-up.">
 <meta name="theme-color" content="#6366f1">
 <link rel="canonical" href="https://khubabalam.github.io/">
 <meta property="og:type" content="website">
 <meta property="og:title" content="Toolkit Studio: free tools that run in your browser">
-<meta property="og:description" content="ZIP to PDF, Word to PDF, PDF splitter, voice cleaner, video upscaler and screen recorder. Your files stay on your device.">
+<meta property="og:description" content="ZIP to PDF, Word to PDF, PDF splitter, voice cleaner, video joiner and screen recorder. Your files stay on your device.">
 <meta property="og:url" content="https://khubabalam.github.io/">
 <meta name="twitter:card" content="summary">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cdefs%3E%3ClinearGradient id='g' x1='0' y1='0' x2='1' y2='1'%3E%3Cstop offset='0' stop-color='%236366f1'/%3E%3Cstop offset='1' stop-color='%2306b6d4'/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect width='64' height='64' rx='16' fill='url(%23g)'/%3E%3Cpath d='M36 10L16 36h14l-2 18 20-26H34l2-18z' fill='white'/%3E%3C/svg%3E">
-<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Toolkit Studio","url":"https://khubabalam.github.io/","description":"Free browser tools: ZIP to PDF, Word to PDF, PDF to Word, PDF splitter, voice recorder with noise removal, video upscaler and screen recorder.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["ZIP to PDF","Word to PDF","PDF to Word","Split PDF","Background remover","Voice recorder with noise removal","Video upscaler","Screen recorder"]}</script>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"Toolkit Studio","url":"https://khubabalam.github.io/","description":"Free browser tools: ZIP to PDF, Word to PDF, PDF to Word, PDF splitter, voice recorder with noise removal, video upscaler and screen recorder.","applicationCategory":"UtilitiesApplication","operatingSystem":"Any","browserRequirements":"Requires JavaScript","offers":{"@type":"Offer","price":"0","priceCurrency":"USD"},"featureList":["ZIP to PDF","Word to PDF","PDF to Word","Split PDF","Background remover","Voice recorder with noise removal","Video joiner","Screen recorder"]}</script>
 <style>
   :root {
     --bg: #f3f5fb; --card: #ffffff; --text: #0f172a; --muted: #5b6478;
@@ -150,8 +150,6 @@
     display: block; width: 100%; height: 140px; margin-top: 12px; border: 1px solid var(--border);
     border-radius: 8px; background: var(--bg); touch-action: none; cursor: crosshair;
   }
-  #upBox { margin-top: 12px; }
-  #upBox canvas { display: block; width: 100%; max-height: 380px; object-fit: contain; background: #000; border-radius: 10px; }
   body { -webkit-text-size-adjust: 100%; }
   button, .drop, a.dl { touch-action: manipulation; }
   @media (max-width: 640px) {
@@ -287,6 +285,11 @@
   .checker { background-color: #fff; background-image: linear-gradient(45deg, #d5d9e4 25%, transparent 25%, transparent 75%, #d5d9e4 75%), linear-gradient(45deg, #d5d9e4 25%, transparent 25%, transparent 75%, #d5d9e4 75%); background-size: 20px 20px; background-position: 0 0, 10px 10px; }
   .bgwrap { border: 1px solid var(--border); border-radius: 12px; overflow: hidden; margin-top: 12px; line-height: 0; }
   .bgwrap canvas { display: block; margin: 0 auto; max-width: 100%; max-height: 70vh; width: auto; height: auto; }
+  .vjname { flex: 1; min-width: 0; }
+  .vjname b { display: block; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .vjname small { display: block; color: var(--muted); font-size: 12.5px; }
+  .vjname small.bad { color: var(--err); }
+  #vjOut { width: 100%; max-height: 420px; background: #000; border-radius: 10px; margin-top: 12px; }
 </style>
 </head>
 <body>
@@ -296,7 +299,7 @@
   <symbol id="i-split" viewBox="0 0 24 24"><circle cx="6" cy="6" r="3"/><circle cx="6" cy="18" r="3"/><line x1="20" y1="4" x2="8.12" y2="15.88"/><line x1="14.47" y1="14.48" x2="20" y2="20"/><line x1="8.12" y1="8.12" x2="12" y2="12"/></symbol>
   <symbol id="i-wp" viewBox="0 0 24 24"><polyline points="17 1 21 5 17 9"/><path d="M3 11V9a4 4 0 0 1 4-4h14"/><polyline points="7 23 3 19 7 15"/><path d="M21 13v2a4 4 0 0 1-4 4H3"/></symbol>
   <symbol id="i-vs" viewBox="0 0 24 24"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"/><path d="M19 10v2a7 7 0 0 1-14 0v-2"/><line x1="12" y1="19" x2="12" y2="23"/><line x1="8" y1="23" x2="16" y2="23"/></symbol>
-  <symbol id="i-up" viewBox="0 0 24 24"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></symbol>
+  <symbol id="i-vj" viewBox="0 0 24 24"><rect x="2" y="2" width="20" height="20" rx="2.18" ry="2.18"/><line x1="7" y1="2" x2="7" y2="22"/><line x1="17" y1="2" x2="17" y2="22"/><line x1="2" y1="12" x2="22" y2="12"/><line x1="2" y1="7" x2="7" y2="7"/><line x1="2" y1="17" x2="7" y2="17"/><line x1="17" y1="17" x2="22" y2="17"/><line x1="17" y1="7" x2="22" y2="7"/></symbol>
   <symbol id="i-rec" viewBox="0 0 24 24"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></symbol>
   <symbol id="i-bg" viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"/><circle cx="8.5" cy="8.5" r="1.5"/><polyline points="21 15 16 10 5 21"/></symbol>
   <symbol id="i-sun" viewBox="0 0 24 24"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></symbol>
@@ -368,11 +371,11 @@
         <span class="tags"><span>Record</span><span>Denoise</span><span>WAV</span></span>
         <span class="open">Open tool <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
-      <a class="tool" href="#up" data-tool="up">
-        <span class="ico c5"><svg class="i"><use href="#i-up"/></svg></span>
-        <h3>Video Upscaler</h3>
-        <p>Enlarge low-resolution video to 720p, 1080p or higher with smooth sharpening and a quick 5-second test.</p>
-        <span class="tags"><span>1080p</span><span>Sharpen</span><span>Smooth</span></span>
+      <a class="tool" href="#vj" data-tool="vj">
+        <span class="ico c5"><svg class="i"><use href="#i-vj"/></svg></span>
+        <h3>Video Joiner</h3>
+        <p>Combine many clips into one long video in seconds, with no re-encoding: the same quality, smooth playback and full skipping.</p>
+        <span class="tags"><span>Lossless</span><span>MP4</span><span>Fast</span></span>
         <span class="open">Open tool <svg class="i"><use href="#i-arrow"/></svg></span>
       </a>
       <a class="tool" href="#bg" data-tool="bg">
@@ -405,7 +408,7 @@
       <details><summary>Is Toolkit Studio really free?</summary><p>Yes. There is no sign-up, no watermark and no limit on how often you use it.</p></details>
       <details><summary>Are my files uploaded anywhere?</summary><p>No. Files are processed in your browser, on your own device. Some tools load helper libraries from a public content network the first time you use them, but your files are never sent.</p></details>
       <details><summary>Does it work on my phone?</summary><p>Yes, for every tool except the Screen Recorder, because phone browsers do not let web pages record the screen. Very large videos and files can be slow on a phone.</p></details>
-      <details><summary>Which browser should I use?</summary><p>A recent Chrome, Edge, Firefox or Safari. Voice Studio and Video Upscaler work best in Chrome or Edge.</p></details>
+      <details><summary>Which browser should I use?</summary><p>A recent Chrome, Edge, Firefox or Safari. Voice Studio and Background Remover work best in Chrome or Edge.</p></details>
     </div>
   </section>
 
@@ -421,7 +424,7 @@
       <button id="tabZip"><svg class="i"><use href="#i-zip"/></svg> ZIP → PDF</button>
       <button id="tabSplit"><svg class="i"><use href="#i-split"/></svg> Split PDF</button>
       <button id="tabVs"><svg class="i"><use href="#i-vs"/></svg> Voice Studio</button>
-      <button id="tabUp"><svg class="i"><use href="#i-up"/></svg> Video Upscaler</button>
+      <button id="tabVj"><svg class="i"><use href="#i-vj"/></svg> Video Joiner</button>
       <button id="tabBg"><svg class="i"><use href="#i-bg"/></svg> Background Remover</button>
       <button id="tabRec"><svg class="i"><use href="#i-rec"/></svg> Screen Recorder</button>
     </div>
@@ -674,70 +677,30 @@
     </div>
   </div>
 
-  <div id="upPanel" class="hidden">
+  <div id="vjPanel" class="hidden">
     <div class="card">
-      <div class="drop" id="upDrop">
-        <strong>Choose a video to upscale</strong>
-        <span>Tap here (or drop an MP4, MOV or WebM file). It stays on your device.</span>
+      <div class="drop" id="vjDrop">
+        <strong>Choose the clips to join</strong>
+        <span>Tap here or drop several MP4 or MOV files. They are joined in name order, and you can change the order.</span>
       </div>
-      <input type="file" id="upFile" accept="video/*">
-      <div class="status" id="upInfo"></div>
+      <input type="file" id="vjFile" accept="video/mp4,video/quicktime,.mp4,.mov,.m4v" multiple>
+      <div class="status" id="vjInfo"></div>
     </div>
-
-    <div class="card hidden" id="upOpts">
-      <h2>Upscale settings</h2>
-      <div class="opts">
-        <label class="f">Target resolution
-          <select id="upRes">
-            <option value="720">HD 720p</option>
-            <option value="1080" selected>Full HD 1080p</option>
-            <option value="1440">2K 1440p</option>
-            <option value="2160">4K 2160p (slow, computers only)</option>
-          </select>
-        </label>
-        <label class="f">Method
-          <select id="upMode">
-            <option value="best">Best quality (computers)</option>
-            <option value="fast">Fast (phones and older devices)</option>
-          </select>
-        </label>
-        <label class="f">Output quality
-          <select id="upQ">
-            <option value="0.08">Standard</option>
-            <option value="0.12" selected>High</option>
-            <option value="0.18">Maximum (bigger file)</option>
-          </select>
-        </label>
-        <label class="f"><span>Sharpening: <b id="upSharpV"></b></span>
-          <input type="range" id="upSharp" min="0" max="100" step="5" value="40">
-        </label>
-        <label class="f">Frame capture
-          <select id="upCap">
-            <option value="match">Match the video's own frames (recommended)</option>
-            <option value="fixed">Fixed 30 fps (try this if the result looks choppy)</option>
-          </select>
-        </label>
+    <div class="card hidden" id="vjCard">
+      <div class="row" style="margin:0 0 12px">
+        <button class="ghost" id="vjSort">Sort by name</button>
+        <button class="ghost" id="vjDropBad">Remove clips that do not match</button>
+        <button class="ghost" id="vjClear">Clear all</button>
       </div>
-      <div class="note" id="upEst"></div>
-      <div class="row">
-        <button class="main" id="upTest">Test the first 5 seconds</button>
-        <button class="main" id="upGo">Upscale the full video</button>
-        <button class="ghost hidden" id="upCancel">Cancel</button>
+      <div class="list" id="vjList"></div>
+      <div class="note" id="vjSummary"></div>
+      <div class="row"><button class="main" id="vjGo">Join clips</button></div>
+      <div class="status" id="vjStatus"></div>
+      <div class="hidden" id="vjResult">
+        <video id="vjOut" controls playsinline></video>
+        <div class="row"><a class="dl" id="vjDl" href="#">Download</a></div>
       </div>
-      <div class="bar" id="ubar"><i id="ubarFill"></i></div>
-      <div class="status" id="upStatus"></div>
-      <div class="hidden" id="upBox"></div>
-      <div class="note">It works at the video's normal speed, so a 5-minute video takes about 5 minutes. Keep this page open and visible, and on a phone keep the screen on. Switching apps or tabs can make the result stutter.</div>
-    </div>
-
-    <div class="card hidden" id="upResult">
-      <h2>Result</h2>
-      <div class="note" id="upReport"></div>
-      <div class="note">Before</div>
-      <video id="upBefore" controls playsinline></video>
-      <div class="note">After</div>
-      <video id="upAfter" controls playsinline></video>
-      <div class="row"><a class="dl" id="upDl" href="#">Download</a></div>
+      <div class="note">Clips are joined without re-encoding, so the picture and sound are exactly as good as the originals, it takes seconds, and you can skip to any point. All clips must have the same size, rotation, frame settings and audio settings, which is normal when they come from the same camera, phone, recorder or editor export. MP4 and MOV files with H.264 or H.265 video and AAC sound are supported.</div>
     </div>
   </div>
 
@@ -1659,14 +1622,14 @@ run();
     $("splitPanel").classList.toggle("hidden", name !== "split");
     $("recPanel").classList.toggle("hidden", name !== "rec");
     $("vsPanel").classList.toggle("hidden", name !== "vs");
-    $("upPanel").classList.toggle("hidden", name !== "up");
+    $("vjPanel").classList.toggle("hidden", name !== "vj");
     $("wpPanel").classList.toggle("hidden", name !== "wp");
     $("bgPanel").classList.toggle("hidden", name !== "bg");
     $("tabZip").classList.toggle("active", name === "zip");
     $("tabSplit").classList.toggle("active", name === "split");
     $("tabRec").classList.toggle("active", name === "rec");
     $("tabVs").classList.toggle("active", name === "vs");
-    $("tabUp").classList.toggle("active", name === "up");
+    $("tabVj").classList.toggle("active", name === "vj");
     $("tabWp").classList.toggle("active", name === "wp");
     $("tabBg").classList.toggle("active", name === "bg");
     if (name === "vs") vsDraw();
@@ -2620,326 +2583,567 @@ run();
   });
   navigator.mediaDevices && navigator.mediaDevices.enumerateDevices && vsListMics();
 
-  /* ---------- video upscaler ---------- */
+  /* ---------- device checks ---------- */
   var isMobile = /Android|iPhone|iPad|iPod/i.test(navigator.userAgent) || (navigator.maxTouchPoints > 1 && /Macintosh/.test(navigator.userAgent));
   if (!recSupported) { $("tabRec").classList.add("hidden"); $("cardRec").classList.add("hidden"); }   // phones cannot record the screen from a web page
-  $("tabUp").onclick = function () { showTab("up"); };
+  /* VJ-START */
+  var VJ = (function () {
+    "use strict";
+    var TWO32 = 4294967296;
 
-  /* UPHELP-START */
-  function even(n) { n = Math.round(n); return n % 2 ? n + 1 : n; }
-  function outDims(sw, sh, target) { var sc = target / Math.min(sw, sh); return { w: even(sw * sc), h: even(sh * sc) }; }
-  function bitrateFor(w, h, fps, k) { return Math.max(3e6, Math.min(45e6, w * h * fps * k)); }
-  /* UPHELP-END */
-
-  var UP_VS = [
-    "attribute vec2 p;",
-    "varying vec2 uv;",
-    "void main() { uv = vec2(p.x * 0.5 + 0.5, 0.5 - p.y * 0.5); gl_Position = vec4(p, 0.0, 1.0); }"
-  ].join("\n");
-  var UP_FS = [
-    "#ifdef GL_FRAGMENT_PRECISION_HIGH",
-    "precision highp float;",
-    "#else",
-    "precision mediump float;",
-    "#endif",
-    "varying vec2 uv;",
-    "uniform sampler2D tex;",
-    "uniform vec2 srcSize;",
-    "uniform float sharp;",
-    "uniform float fastMode;",
-    "float wc(vec4 w, int i) { if (i == 0) return w.x; if (i == 1) return w.y; if (i == 2) return w.z; return w.w; }",
-    "vec4 weights(float f) {",
-    "  float f2 = f * f; float f3 = f2 * f;",
-    "  return vec4(-0.5 * f3 + f2 - 0.5 * f, 1.5 * f3 - 2.5 * f2 + 1.0, -1.5 * f3 + 2.0 * f2 + 0.5 * f, 0.5 * f3 - 0.5 * f2);",
-    "}",
-    "vec3 bicubic(vec2 coord) {",
-    "  vec2 q = coord - 0.5;",
-    "  vec2 fr = fract(q);",
-    "  vec2 base = floor(q);",
-    "  vec4 wx = weights(fr.x);",
-    "  vec4 wy = weights(fr.y);",
-    "  vec3 col = vec3(0.0);",
-    "  for (int j = 0; j < 4; j++) {",
-    "    float wyv = wc(wy, j);",
-    "    for (int i = 0; i < 4; i++) {",
-    "      vec2 t = (base + vec2(float(i) - 1.0, float(j) - 1.0) + 0.5) / srcSize;",
-    "      col += texture2D(tex, t).rgb * (wc(wx, i) * wyv);",
-    "    }",
-    "  }",
-    "  return col;",
-    "}",
-    "void main() {",
-    "  vec2 coord = uv * srcSize;",
-    "  vec3 c;",
-    "  if (fastMode > 0.5) { c = texture2D(tex, uv).rgb; } else { c = bicubic(coord); }",
-    "  vec2 px = 1.0 / srcSize;",
-    "  vec3 a = texture2D(tex, uv + vec2(-0.75, -0.75) * px).rgb;",
-    "  vec3 b = texture2D(tex, uv + vec2(0.75, -0.75) * px).rgb;",
-    "  vec3 d = texture2D(tex, uv + vec2(-0.75, 0.75) * px).rgb;",
-    "  vec3 e = texture2D(tex, uv + vec2(0.75, 0.75) * px).rgb;",
-    "  vec3 blur = (a + b + d + e) * 0.25;",
-    "  vec3 mn = min(min(a, b), min(d, e));",
-    "  vec3 mx = max(max(a, b), max(d, e));",
-    "  mn = min(mn, c); mx = max(mx, c);",
-    "  vec3 o = c + sharp * (c - blur);",
-    "  o = clamp(o, mn - 0.04, mx + 0.04);",
-    "  gl_FragColor = vec4(clamp(o, 0.0, 1.0), 1.0);",
-    "}"
-  ].join("\n");
-
-  /* draws each video frame enlarged: on the graphics card when possible, plain canvas otherwise */
-  function makeRenderer(sw, sh, outW, outH, fast, sharp) {
-    var c = document.createElement("canvas"), gl = null;
-    c.width = outW; c.height = outH;
-    try { gl = c.getContext("webgl", { alpha: false, antialias: false, preserveDrawingBuffer: true }); } catch (e) { gl = null; }
-    if (gl) {
-      try {
-        var mk = function (type, src) {
-          var sd = gl.createShader(type);
-          gl.shaderSource(sd, src); gl.compileShader(sd);
-          if (!gl.getShaderParameter(sd, gl.COMPILE_STATUS)) throw new Error(gl.getShaderInfoLog(sd) || "shader error");
-          return sd;
-        };
-        var pr = gl.createProgram();
-        gl.attachShader(pr, mk(gl.VERTEX_SHADER, UP_VS));
-        gl.attachShader(pr, mk(gl.FRAGMENT_SHADER, UP_FS));
-        gl.linkProgram(pr);
-        if (!gl.getProgramParameter(pr, gl.LINK_STATUS)) throw new Error("link error");
-        gl.useProgram(pr);
-        gl.bindBuffer(gl.ARRAY_BUFFER, gl.createBuffer());
-        gl.bufferData(gl.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), gl.STATIC_DRAW);
-        var loc = gl.getAttribLocation(pr, "p");
-        gl.enableVertexAttribArray(loc); gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
-        gl.bindTexture(gl.TEXTURE_2D, gl.createTexture());
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_S, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_WRAP_T, gl.CLAMP_TO_EDGE);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.LINEAR);
-        gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.LINEAR);
-        gl.uniform1i(gl.getUniformLocation(pr, "tex"), 0);
-        gl.uniform2f(gl.getUniformLocation(pr, "srcSize"), sw, sh);
-        gl.uniform1f(gl.getUniformLocation(pr, "sharp"), sharp * 1.2);
-        gl.uniform1f(gl.getUniformLocation(pr, "fastMode"), fast ? 1 : 0);
-        gl.viewport(0, 0, outW, outH);
-        return {
-          canvas: c, kind: fast ? "graphics card, fast" : "graphics card, best quality",
-          draw: function (v) {
-            gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGB, gl.RGB, gl.UNSIGNED_BYTE, v);
-            gl.drawArrays(gl.TRIANGLE_STRIP, 0, 4);
-          }
-        };
-      } catch (err) { /* fall back below */ }
+    /* ---------- reading helpers ---------- */
+    function rd32(b, o) { return ((b[o] << 24) | (b[o + 1] << 16) | (b[o + 2] << 8) | b[o + 3]) >>> 0; }
+    function rdS32(b, o) { return (b[o] << 24) | (b[o + 1] << 16) | (b[o + 2] << 8) | b[o + 3]; }
+    function rd16(b, o) { return (b[o] << 8) | b[o + 1]; }
+    function rd64(b, o) { return rd32(b, o) * TWO32 + rd32(b, o + 4); }
+    function tag(b, o) { return String.fromCharCode(b[o], b[o + 1], b[o + 2], b[o + 3]); }
+    function hex(b, s, e) { var t = ""; for (var i = s; i < e; i++) t += (b[i] < 16 ? "0" : "") + b[i].toString(16); return t; }
+    function boxes(b, start, end) {
+      var out = [], p = start;
+      while (p + 8 <= end) {
+        var size = rd32(b, p), type = tag(b, p + 4), hdr = 8;
+        if (size === 1) { size = rd64(b, p + 8); hdr = 16; } else if (size === 0) { size = end - p; }
+        if (size < hdr || p + size > end) break;
+        out.push({ type: type, start: p, size: size, hdr: hdr, ds: p + hdr, end: p + size });
+        p += size;
+      }
+      return out;
     }
-    var c2 = document.createElement("canvas");
-    c2.width = outW; c2.height = outH;
-    var g = c2.getContext("2d");
-    g.imageSmoothingEnabled = true; g.imageSmoothingQuality = "high";
-    return { canvas: c2, kind: "basic mode (no sharpening)", draw: function (v) { g.drawImage(v, 0, 0, outW, outH); } };
-  }
+    function kids(b, box) { return boxes(b, box.ds, box.end); }
+    function child(b, box, type) { var l = kids(b, box); for (var i = 0; i < l.length; i++) if (l[i].type === type) return l[i]; return null; }
+    function raw(b, box) { return b.subarray(box.start, box.end); }
 
-  function upMime() {
-    if (!window.MediaRecorder) return "";
-    var c = ["video/mp4;codecs=avc1.640028,mp4a.40.2", "video/mp4;codecs=avc1.42E01E,mp4a.40.2", "video/mp4",
-      "video/webm;codecs=vp9,opus", "video/webm;codecs=vp8,opus", "video/webm"];
-    for (var i = 0; i < c.length; i++) { if (MediaRecorder.isTypeSupported(c[i])) return c[i]; }
-    return "";
-  }
-
-  var up = { file: null, url: null, w: 0, h: 0, dur: 0, running: false, cancel: false, hidden: false, outUrl: null };
-
-  function upClearResult() {
-    if (up.outUrl) { URL.revokeObjectURL(up.outUrl); up.outUrl = null; }
-    $("upAfter").removeAttribute("src"); $("upAfter").load();
-    $("upResult").classList.add("hidden");
-  }
-  function upEstimate() {
-    if (!up.w) return;
-    var d = outDims(up.w, up.h, +$("upRes").value), bps = bitrateFor(d.w, d.h, 30, +$("upQ").value);
-    var mb = bps * up.dur / 8;
-    var t = "Output: " + d.w + "×" + d.h + " · about " + (bps / 1e6).toFixed(1) + " Mbps · about " + fmtSize(mb) +
-      " · processing takes about " + fmtTime(up.dur * 1000) + ".";
-    if (+$("upRes").value <= Math.min(up.w, up.h)) t += " This video is already that size or larger, so upscaling will not add detail.";
-    if (isMobile && +$("upRes").value >= 2160) t += " 4K is too heavy for most phones. Choose 1080p.";
-    if (mb > (isMobile ? 4e8 : 1.5e9)) t += " The result will be large. Try a shorter clip or lower quality.";
-    $("upEst").textContent = t;
-  }
-  function upSharpLabel() { $("upSharpV").textContent = $("upSharp").value + "%"; }
-  function upProgress(p, text) {
-    $("ubar").style.display = "block";
-    $("ubarFill").style.width = Math.round(Math.max(0, Math.min(1, p)) * 100) + "%";
-    if (text) $("upStatus").textContent = text;
-  }
-  function upUI(running) {
-    $("upTest").classList.toggle("hidden", running);
-    $("upGo").classList.toggle("hidden", running);
-    $("upCancel").classList.toggle("hidden", !running);
-  }
-
-  async function upLoad(file) {
-    if (!file || up.running) return;
-    upClearResult();
-    if (up.url) URL.revokeObjectURL(up.url);
-    $("upInfo").textContent = "Reading video…";
-    var probe = document.createElement("video");
-    probe.preload = "metadata"; probe.muted = true;
-    var url = URL.createObjectURL(file);
-    try {
-      await new Promise(function (res, rej) {
-        probe.onloadedmetadata = res;
-        probe.onerror = function () { rej(new Error("x")); };
-        probe.src = url;
-      });
-      if (!probe.videoWidth || !isFinite(probe.duration) || probe.duration <= 0) throw new Error("x");
-    } catch (e) {
-      URL.revokeObjectURL(url); up.file = null;
-      $("upOpts").classList.add("hidden");
-      $("upInfo").textContent = "This browser could not read that video (or its length). Try an MP4 file.";
-      return;
+    /* ---------- parsing a clip ---------- */
+    async function scanTop(src) {
+      var list = [], pos = 0;
+      while (pos + 8 <= src.size) {
+        var h = await src.read(pos, 16);
+        if (h.length < 8) break;
+        var size = rd32(h, 0), type = tag(h, 4), hdr = 8;
+        if (size === 1) { if (h.length < 16) break; size = rd64(h, 8); hdr = 16; } else if (size === 0) { size = src.size - pos; }
+        if (size < hdr) break;
+        if (pos + size > src.size) size = src.size - pos;
+        list.push({ type: type, start: pos, size: size, hdr: hdr });
+        pos += size;
+      }
+      return list;
     }
-    up.file = file; up.url = url; up.w = probe.videoWidth; up.h = probe.videoHeight; up.dur = probe.duration;
-    $("upInfo").textContent = file.name + " · " + up.w + "×" + up.h + " · " + fmtTime(up.dur * 1000) + " · " + fmtSize(file.size);
-    $("upBefore").src = url;
-    $("upBox").classList.add("hidden"); $("upBox").innerHTML = "";
-    $("ubar").style.display = "none"; $("upStatus").textContent = "";
-    $("upMode").value = isMobile ? "fast" : "best";
-    var pick = up.h < 1080 && up.w < 1080 ? "1080" : (Math.min(up.w, up.h) < 1440 ? "1440" : "2160");
-    $("upRes").value = isMobile && pick === "2160" ? "1440" : pick;
-    $("upOpts").classList.remove("hidden");
-    upEstimate();
-  }
-
-  async function upRun(limit) {
-    if (up.running || !up.file) return;
-    up.running = true; up.cancel = false; up.hidden = false;
-    upClearResult(); upUI(true);
-    var v = null, ac = null, mr = null, wake = null, cs = null, rend = null, stream = null;
-    var onVis = function () { if (document.hidden) up.hidden = true; };
-    document.addEventListener("visibilitychange", onVis);
-    try {
-      var d = outDims(up.w, up.h, +$("upRes").value);
-      var fast = $("upMode").value === "fast", sharp = +$("upSharp").value / 100, k = +$("upQ").value;
-      rend = makeRenderer(up.w, up.h, d.w, d.h, fast, sharp);
-      $("upBox").innerHTML = ""; $("upBox").appendChild(rend.canvas); $("upBox").classList.remove("hidden");
-
-      v = document.createElement("video");
-      v.playsInline = true; v.preload = "auto"; v.src = up.url;
-      v.style.cssText = "position:absolute;width:1px;height:1px;opacity:0;pointer-events:none";
-      document.body.appendChild(v);
-      upProgress(0, "Preparing…");
-      await new Promise(function (res, rej) {
-        if (v.readyState >= 3) return res();
-        var t = setTimeout(res, 8000);
-        v.oncanplay = function () { clearTimeout(t); res(); };
-        v.onerror = function () { clearTimeout(t); rej(new Error("This browser could not decode the video.")); };
-      });
-
-      var aTracks = [];
-      try {
-        var AC = window.AudioContext || window.webkitAudioContext;
-        ac = new AC();
-        if (ac.resume) await ac.resume();
-        var ms = ac.createMediaElementSource(v), dst = ac.createMediaStreamDestination();
-        ms.connect(dst); aTracks = dst.stream.getAudioTracks();
-      } catch (e) { aTracks = []; }
-
-      rend.draw(v);
-      var wantManual = $("upCap").value === "match";
-      cs = rend.canvas.captureStream(wantManual ? 0 : 30);
-      var vt = cs.getVideoTracks()[0], manual = wantManual && typeof vt.requestFrame === "function";
-      if (wantManual && !manual) { vt.stop(); cs = rend.canvas.captureStream(30); vt = cs.getVideoTracks()[0]; }
-      stream = new MediaStream([vt].concat(aTracks));
-      var mime = upMime(), opts = { videoBitsPerSecond: bitrateFor(d.w, d.h, 30, k) };
-      if (mime) opts.mimeType = mime;
-      if (aTracks.length) opts.audioBitsPerSecond = 192000;
-      var chunks = [];
-      mr = new MediaRecorder(stream, opts);
-      mr.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
-      var stopped = new Promise(function (res) { mr.onstop = res; });
-      try { wake = await navigator.wakeLock.request("screen"); } catch (e) {}
-
-      var drawn = 0, missed = 0, lastPres = 0, t0 = performance.now(), done = false;
-      var total = limit ? Math.min(limit, up.dur) : up.dur;
-      var finished = new Promise(function (resolve) {
-        function end() { if (!done) { done = true; resolve(); } }
-        function frame(now, meta) {
-          if (done) return;
-          rend.draw(v);
-          if (manual) vt.requestFrame();
-          drawn++;
-          if (meta && meta.presentedFrames) {
-            if (lastPres) missed += Math.max(0, meta.presentedFrames - lastPres - 1);
-            lastPres = meta.presentedFrames;
-          }
-          var t = v.currentTime;
-          upProgress(t / total, (limit ? "Testing: " : "Processing: ") + fmtTime(t * 1000) + " of " + fmtTime(total * 1000));
-          if (up.cancel || v.ended || t >= total) return end();
-          schedule();
+    function parseTkhd(b, box) {
+      var v = b[box.ds], o = box.ds + 4, id, w, h;
+      if (v === 1) { id = rd32(b, o + 16); o += 32 + 8 + 4 + 4 - 4; } else { id = rd32(b, o + 8); o += 16; }
+      /* after duration: reserved(8) layer(2) altgroup(2) volume(2) reserved(2) matrix(36) w(4) h(4) */
+      var d = (v === 1) ? box.ds + 4 + 32 : box.ds + 4 + 20;
+      var matrix = hex(b, d + 16, d + 52);
+      w = rd32(b, d + 52) / 65536; h = rd32(b, d + 56) / 65536;
+      return { id: id, matrix: matrix, matrixBytes: b.slice(d + 16, d + 52), w: w, h: h };
+    }
+    function parseMdhd(b, box) {
+      var v = b[box.ds];
+      if (v === 1) return { ts: rd32(b, box.ds + 20), dur: rd64(b, box.ds + 24), lang: rd16(b, box.ds + 32) };
+      return { ts: rd32(b, box.ds + 12), dur: rd32(b, box.ds + 16), lang: rd16(b, box.ds + 20) };
+    }
+    function parseElst(b, box) {
+      var v = b[box.ds], n = rd32(b, box.ds + 4), p = box.ds + 8, out = [];
+      for (var i = 0; i < n; i++) {
+        var seg, mt, rate;
+        if (v === 1) {
+          seg = rd64(b, p);
+          mt = (rd32(b, p + 8) === 0xFFFFFFFF && rd32(b, p + 12) === 0xFFFFFFFF) ? -1 : rd64(b, p + 8);
+          rate = rd16(b, p + 16); p += 20;
+        } else { seg = rd32(b, p); mt = rdS32(b, p + 4); rate = rd16(b, p + 8); p += 12; }
+        out.push({ seg: seg, mt: mt, rate: rate });
+      }
+      return out;
+    }
+    function parseStbl(b, stbl) {
+      var t = { count: 0 }, l = kids(b, stbl), i, k, p;
+      var m = {}; l.forEach(function (x) { m[x.type] = x; });
+      var stsd = m.stsd;
+      if (stsd) {
+        var n = rd32(b, stsd.ds + 4), eb = boxes(b, stsd.ds + 8, stsd.end);
+        t.descCount = n; if (eb.length) { t.entryBox = eb[0]; t.entryRaw = raw(b, eb[0]); t.entryType = eb[0].type; }
+      }
+      if (!m.stsz || !m.stts || !m.stsc || !(m.stco || m.co64)) return t;   /* empty (fragmented) */
+      var szBox = m.stsz, uniform = rd32(b, szBox.ds + 4), n = rd32(b, szBox.ds + 8);
+      if (n === 0) return t;
+      var size = new Uint32Array(n);
+      if (uniform) size.fill(uniform); else for (i = 0; i < n; i++) size[i] = rd32(b, szBox.ds + 12 + i * 4);
+      var dur = new Uint32Array(n), dts = new Float64Array(n), cur = 0, si = 0, sc = rd32(b, m.stts.ds + 4);
+      p = m.stts.ds + 8;
+      for (i = 0; i < sc; i++) {
+        var cnt = rd32(b, p), d = rd32(b, p + 4); p += 8;
+        for (k = 0; k < cnt && si < n; k++) { dur[si] = d; dts[si] = cur; cur += d; si++; }
+      }
+      var cto = new Int32Array(n);
+      if (m.ctts) {
+        var cv = b[m.ctts.ds], cc = rd32(b, m.ctts.ds + 4); p = m.ctts.ds + 8; si = 0;
+        for (i = 0; i < cc; i++) {
+          var c2 = rd32(b, p), o2 = cv === 1 ? rdS32(b, p + 4) : (rd32(b, p + 4) | 0); p += 8;
+          for (k = 0; k < c2 && si < n; k++) cto[si++] = o2;
         }
-        function schedule() {
-          if (v.requestVideoFrameCallback) v.requestVideoFrameCallback(frame);
-          else requestAnimationFrame(function (n) { frame(n, null); });
-        }
-        v.onended = end; v.onerror = end;
-        schedule();
-      });
-      mr.start(1000);
-      await v.play();
-      await finished;
-      v.pause();
-      if (manual) vt.requestFrame();
-      await new Promise(function (r) { setTimeout(r, 300); });
-      if (mr.state !== "inactive") mr.stop();
-      await stopped;
-
-      if (up.cancel) { $("upStatus").textContent = "Cancelled."; return; }
-      if (!chunks.length) throw new Error("Nothing was recorded. Try the fixed 30 fps capture option.");
-
-      var q = v.getVideoPlaybackQuality ? v.getVideoPlaybackQuality() : null;
-      var frames = q && q.totalVideoFrames ? q.totalVideoFrames : drawn + missed;
-      var dropped = (q ? q.droppedVideoFrames : 0) + missed;
-      var pct = frames ? dropped / frames * 100 : 0;
-      var wall = (performance.now() - t0) / 1000, slow = wall > v.currentTime * 1.15 + 1;
-      var verdict;
-      if (up.hidden) verdict = "You switched away while it was running, so the result may have gaps. Run it again and keep this page open.";
-      else if (pct > 5 || slow) verdict = "Your device could not keep up (" + pct.toFixed(1) + "% of frames missed). Choose Fast, a lower resolution, or lower quality and run it again.";
-      else if (pct > 1) verdict = "Mostly smooth (" + pct.toFixed(1) + "% of frames missed).";
-      else verdict = "Smooth: no noticeable frames were missed.";
-      var type = (mr.mimeType || mime || "video/webm"), extn = type.indexOf("mp4") > -1 ? "mp4" : "webm";
-      var blob = new Blob(chunks, { type: type }), dt = new Date();
-      up.outUrl = URL.createObjectURL(blob);
-      $("upAfter").src = up.outUrl;
-      $("upDl").href = up.outUrl;
-      $("upDl").download = "upscaled-" + d.h + "p-" + dt.getFullYear() + pad2(dt.getMonth() + 1) + pad2(dt.getDate()) + "-" + pad2(dt.getHours()) + pad2(dt.getMinutes()) + pad2(dt.getSeconds()) + "." + extn;
-      $("upDl").textContent = "Download " + extn.toUpperCase() + " (" + fmtSize(blob.size) + ")";
-      $("upReport").textContent = (limit ? "Test clip (first " + limit + " seconds). " : "") + up.w + "×" + up.h + " → " + d.w + "×" + d.h +
-        " using " + rend.kind + ". " + verdict + (extn === "webm" ? " WebM files from browsers may not allow seeking in some players; MP4 is better where available." : "");
-      $("upResult").classList.remove("hidden");
-      upProgress(1, limit ? "Test finished. If it looks good, upscale the full video." : "Done.");
-    } catch (err) {
-      $("upStatus").textContent = "Failed: " + (err && err.message ? err.message : err);
-    } finally {
-      document.removeEventListener("visibilitychange", onVis);
-      try { if (mr && mr.state !== "inactive") mr.stop(); } catch (e) {}
-      [cs, stream].forEach(function (st) { if (st) st.getTracks().forEach(function (t) { try { t.stop(); } catch (e) {} }); });
-      try { if (ac) ac.close(); } catch (e) {}
-      try { if (wake) wake.release(); } catch (e) {}
-      if (v) { try { v.pause(); } catch (e) {} v.removeAttribute("src"); if (v.parentNode) v.parentNode.removeChild(v); }
-      up.running = false; upUI(false);
+      }
+      var sync = new Uint8Array(n);
+      if (m.stss) { var ssc = rd32(b, m.stss.ds + 4); p = m.stss.ds + 8; for (i = 0; i < ssc; i++) { var idx = rd32(b, p) - 1; p += 4; if (idx >= 0 && idx < n) sync[idx] = 1; } }
+      else sync.fill(1);
+      var co = m.co64 || m.stco, is64 = !!m.co64, nch = rd32(b, co.ds + 4);
+      var stscN = rd32(b, m.stsc.ds + 4), sx = [];
+      p = m.stsc.ds + 8;
+      for (i = 0; i < stscN; i++) { sx.push({ first: rd32(b, p), spc: rd32(b, p + 4), desc: rd32(b, p + 8) }); p += 12; }
+      var off = new Float64Array(n), s = 0, multiDesc = false;
+      for (var ch = 0; ch < nch && s < n; ch++) {
+        var e = sx[0];
+        for (i = 0; i < sx.length; i++) { if (sx[i].first <= ch + 1) e = sx[i]; else break; }
+        var pos = is64 ? rd64(b, co.ds + 8 + ch * 8) : rd32(b, co.ds + 8 + ch * 4);
+        if (e.desc !== 1) multiDesc = true;
+        for (k = 0; k < e.spc && s < n; k++) { off[s] = pos; pos += size[s]; s++; }
+      }
+      t.count = n; t.size = size; t.dur = dur; t.dts = dts; t.cto = cto; t.sync = sync; t.off = off; t.multiDesc = multiDesc;
+      return t;
     }
-  }
+    function toTyped(a, Ctor) { var o = new Ctor(a.length); for (var i = 0; i < a.length; i++) o[i] = a[i]; return o; }
 
-  $("upFile").onchange = function () { upLoad($("upFile").files[0]); $("upFile").value = ""; };
-  (function () {
-    var dz = $("upDrop");
-    dz.onclick = function () { $("upFile").click(); };
-    ["dragenter", "dragover"].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.add("over"); }); });
-    ["dragleave", "drop"].forEach(function (ev) { dz.addEventListener(ev, function (e) { e.preventDefault(); dz.classList.remove("over"); }); });
-    dz.addEventListener("drop", function (e) { upLoad(e.dataTransfer.files[0]); });
+    /* fragments (moof) -> samples */
+    async function readFragments(src, top, tracks, trex) {
+      var by = {};
+      tracks.forEach(function (t) { by[t.id] = { t: t, off: [], size: [], dur: [], dts: [], cto: [], sync: [], next: null }; });
+      for (var ti = 0; ti < top.length; ti++) {
+        if (top[ti].type !== "moof") continue;
+        var mb = await src.read(top[ti].start, top[ti].size), moofStart = top[ti].start, root = { ds: top[ti].hdr, end: mb.length };
+        kids(mb, root).forEach(function (traf) {
+          if (traf.type !== "traf") return;
+          var tfhd = child(mb, traf, "tfhd"); if (!tfhd) return;
+          var fl = rd32(mb, tfhd.ds) & 0xFFFFFF, id = rd32(mb, tfhd.ds + 4), p = tfhd.ds + 8, base = moofStart, dsi = 1, dd, ds, df;
+          var tr = trex[id] || {}; dd = tr.dur || 0; ds = tr.size || 0; df = tr.flags || 0;
+          if (fl & 0x01) { base = rd64(mb, p); p += 8; } else if (!(fl & 0x20000)) base = moofStart;
+          if (fl & 0x02) { dsi = rd32(mb, p); p += 4; }
+          if (fl & 0x08) { dd = rd32(mb, p); p += 4; }
+          if (fl & 0x10) { ds = rd32(mb, p); p += 4; }
+          if (fl & 0x20) { df = rd32(mb, p); p += 4; }
+          var S = by[id]; if (!S) return;
+          if (dsi !== 1) S.t.multiDesc = true;
+          var tfdt = child(mb, traf, "tfdt");
+          if (tfdt) S.next = b0(tfdt);
+          function b0(bx) { return mb[bx.ds] === 1 ? rd64(mb, bx.ds + 4) : rd32(mb, bx.ds + 4); }
+          if (S.next === null) S.next = 0;
+          var dataEnd = null;
+          kids(mb, traf).forEach(function (trun) {
+            if (trun.type !== "trun") return;
+            var ver = mb[trun.ds], tf = rd32(mb, trun.ds) & 0xFFFFFF, cnt = rd32(mb, trun.ds + 4), q = trun.ds + 8, dataOff = null, first = null;
+            if (tf & 0x01) { dataOff = rdS32(mb, q); q += 4; }
+            if (tf & 0x04) { first = rd32(mb, q); q += 4; }
+            var pos = dataOff !== null ? base + dataOff : (dataEnd !== null ? dataEnd : base);
+            for (var i = 0; i < cnt; i++) {
+              var sd = dd, sz = ds, sf = df, sco = 0;
+              if (tf & 0x100) { sd = rd32(mb, q); q += 4; }
+              if (tf & 0x200) { sz = rd32(mb, q); q += 4; }
+              if (tf & 0x400) { sf = rd32(mb, q); q += 4; } else if (i === 0 && first !== null) sf = first;
+              if (tf & 0x800) { sco = ver === 1 ? rdS32(mb, q) : (rd32(mb, q) | 0); q += 4; }
+              S.off.push(pos); S.size.push(sz); S.dur.push(sd); S.dts.push(S.next); S.cto.push(sco); S.sync.push((sf & 0x10000) ? 0 : 1);
+              pos += sz; S.next += sd;
+            }
+            dataEnd = pos;
+          });
+        });
+      }
+      tracks.forEach(function (t) {
+        var S = by[t.id];
+        if (!S.off.length) return;
+        t.count = S.off.length; t.off = toTyped(S.off, Float64Array); t.size = toTyped(S.size, Uint32Array); t.dur = toTyped(S.dur, Uint32Array);
+        t.dts = toTyped(S.dts, Float64Array); t.cto = toTyped(S.cto, Int32Array); t.sync = toTyped(S.sync, Uint8Array);
+      });
+    }
+
+    /* H.264: two clips can share one decoder setup when everything that affects decoding matches.
+       Display-only colour tags (the VUI part of the stream header) are allowed to differ. */
+    function BitR(a) { this.a = a; this.p = 0; }
+    BitR.prototype.bit = function () { var v = (this.a[this.p >> 3] >> (7 - (this.p & 7))) & 1; this.p++; return v; };
+    BitR.prototype.bits = function (n) { var v = 0; while (n-- > 0) v = v * 2 + this.bit(); return v; };
+    BitR.prototype.ue = function () { var z = 0; while (this.bit() === 0 && z < 32) z++; return z ? (Math.pow(2, z) - 1 + this.bits(z)) : 0; };
+    BitR.prototype.se = function () { var k = this.ue(); return (k % 2) ? (k + 1) / 2 : -(k / 2); };
+    function spsPrefix(nal) {
+      var a = [], i; for (i = 1; i < nal.length; i++) { if (i >= 3 && nal[i] === 3 && nal[i - 1] === 0 && nal[i - 2] === 0) continue; a.push(nal[i]); }
+      var r = new BitR(a), profile = r.bits(8); r.bits(16); r.ue();
+      if ([100, 110, 122, 244, 44, 83, 86, 118, 128, 138, 139, 134, 135].indexOf(profile) >= 0) {
+        var cf = r.ue(); if (cf === 3) r.bit(); r.ue(); r.ue(); r.bit();
+        if (r.bit()) {
+          var cnt = cf !== 3 ? 8 : 12;
+          for (i = 0; i < cnt; i++) if (r.bit()) { var size = i < 6 ? 16 : 64, last = 8, next = 8; for (var j = 0; j < size; j++) { if (next !== 0) next = (last + r.se() + 256) % 256; if (next !== 0) last = next; } }
+        }
+      }
+      r.ue(); var poc = r.ue();
+      if (poc === 0) r.ue(); else if (poc === 1) { r.bit(); r.se(); r.se(); var n = r.ue(); for (i = 0; i < n; i++) r.se(); }
+      r.ue(); r.bit(); r.ue(); r.ue();
+      if (!r.bit()) r.bit();
+      r.bit();
+      if (r.bit()) { r.ue(); r.ue(); r.ue(); r.ue(); }
+      var bits = ""; for (i = 0; i < r.p; i++) bits += (a[i >> 3] >> (7 - (i & 7))) & 1;
+      return bits;
+    }
+    function avcSig(b, box) {
+      var p = box.ds, sizeBytes = b[p + 4] & 3, nSps = b[p + 5] & 31, parts = [];
+      p += 6;
+      for (var i = 0; i < nSps; i++) { var l = rd16(b, p); parts.push(spsPrefix(b.subarray(p + 2, p + 2 + l))); p += 2 + l; }
+      var nPps = b[p++], pps = [];
+      for (i = 0; i < nPps; i++) { var l2 = rd16(b, p); pps.push(hex(b, p + 2, p + 2 + l2)); p += 2 + l2; }
+      return "avc:" + sizeBytes + ":" + parts.join("|") + ":" + pps.join("|");
+    }
+
+    /* the codec settings that must match for a lossless join */
+    function entryInfo(entry, handler) {
+      var type = tag(entry, 4), out = { type: type, cfg: "", w: 0, h: 0, ch: 0, rate: 0 };
+      if (handler === "vide") {
+        out.w = rd16(entry, 32); out.h = rd16(entry, 34);
+        boxes(entry, 86, entry.length).forEach(function (c) {
+          if (c.type === "avcC") { try { out.cfg = avcSig(entry, c); } catch (e) { out.cfg = c.type + hex(entry, c.ds, c.end); } }
+          else if (c.type === "hvcC" || c.type === "av1C" || c.type === "vpcC") out.cfg = c.type + hex(entry, c.ds, c.end);
+        });
+      } else if (handler === "soun") {
+        var ver = rd16(entry, 16), start = 36 + (ver === 1 ? 16 : (ver === 2 ? 36 : 0));
+        out.ch = rd16(entry, 24); out.rate = rd32(entry, 32) / 65536;
+        var found = null;
+        function look(list, buf) { list.forEach(function (c) { if (c.type === "wave") look(boxes(buf, c.ds, c.end), buf); else if (["esds", "dac3", "dec3", "dOps", "alac", "dfLa"].indexOf(c.type) >= 0) found = c; }); }
+        look(boxes(entry, start, entry.length), entry);
+        if (found) {
+          if (found.type === "esds") out.cfg = "asc" + esdsAsc(entry, found); else out.cfg = found.type + hex(entry, found.ds, found.end);
+        }
+      }
+      return out;
+    }
+    function esdsAsc(b, box) {
+      /* esds: version/flags(4) then ES_Descriptor(0x03) > DecoderConfigDescriptor(0x04) > DecoderSpecificInfo(0x05) */
+      function desc(p, end) {
+        if (p >= end) return null;
+        var t = b[p++], len = 0, k = 0, c;
+        do { c = b[p++]; len = (len << 7) | (c & 0x7f); k++; } while ((c & 0x80) && k < 4);
+        return { tag: t, start: p, end: Math.min(end, p + len) };
+      }
+      var d3 = desc(box.ds + 4, box.end); if (!d3 || d3.tag !== 3) return hex(b, box.ds, box.end);
+      var p = d3.start + 2, fl = b[p++];
+      if (fl & 0x80) p += 2; if (fl & 0x40) p += 1 + b[p]; if (fl & 0x20) p += 2;
+      var d4 = desc(p, d3.end); if (!d4 || d4.tag !== 4) return hex(b, box.ds, box.end);
+      var d5 = desc(d4.start + 13, d4.end); if (!d5 || d5.tag !== 5) return "";
+      return hex(b, d5.start, d5.end);
+    }
+
+    async function parseClip(src, name) {
+      var top = await scanTop(src), mv = null, i;
+      for (i = 0; i < top.length; i++) if (top[i].type === "moov") { mv = top[i]; break; }
+      if (!mv) throw new Error("this is not a normal MP4 or MOV file (no movie data found)");
+      var mb = await src.read(mv.start, mv.size), root = { ds: mv.hdr, end: mb.length };
+      var mvhd = child(mb, root, "mvhd"); if (!mvhd) throw new Error("the file's movie header is missing");
+      var movieTs = mb[mvhd.ds] === 1 ? rd32(mb, mvhd.ds + 20) : rd32(mb, mvhd.ds + 12);
+      var ftypBox = top.filter(function (t) { return t.type === "ftyp"; })[0], ftyp = ftypBox ? await src.read(ftypBox.start, Math.min(ftypBox.size, 64)) : null;
+      var trex = {}, mvex = child(mb, root, "mvex");
+      if (mvex) kids(mb, mvex).forEach(function (x) {
+        if (x.type === "trex") trex[rd32(mb, x.ds + 4)] = { desc: rd32(mb, x.ds + 8), dur: rd32(mb, x.ds + 12), size: rd32(mb, x.ds + 16), flags: rd32(mb, x.ds + 20) };
+      });
+      var tracks = [];
+      kids(mb, root).forEach(function (trak) {
+        if (trak.type !== "trak") return;
+        var tkhd = child(mb, trak, "tkhd"), mdia = child(mb, trak, "mdia"); if (!tkhd || !mdia) return;
+        var mdhd = child(mb, mdia, "mdhd"), hdlr = child(mb, mdia, "hdlr"), minf = child(mb, mdia, "minf"); if (!mdhd || !hdlr || !minf) return;
+        var handler = tag(mb, hdlr.ds + 8);
+        if (handler !== "vide" && handler !== "soun") return;
+        var stbl = child(mb, minf, "stbl"); if (!stbl) return;
+        var tk = parseTkhd(mb, tkhd), md = parseMdhd(mb, mdhd), st = parseStbl(mb, stbl), edts = child(mb, trak, "edts"), elst = edts ? child(mb, edts, "elst") : null;
+        if (!st.entryRaw) return;
+        var t = {
+          id: tk.id, handler: handler, ts: md.ts, lang: md.lang, matrix: tk.matrix, matrixBytes: tk.matrixBytes, tw: tk.w, th: tk.h,
+          edits: elst ? parseElst(mb, elst) : [], entryRaw: st.entryRaw, info: entryInfo(st.entryRaw, handler), descCount: st.descCount || 1,
+          hdlrRaw: raw(mb, hdlr), minfHdr: raw(mb, kids(mb, minf).filter(function (x) { return x.type === "vmhd" || x.type === "smhd"; })[0] || { start: 0, end: 0 }),
+          dinfRaw: (function () { var d = child(mb, minf, "dinf"); return d ? raw(mb, d) : null; })(), multiDesc: !!st.multiDesc,
+          count: st.count || 0, off: st.off, size: st.size, dur: st.dur, dts: st.dts, cto: st.cto, sync: st.sync
+        };
+        tracks.push(t);
+      });
+      var fragmented = tracks.some(function (t) { return !t.count; });
+      if (fragmented) await readFragments(src, top, tracks, trex);
+      tracks = tracks.filter(function (t) { return t.count > 0; });
+      if (!tracks.length) throw new Error("no video or audio found in this file");
+      tracks.forEach(function (t) {
+        for (var k = 0; k < t.count; k++) if (t.off[k] + t.size[k] > src.size) throw new Error("this file looks incomplete or damaged (its video data is cut off)");
+      });
+      return { name: name, size: src.size, movieTs: movieTs, tracks: tracks, ftyp: ftyp, fragmented: fragmented };
+    }
+    function pick(clip, handler) { for (var i = 0; i < clip.tracks.length; i++) if (clip.tracks[i].handler === handler) return clip.tracks[i]; return null; }
+    function clipSeconds(clip) {
+      var v = pick(clip, "vide") || clip.tracks[0], n = v.count - 1;
+      return (v.dts[n] + v.dur[n] - v.dts[0]) / v.ts;
+    }
+    function describe(clip) {
+      var v = pick(clip, "vide"), a = pick(clip, "soun");
+      return { seconds: clipSeconds(clip), w: v ? v.info.w : 0, h: v ? v.info.h : 0, vcodec: v ? v.info.type : "", acodec: a ? a.info.type : "", hasAudio: !!a, fragmented: clip.fragmented };
+    }
+
+    /* every clip must carry the same codec settings as the first one */
+    function check(clips) {
+      var issues = [], f = clips[0], fv = pick(f, "vide"), fa = pick(f, "soun");
+      if (!fv) issues.push({ clip: 0, why: "has no video" });
+      clips.forEach(function (c, i) {
+        var v = pick(c, "vide"), a = pick(c, "soun");
+        if (!v) { if (i) issues.push({ clip: i, why: "has no video" }); return; }
+        if (["avc1", "avc3", "hvc1", "hev1"].indexOf(v.info.type) < 0) issues.push({ clip: i, why: "uses the video format “" + v.info.type + "”, which this tool cannot join (it supports H.264 and H.265 MP4 or MOV files)" });
+        if (v.multiDesc || v.descCount > 1) issues.push({ clip: i, why: "changes its video settings partway through" });
+        if (a && (a.multiDesc || a.descCount > 1)) issues.push({ clip: i, why: "changes its audio settings partway through" });
+        if (a && a.info.type !== "mp4a") issues.push({ clip: i, why: "uses the audio format “" + a.info.type + "”, which this tool cannot join (it supports AAC)" });
+        if (i === 0) return;
+        if (!!a !== !!fa) { issues.push({ clip: i, why: a ? "has audio but the first clip has none" : "has no audio but the first clip does" }); return; }
+        if (v.info.w !== fv.info.w || v.info.h !== fv.info.h) issues.push({ clip: i, why: "is " + v.info.w + "×" + v.info.h + " but the first clip is " + fv.info.w + "×" + fv.info.h });
+        else if (v.info.type !== fv.info.type || v.info.cfg !== fv.info.cfg) issues.push({ clip: i, why: "was made with different video encoder settings than the first clip" });
+        if (v.matrix !== fv.matrix) issues.push({ clip: i, why: "is rotated differently from the first clip" });
+        if (a && fa && (a.info.cfg !== fa.info.cfg || a.info.ch !== fa.info.ch || a.info.rate !== fa.info.rate)) issues.push({ clip: i, why: "has different audio settings (" + a.info.rate + " Hz, " + a.info.ch + " channels) from the first clip (" + fa.info.rate + " Hz, " + fa.info.ch + " channels)" });
+      });
+      return issues;
+    }
+
+    /* ---------- writing ---------- */
+    function strb(t) { return new Uint8Array([t.charCodeAt(0), t.charCodeAt(1), t.charCodeAt(2), t.charCodeAt(3)]); }
+    function cat(list) {
+      var n = 0, i; for (i = 0; i < list.length; i++) n += list[i].length;
+      var out = new Uint8Array(n), o = 0; for (i = 0; i < list.length; i++) { out.set(list[i], o); o += list[i].length; }
+      return out;
+    }
+    function mk(type, parts) { var body = cat(parts), out = new Uint8Array(8 + body.length); new DataView(out.buffer).setUint32(0, out.length); out.set(strb(type), 4); out.set(body, 8); return out; }
+    function U32() { var a = new Uint8Array(arguments.length * 4), dv = new DataView(a.buffer); for (var i = 0; i < arguments.length; i++) dv.setUint32(i * 4, arguments[i] >>> 0); return a; }
+    function I32(n) { var a = new Uint8Array(4); new DataView(a.buffer).setInt32(0, n); return a; }
+    function U64(n) { var a = new Uint8Array(8), dv = new DataView(a.buffer); dv.setUint32(0, Math.floor(n / TWO32)); dv.setUint32(4, n >>> 0); return a; }
+    function U16(n) { var a = new Uint8Array(2); new DataView(a.buffer).setUint16(0, n); return a; }
+    function ZERO(n) { return new Uint8Array(n); }
+    function FULL(v, f) { return new Uint8Array([v, (f >> 16) & 255, (f >> 8) & 255, f & 255]); }
+    function runs(arr, n) { var out = [], i = 0; while (i < n) { var j = i + 1; while (j < n && arr[j] === arr[i]) j++; out.push([j - i, arr[i]]); i = j; } return out; }
+    function rs(v, f) { return Math.round(v * f); }
+    function fl(v, f) { return Math.floor(v * f + 1e-6); }   /* rounds down so neighbouring clips can never overlap */
+
+    function build(clips, opts) {
+      var n = clips.length, F = clips[0];
+      var kinds = ["vide"]; if (pick(F, "soun")) kinds.push("soun");
+      var vts = pick(F, "vide").ts, estSec = 0;
+      clips.forEach(function (c) { estSec += clipSeconds(c); });
+      var outMovTs = (vts * (estSec + 1) < 2e9) ? vts : (F.movieTs || 1000);   /* a fine movie clock keeps every cut exact */
+      var T = {};   /* per kind output tables */
+      kinds.forEach(function (kind) {
+        var first = pick(F, kind), outTs = first.ts, total = 0, i;
+        clips.forEach(function (c) { total += pick(c, kind).count; });
+        var o = { kind: kind, ts: outTs, count: total, size: new Uint32Array(total), dur: new Uint32Array(total), cto: new Int32Array(total), sync: new Uint8Array(total), srcOff: new Float64Array(total), srcClip: new Uint16Array(total), edits: [], pres: [], mediaDur: 0, first: first };
+        var si = 0, base = 0;
+        clips.forEach(function (c, ci) {
+          var t = pick(c, kind), f = outTs / t.ts, dts0 = t.dts[0], k;
+          for (k = 0; k < t.count; k++) {
+            var a = rs(t.dts[k] - dts0, f), b = k + 1 < t.count ? rs(t.dts[k + 1] - dts0, f) : rs(t.dts[k] + t.dur[k] - dts0, f);
+            o.size[si] = t.size[k]; o.dur[si] = Math.max(0, b - a); o.cto[si] = rs(t.cto[k], f); o.sync[si] = t.sync[k]; o.srcOff[si] = t.off[k]; o.srcClip[si] = ci; si++;
+          }
+          var last = t.count - 1, mediaSrc = t.dts[last] + t.dur[last] - dts0, clipMedia = rs(mediaSrc, f), ed = [], pres = 0, cm = c.movieTs || outMovTs;
+          var endSrc = mediaSrc; for (k = 0; k < t.count; k++) { var ce = t.dts[k] + t.cto[k] + t.dur[k] - dts0; if (ce > endSrc) endSrc = ce; }
+          if (t.edits.length) {
+            t.edits.forEach(function (e) {
+              var seg = fl(e.seg, outMovTs / cm), mt = e.mt < 0 ? -1 : Math.max(base, rs(e.mt - dts0, f) + base);
+              ed.push({ seg: seg, mt: mt }); pres += seg;
+            });
+          } else { var seg = fl(endSrc, outMovTs / t.ts); ed.push({ seg: seg, mt: base }); pres = seg; }   /* no edit list: show everything, including late-starting reordered frames */
+          o.edits.push(ed); o.pres.push(pres); base += clipMedia;
+        });
+        o.mediaDur = base; T[kind] = o;
+      });
+      /* each clip lasts as long as its video; audio is trimmed or padded to match, so sync never drifts */
+      var L = [], ci, total = 0;
+      for (ci = 0; ci < n; ci++) { L.push(T.vide.pres[ci]); total += L[ci]; }
+      kinds.forEach(function (kind) {
+        var o = T[kind], list = [];
+        for (var c = 0; c < n; c++) {
+          var ed = o.edits[c], acc = 0, keep = [];
+          for (var e = 0; e < ed.length; e++) {
+            if (acc >= L[c]) break;
+            var seg = Math.min(ed[e].seg, L[c] - acc); if (seg > 0) keep.push({ seg: seg, mt: ed[e].mt }); acc += seg;
+          }
+          if (acc < L[c]) keep.push({ seg: L[c] - acc, mt: -1 });
+          keep.forEach(function (x) { list.push(x); });
+        }
+        o.finalEdits = list;
+      });
+      /* where each clip's sample bytes live in the new file */
+      var lo = [], hi = [];
+      clips.forEach(function (c, ci2) {
+        var l = Infinity, h = -Infinity;
+        kinds.forEach(function (kind) {
+          var t = pick(c, kind);
+          for (var k = 0; k < t.count; k++) { if (t.off[k] < l) l = t.off[k]; var e2 = t.off[k] + t.size[k]; if (e2 > h) h = e2; }
+        });
+        lo.push(l); hi.push(h);
+      });
+      var delta = [], payload = 0;
+      for (ci = 0; ci < n; ci++) { delta.push(payload); payload += hi[ci] - lo[ci]; }
+      kinds.forEach(function (kind) {
+        var o = T[kind], chunkOff = [], chunkCnt = [], prevEnd = -1, prevClip = -1;
+        for (var s = 0; s < o.count; s++) {
+          var cc = o.srcClip[s], newOff = delta[cc] + (o.srcOff[s] - lo[cc]);
+          if (cc !== prevClip || o.srcOff[s] !== prevEnd) { chunkOff.push(newOff); chunkCnt.push(0); }
+          chunkCnt[chunkCnt.length - 1]++; prevEnd = o.srcOff[s] + o.size[s]; prevClip = cc;
+        }
+        o.chunkOff = chunkOff; o.chunkCnt = chunkCnt;
+      });
+
+      var big = !!(opts && opts.co64) || payload + 300e6 > 4294967295, mdatHdr = payload + 8 > 4294967295 ? 16 : 8;
+      var ftypBytes = (F.ftyp && tag(F.ftyp, 8) === "qt  ") ? F.ftyp.subarray(0, rd32(F.ftyp, 0)) : mk("ftyp", [strb("isom"), U32(512), strb("isom"), strb("iso2"), strb("avc1"), strb("mp41")]);
+      var maxId = kinds.length;
+
+      function stbl(o, base) {
+        var parts = [mk("stsd", [FULL(0, 0), U32(1), o.first.entryRaw])];
+        parts.push(mk("stts", (function () { var r = runs(o.dur, o.count), p = [FULL(0, 0), U32(r.length)]; r.forEach(function (x) { p.push(U32(x[0], x[1])); }); return p; })()));
+        var anyCto = false; for (var i = 0; i < o.count; i++) if (o.cto[i] !== 0) { anyCto = true; break; }
+        if (anyCto) {
+          var neg = false; for (i = 0; i < o.count; i++) if (o.cto[i] < 0) { neg = true; break; }
+          var r2 = runs(o.cto, o.count), p2 = [FULL(neg ? 1 : 0, 0), U32(r2.length)];
+          r2.forEach(function (x) { p2.push(U32(x[0]), neg ? I32(x[1]) : U32(x[1])); });
+          parts.push(mk("ctts", p2));
+        }
+        var allSync = true; for (i = 0; i < o.count; i++) if (!o.sync[i]) { allSync = false; break; }
+        if (!allSync) {
+          var ss = []; for (i = 0; i < o.count; i++) if (o.sync[i]) ss.push(i + 1);
+          var sp = new Uint8Array(8 + ss.length * 4), dv = new DataView(sp.buffer); dv.setUint32(4, ss.length);
+          for (i = 0; i < ss.length; i++) dv.setUint32(8 + i * 4, ss[i]);
+          parts.push(mk("stss", [sp]));
+        }
+        var same = true; for (i = 1; i < o.count; i++) if (o.size[i] !== o.size[0]) { same = false; break; }
+        if (same) parts.push(mk("stsz", [FULL(0, 0), U32(o.size[0], o.count)]));
+        else { var zp = new Uint8Array(12 + o.count * 4), zv = new DataView(zp.buffer); zv.setUint32(8, o.count); for (i = 0; i < o.count; i++) zv.setUint32(12 + i * 4, o.size[i]); parts.push(mk("stsz", [zp])); }
+        var sc = [], last = -1;
+        for (i = 0; i < o.chunkCnt.length; i++) if (o.chunkCnt[i] !== last) { sc.push([i + 1, o.chunkCnt[i]]); last = o.chunkCnt[i]; }
+        var sp2 = [FULL(0, 0), U32(sc.length)]; sc.forEach(function (x) { sp2.push(U32(x[0], x[1], 1)); });
+        parts.push(mk("stsc", sp2));
+        var cp = new Uint8Array(8 + o.chunkOff.length * (big ? 8 : 4)), cv = new DataView(cp.buffer); cv.setUint32(4, o.chunkOff.length);
+        for (i = 0; i < o.chunkOff.length; i++) {
+          var abs = base + o.chunkOff[i];
+          if (big) { cv.setUint32(8 + i * 8, Math.floor(abs / TWO32)); cv.setUint32(12 + i * 8, abs >>> 0); } else cv.setUint32(8 + i * 4, abs >>> 0);
+        }
+        parts.push(mk(big ? "co64" : "stco", [cp]));
+        return mk("stbl", parts);
+      }
+      function trak(o, id, base) {
+        var f = o.first, isV = o.kind === "vide", dur = 0; o.finalEdits.forEach(function (e) { dur += e.seg; });
+        var tkhd = mk("tkhd", [FULL(0, 3), U32(0, 0, id, 0, dur), ZERO(8), U16(0), U16(0), U16(isV ? 0 : 0x0100), U16(0), f.matrixBytes, U32(Math.round(f.tw * 65536), Math.round(f.th * 65536))]);
+        var elst = mk("edts", [mk("elst", (function () { var p = [FULL(0, 0), U32(o.finalEdits.length)]; o.finalEdits.forEach(function (e) { p.push(U32(e.seg), I32(e.mt), U32(0x00010000)); }); return p; })())]);
+        var mdhd = mk("mdhd", [FULL(0, 0), U32(0, 0, o.ts, o.mediaDur), U16(f.lang), U16(0)]);
+        var minf = [f.minfHdr]; if (f.dinfRaw) minf.push(f.dinfRaw); minf.push(stbl(o, base));
+        return mk("trak", [tkhd, elst, mk("mdia", [mdhd, f.hdlrRaw, mk("minf", minf)])]);
+      }
+      function moov(base) {
+        var mvhd = mk("mvhd", [FULL(0, 0), U32(0, 0, outMovTs, total), U32(0x00010000), U16(0x0100), U16(0), ZERO(8),
+          U32(0x00010000, 0, 0, 0, 0x00010000, 0, 0, 0, 0x40000000), ZERO(24), U32(maxId + 1)]);
+        var list = [mvhd], id = 1;
+        kinds.forEach(function (k) { list.push(trak(T[k], id++, base)); });
+        return mk("moov", list);
+      }
+      var m0 = moov(0), headLen = ftypBytes.length + m0.length + mdatHdr, m1 = moov(headLen);
+      var mdat = mdatHdr === 8 ? cat([U32(8 + payload), strb("mdat")]) : cat([U32(1), strb("mdat"), U64(16 + payload)]);
+      var head = cat([ftypBytes, m1, mdat]), slices = [];
+      for (ci = 0; ci < n; ci++) slices.push({ clip: ci, start: lo[ci], end: hi[ci] });
+      return { head: head, slices: slices, size: head.length + payload, seconds: total / outMovTs, frames: T.vide.count };
+    }
+    return { parseClip: parseClip, check: check, build: build, describe: describe, seconds: clipSeconds };
   })();
-  ["upRes", "upQ"].forEach(function (id) { $(id).onchange = upEstimate; });
-  $("upSharp").oninput = upSharpLabel; upSharpLabel();
-  $("upTest").onclick = function () { upRun(5); };
-  $("upGo").onclick = function () { upRun(0); };
-  $("upCancel").onclick = function () { up.cancel = true; };
+  /* VJ-END */
+
+  /* ---- Video Joiner screen ---- */
+  $("tabVj").onclick = function () { showTab("vj"); };
+  var vj = { items: [], url: null, busy: false };
+  function vjSrc(file) { return { size: file.size, read: async function (s, l) { return new Uint8Array(await file.slice(s, Math.min(file.size, s + l)).arrayBuffer()); } }; }
+  function vjCodec(t) { return t === "avc1" || t === "avc3" ? "H.264" : (t === "hvc1" || t === "hev1" ? "H.265" : t); }
+  function vjClock(sec) { var t = Math.round(sec * 10) / 10, m = Math.floor(t / 60), s = (t - m * 60).toFixed(1); return m + ":" + (s < 10 ? "0" : "") + s; }
+  async function vjAdd(files) {
+    if (vj.busy) return;
+    vj.busy = true;
+    var list = Array.prototype.slice.call(files);
+    for (var i = 0; i < list.length; i++) {
+      var f = list[i];
+      $("vjInfo").textContent = "Reading " + (i + 1) + " of " + list.length + ": " + f.name;
+      await tick();
+      var it = { file: f, clip: null, error: "", issue: "", id: ++vjId };
+      try { it.clip = await VJ.parseClip(vjSrc(f), f.name); it.desc = VJ.describe(it.clip); }
+      catch (err) { it.error = err && err.message ? err.message : String(err); }
+      vj.items.push(it);
+    }
+    vj.items.sort(function (a, b) { return a.file.name.localeCompare(b.file.name, undefined, { numeric: true, sensitivity: "base" }); });
+    $("vjInfo").textContent = "";
+    vj.busy = false;
+    vjRender();
+  }
+  var vjId = 0;
+  function vjRecheck() {
+    var valid = vj.items.filter(function (i) { return i.clip; });
+    vj.items.forEach(function (i) { i.issue = ""; });
+    if (valid.length) {
+      VJ.check(valid.map(function (i) { return i.clip; })).forEach(function (x) {
+        var it = valid[x.clip]; it.issue += (it.issue ? " Also: " : "") + (x.clip === 0 ? "This clip " : "This clip ") + x.why + ".";
+      });
+    }
+    return valid;
+  }
+  function vjRender() {
+    var valid = vjRecheck(), list = $("vjList"), bad = 0;
+    list.innerHTML = "";
+    $("vjCard").classList.toggle("hidden", !vj.items.length);
+    $("vjResult").classList.add("hidden");
+    vj.items.forEach(function (it, idx) {
+      var row = document.createElement("div"); row.className = "item";
+      var no = document.createElement("span"); no.className = "tag"; no.textContent = String(idx + 1);
+      var nm = document.createElement("div"); nm.className = "vjname";
+      var b = document.createElement("b"); b.textContent = it.file.name; b.title = it.file.name; nm.appendChild(b);
+      var sm = document.createElement("small");
+      if (it.error) { sm.className = "bad"; sm.textContent = "Cannot use this file: " + it.error + "."; bad++; }
+      else if (it.issue) { sm.className = "bad"; sm.textContent = it.issue; bad++; }
+      else sm.textContent = vjClock(it.desc.seconds) + " · " + it.desc.w + "×" + it.desc.h + " · " + vjCodec(it.desc.vcodec) + (it.desc.hasAudio ? " + " + (it.desc.acodec === "mp4a" ? "AAC" : it.desc.acodec) : ", no audio") + " · " + fmtSize(it.file.size);
+      nm.appendChild(sm);
+      var mv = document.createElement("div"); mv.className = "mv";
+      [["↑", "Move up", -1], ["↓", "Move down", 1], ["✕", "Remove", 0]].forEach(function (d) {
+        var bt = document.createElement("button"); bt.textContent = d[0]; bt.title = d[1];
+        if (d[2] === -1 && idx === 0) bt.disabled = true;
+        if (d[2] === 1 && idx === vj.items.length - 1) bt.disabled = true;
+        bt.onclick = function () {
+          if (d[2] === 0) vj.items.splice(idx, 1);
+          else { var o = vj.items[idx + d[2]]; vj.items[idx + d[2]] = it; vj.items[idx] = o; }
+          vjRender();
+        };
+        mv.appendChild(bt);
+      });
+      [no, nm, mv].forEach(function (x) { row.appendChild(x); });
+      list.appendChild(row);
+    });
+    var secs = 0, bytes = 0; valid.forEach(function (i) { secs += i.desc.seconds; bytes += i.file.size; });
+    $("vjSummary").textContent = vj.items.length ? (bad ? bad + " clip" + (bad === 1 ? "" : "s") + " cannot be joined (marked in red). Remove " + (bad === 1 ? "it" : "them") + " or fix " + (bad === 1 ? "it" : "them") + " to continue."
+      : vj.items.length + " clips · total " + vjClock(secs) + " · about " + fmtSize(bytes) + " · all clips match and can be joined without any quality loss.") : "";
+    $("vjDropBad").classList.toggle("hidden", !bad);
+    $("vjGo").disabled = !!bad || vj.items.length < 2;
+    if (vj.items.length === 1 && !bad) $("vjSummary").textContent = "Add at least one more clip.";
+  }
+  function vjJoin() {
+    if (vj.busy || $("vjGo").disabled) return;
+    var items = vj.items.slice(), clips = items.map(function (i) { return i.clip; }), t0 = Date.now();
+    try {
+      var res = VJ.build(clips), parts = [res.head];
+      res.slices.forEach(function (s) { parts.push(items[s.clip].file.slice(s.start, s.end)); });
+      var blob = new Blob(parts, { type: "video/mp4" });
+      if (vj.url) URL.revokeObjectURL(vj.url);
+      vj.url = URL.createObjectURL(blob);
+      var qt = clips[0].ftyp && String.fromCharCode(clips[0].ftyp[8], clips[0].ftyp[9], clips[0].ftyp[10], clips[0].ftyp[11]) === "qt  ";
+      $("vjOut").src = vj.url;
+      $("vjDl").href = vj.url; $("vjDl").download = "joined-" + items.length + "-clips." + (qt ? "mov" : "mp4");
+      $("vjDl").textContent = "Download joined video (" + fmtSize(blob.size) + ")";
+      $("vjResult").classList.remove("hidden");
+      $("vjStatus").textContent = "Done in " + (Date.now() - t0) + " ms: " + items.length + " clips, " + vjClock(res.seconds) + " long. Nothing was re-encoded.";
+    } catch (err) {
+      $("vjStatus").textContent = "Could not join the clips: " + (err && err.message ? err.message : err);
+    }
+  }
+  var vjDrop = $("vjDrop");
+  vjDrop.onclick = function () { $("vjFile").click(); };
+  $("vjFile").onchange = function () { vjAdd($("vjFile").files); $("vjFile").value = ""; };
+  ["dragenter", "dragover"].forEach(function (ev) { vjDrop.addEventListener(ev, function (e) { e.preventDefault(); vjDrop.classList.add("over"); }); });
+  ["dragleave", "drop"].forEach(function (ev) { vjDrop.addEventListener(ev, function (e) { e.preventDefault(); vjDrop.classList.remove("over"); }); });
+  vjDrop.addEventListener("drop", function (e) { vjAdd(e.dataTransfer.files); });
+  $("vjSort").onclick = function () { vj.items.sort(function (a, b) { return a.file.name.localeCompare(b.file.name, undefined, { numeric: true, sensitivity: "base" }); }); vjRender(); };
+  $("vjClear").onclick = function () { vj.items = []; $("vjStatus").textContent = ""; vjRender(); };
+  $("vjDropBad").onclick = function () { vj.items = vj.items.filter(function (i) { return i.clip && !i.issue; }); vjRender(); };
+  $("vjGo").onclick = vjJoin;
 
   /* ---------- Word <-> PDF ---------- */
   $("tabWp").onclick = function () { showTab("wp"); };
@@ -3549,7 +3753,7 @@ run();
     zip: ["ZIP → PDF", "Combine the images, PDFs and text files in a ZIP into one PDF."],
     split: ["Split PDF", "Cut a PDF into equal parts, page ranges or single pages."],
     vs: ["Voice Studio", "Record your voice, remove mistakes and noise, and polish the sound."],
-    up: ["Video Upscaler", "Enlarge low-resolution video with smooth sharpening."],
+    vj: ["Video Joiner", "Join many clips into one long video without losing any quality."],
     bg: ["Background Remover", "Cut the subject out of a photo and save a transparent PNG."],
     rec: ["Screen Recorder", "Record your screen, a window or a tab, with sound."]
   };
